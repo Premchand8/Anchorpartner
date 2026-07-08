@@ -1,0 +1,617 @@
+/* ============================================================
+   PMJ Responsive System
+   Fold · mobile · tablet · laptop · desktop · 4K / ultra-wide
+   Loaded last — overrides layout tokens across the app
+   ============================================================ */
+
+:root {
+  --pmj-shell-pad: clamp(14px, 2.8vw, 44px);
+  --pmj-shell-max: 1360px;
+  --pmj-grid-min: min(280px, 100%);
+  --pmj-grid-gap: clamp(12px, 2vw, 28px);
+  --pmj-header-pad-x: var(--pmj-shell-pad);
+  --pmj-header-pad-y: clamp(12px, 2vw, 22px);
+  --pmj-safe-top: env(safe-area-inset-top, 0px);
+  --pmj-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pmj-safe-left: env(safe-area-inset-left, 0px);
+  --pmj-safe-right: env(safe-area-inset-right, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+/* ——— Fluid shells ——— */
+.hero-grid,
+.catalogue,
+.promo-banner-inner,
+.footer-shell {
+  max-width: var(--pmj-shell-max);
+}
+
+.hero {
+  padding-left: var(--pmj-shell-pad);
+  padding-right: var(--pmj-shell-pad);
+  padding-top: calc(var(--site-header-height, 68px) + clamp(48px, 9vh, 96px));
+}
+
+.filter-bar.filter-bar--in-header {
+  flex-wrap: wrap;
+  padding-left: calc(var(--pmj-shell-pad) + var(--pmj-safe-left));
+  padding-right: calc(var(--pmj-shell-pad) + var(--pmj-safe-right));
+}
+
+@media (min-width: 1101px) {
+  .filter-bar.filter-bar--in-header {
+    flex-wrap: nowrap;
+  }
+}
+
+.catalogue {
+  padding-left: var(--pmj-shell-pad);
+  padding-right: var(--pmj-shell-pad);
+}
+
+footer {
+  padding-left: var(--pmj-shell-pad);
+  padding-right: var(--pmj-shell-pad);
+  padding-bottom: calc(30px + var(--pmj-safe-bottom));
+}
+
+/* ——— Header safe-area + fluid padding ——— */
+#siteHeader {
+  padding-left: calc(var(--pmj-header-pad-x) + var(--pmj-safe-left));
+  padding-right: calc(var(--pmj-header-pad-x) + var(--pmj-safe-right));
+  padding-top: calc(var(--pmj-header-pad-y) + var(--pmj-safe-top));
+}
+
+header.scrolled {
+  padding-left: calc(var(--pmj-header-pad-x) + var(--pmj-safe-left));
+  padding-right: calc(var(--pmj-header-pad-x) + var(--pmj-safe-right));
+}
+
+body.plp-scrolled #siteHeader,
+body.filter-bar-stuck #siteHeader {
+  padding-left: calc(var(--pmj-shell-pad) + var(--pmj-safe-left));
+  padding-right: calc(var(--pmj-shell-pad) + var(--pmj-safe-right));
+}
+
+/* ——— Filter bar: stick below fixed header (not under it) ——— */
+.filter-bar:not(.filter-bar--in-header) {
+  top: var(--site-header-height, 68px);
+}
+
+.filter-bar {
+  padding-left: var(--pmj-shell-pad);
+  padding-right: var(--pmj-shell-pad);
+}
+
+/* ——— Fluid product grid ——— */
+.grid {
+  grid-template-columns: repeat(auto-fill, minmax(var(--pmj-grid-min), 1fr));
+  gap: var(--pmj-grid-gap);
+  background: transparent;
+}
+
+/* ——— Drawer / modal / overlay safe areas ——— */
+.drawer {
+  padding-bottom: var(--pmj-safe-bottom);
+}
+
+.drawer-head {
+  padding-top: calc(26px + var(--pmj-safe-top));
+}
+
+.drawer-form {
+  padding-bottom: calc(30px + var(--pmj-safe-bottom));
+}
+
+.admin-pill {
+  left: calc(18px + var(--pmj-safe-left));
+  bottom: calc(18px + var(--pmj-safe-bottom));
+}
+
+.category-panel {
+  width: min(640px, calc(100vw - var(--pmj-shell-pad) * 2 - var(--pmj-safe-left) - var(--pmj-safe-right)));
+}
+
+#loginGate {
+  padding: var(--pmj-safe-top) var(--pmj-safe-right) var(--pmj-safe-bottom) var(--pmj-safe-left);
+}
+
+/* ——— Touch targets ——— */
+@media (pointer: coarse) {
+  .heart-btn,
+  .filter-chip,
+  .icon-btn,
+  .wishlist-tab,
+  .pm-close,
+  .close-btn {
+    min-height: 44px;
+  }
+
+  .heart-btn {
+    min-width: 44px;
+  }
+}
+
+/* ============================================================
+   FOLD / NARROW (Galaxy Fold, 320–360px)
+   ============================================================ */
+@media (max-width: 360px) {
+  :root {
+    --pmj-grid-min: 100%;
+    --pmj-shell-pad: 12px;
+    --pmj-grid-gap: 10px;
+  }
+
+  .wordmark {
+    font-size: 20px;
+    letter-spacing: 0.1em;
+  }
+
+  .wordmark span {
+    display: none;
+  }
+
+  .header-main-row nav {
+    gap: 6px;
+  }
+
+  #openAdmin {
+    padding: 8px 9px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .wishlist-tab > span:first-child {
+    display: none;
+  }
+
+  .wishlist-tab {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .filter-chip {
+    padding: 7px 11px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .filter-group-label {
+    font-size: 9px;
+  }
+
+  .hero {
+    padding-top: calc(var(--site-header-height, 68px) + 72px);
+    min-height: auto;
+  }
+
+  .hero-visual {
+    height: min(52vw, 220px);
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(28px, 9vw, 36px);
+  }
+
+  .card-name {
+    font-size: 18px;
+  }
+
+  .card-body {
+    padding: 14px 14px 0;
+  }
+
+  .footer-block-title {
+    font-size: 20px;
+  }
+
+  .admin-pill {
+    left: calc(10px + var(--pmj-safe-left));
+    right: calc(10px + var(--pmj-safe-right));
+  }
+
+  #pmjUiMonitor {
+    left: calc(10px + var(--pmj-safe-left));
+    right: calc(10px + var(--pmj-safe-right));
+    bottom: calc(52px + var(--pmj-safe-bottom));
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* ============================================================
+   MOBILE (361–479px)
+   ============================================================ */
+@media (min-width: 361px) and (max-width: 479px) {
+  :root {
+    --pmj-grid-min: min(240px, 100%);
+    --pmj-shell-pad: 14px;
+  }
+
+  .wordmark span {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+  }
+
+  .wishlist-tab > span:first-child {
+    display: none;
+  }
+
+  .hero-visual {
+    height: min(58vw, 260px);
+  }
+}
+
+@media (max-width: 479px) {
+  .filter-bar:not(.filter-bar--in-header) {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .filter-group--availability .filter-chip--ready,
+  .filter-group--availability .filter-chip--mto {
+    letter-spacing: 0.06em;
+  }
+
+  body.filter-bar-stuck .header-filter-dock {
+    max-height: min(420px, 62vh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .promo-banner-content {
+    padding: 18px 16px 22px;
+  }
+
+  .display-settings-modal,
+  .admin-modal {
+    width: min(340px, calc(100vw - 24px - var(--pmj-safe-left) - var(--pmj-safe-right)));
+  }
+}
+
+/* ============================================================
+   LARGE PHONE (480–767px)
+   ============================================================ */
+@media (min-width: 480px) and (max-width: 767px) {
+  :root {
+    --pmj-grid-min: min(260px, 100%);
+  }
+
+  .hero-visual {
+    height: min(52vw, 320px);
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(var(--pmj-grid-min), 1fr));
+  }
+}
+
+/* ============================================================
+   TABLET (768–1024px)
+   ============================================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --pmj-grid-min: min(240px, 100%);
+    --pmj-shell-pad: clamp(20px, 3vw, 32px);
+  }
+
+  .hero {
+    padding-top: calc(var(--site-header-height, 68px) + clamp(56px, 8vh, 88px));
+    min-height: 70vh;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 3vw, 28px);
+    text-align: left;
+  }
+
+  .hero-visual {
+    height: min(44vh, 440px);
+    order: 0;
+  }
+
+  .hero-copy p {
+    max-width: 36em;
+  }
+
+  .catalogue {
+    padding-top: 56px;
+  }
+
+  .filter-bar.filter-bar--in-header {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-group--availability {
+    flex: 0 1 auto;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-category-slot {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-bar-actions {
+    flex: 1 1 100%;
+    margin-top: 0;
+  }
+
+  .filter-bar.filter-bar--in-header .search-wrap {
+    flex: 1 1 auto;
+    min-width: 140px;
+    max-width: none;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .footer-block--promises {
+    border-right: 1px solid rgba(199, 162, 82, 0.14);
+    border-bottom: none;
+  }
+
+  .drawer {
+    width: min(520px, 100%);
+  }
+
+  .product-modal {
+    width: min(960px, 96vw);
+  }
+
+  .pm-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  }
+}
+
+/* ============================================================
+   SMALL LAPTOP (1025–1279px)
+   ============================================================ */
+@media (min-width: 1025px) and (max-width: 1279px) {
+  :root {
+    --pmj-shell-max: 1280px;
+    --pmj-grid-min: min(260px, 100%);
+  }
+
+  .hero-visual {
+    height: min(48vh, 480px);
+  }
+}
+
+/* ============================================================
+   LAPTOP / DESKTOP (1280–1919px)
+   ============================================================ */
+@media (min-width: 1280px) and (max-width: 1919px) {
+  :root {
+    --pmj-shell-max: 1360px;
+    --pmj-grid-min: min(280px, 100%);
+  }
+}
+
+/* ============================================================
+   LARGE DESKTOP / QHD (1920–2559px)
+   ============================================================ */
+@media (min-width: 1920px) {
+  :root {
+    --pmj-shell-max: min(1680px, 88vw);
+    --pmj-grid-min: min(300px, 100%);
+    --pmj-shell-pad: clamp(32px, 2.5vw, 56px);
+    --pmj-grid-gap: clamp(20px, 1.6vw, 32px);
+  }
+
+  .hero {
+    min-height: 76vh;
+    padding-top: calc(var(--site-header-height, 68px) + clamp(64px, 8vh, 96px));
+  }
+
+  .hero-visual {
+    height: min(56vh, 620px);
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(48px, 3.4vw, 84px);
+  }
+
+  .section-head h2 {
+    font-size: clamp(32px, 2.4vw, 48px);
+  }
+
+  .catalogue {
+    padding-top: 80px;
+    padding-bottom: 56px;
+  }
+
+  .card-name {
+    font-size: 24px;
+  }
+
+  .product-modal {
+    width: min(1320px, 94vw);
+  }
+
+  .drawer {
+    width: min(520px, 100%);
+  }
+
+  .footer-grid {
+    gap: 0;
+  }
+}
+
+/* ============================================================
+   4K / ULTRA-WIDE (2560px+)
+   ============================================================ */
+@media (min-width: 2560px) {
+  :root {
+    --pmj-shell-max: 1920px;
+    --pmj-grid-min: min(320px, 100%);
+    --pmj-shell-pad: 64px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(56px, 2.8vw, 92px);
+  }
+
+  .hero-copy p {
+    font-size: 18px;
+    max-width: 520px;
+  }
+
+  .wordmark {
+    font-size: 30px;
+  }
+
+  nav .nav-link {
+    font-size: 14px;
+  }
+}
+
+/* ============================================================
+   LANDSCAPE PHONE / SHORT VIEWPORT
+   ============================================================ */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding-top: calc(88px + var(--pmj-safe-top));
+    padding-bottom: 28px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .hero-visual {
+    height: min(72vh, 280px);
+    order: 0;
+  }
+
+  #introBox .box-emblem {
+    font-size: 10vw;
+  }
+}
+
+/* ============================================================
+   LEGACY MOBILE BREAKPOINT ALIGNMENT (≤900px)
+   ============================================================ */
+@media (max-width: 900px) {
+  header {
+    padding-left: calc(var(--pmj-shell-pad) + var(--pmj-safe-left));
+    padding-right: calc(var(--pmj-shell-pad) + var(--pmj-safe-right));
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+
+  .filter-bar:not(.filter-bar--in-header) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar-actions {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .search-wrap {
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  nav .nav-link {
+    display: none;
+  }
+
+  .drawer {
+    width: 100%;
+  }
+}
+
+/* Tablet-only override: restore 2-col hero inside mobile band */
+@media (min-width: 768px) and (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero-visual {
+    order: 0;
+    height: min(40vh, 380px);
+  }
+}
+
+/* ============================================================
+   PLP header dock — tablet+ wrap earlier
+   ============================================================ */
+@media (max-width: 1100px) {
+  .filter-bar.filter-bar--in-header {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 10px;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-group--availability {
+    flex: 0 1 auto;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-category-slot {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .filter-bar.filter-bar--in-header .filter-bar-actions {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .filter-bar.filter-bar--in-header .search-wrap {
+    flex: 1 1 180px;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+/* ============================================================
+   UI monitor — don't overlap admin pill on small screens
+   ============================================================ */
+@media (max-width: 767px) {
+  #pmjUiMonitor {
+    left: calc(10px + var(--pmj-safe-left));
+    right: calc(10px + var(--pmj-safe-right));
+    bottom: calc(56px + var(--pmj-safe-bottom));
+    width: auto;
+    max-width: none;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1920px) {
+  #pmjUiMonitor {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 860px) {
+  .product-modal.open {
+    padding-bottom: var(--pmj-safe-bottom);
+  }
+
+  .pm-close {
+    top: calc(10px + var(--pmj-safe-top));
+    right: calc(10px + var(--pmj-safe-right));
+  }
+}

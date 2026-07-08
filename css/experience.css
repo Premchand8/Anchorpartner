@@ -1,0 +1,303 @@
+/* WebGL cinematic experience layers */
+
+/* ——— Unified PMJ brand lockup ——— */
+.brand-lockup {
+  text-align: center;
+  padding: 0 24px;
+  overflow: visible;
+}
+
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 14vw, 88px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--ivory);
+  white-space: nowrap;
+}
+
+.brand-tagline {
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(10px, 2.5vw, 12px);
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 14px;
+  font-weight: 400;
+}
+
+.brand-est {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 12px;
+}
+
+.login-lockup .brand-name {
+  font-size: clamp(44px, 12vw, 52px);
+}
+
+.login-lockup {
+  margin-bottom: 12px;
+}
+
+.login-lockup .brand-est {
+  display: none;
+}
+
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(199,162,82,.12), transparent 55%), var(--onyx);
+  transition: opacity 0.5s;
+  padding: 24px;
+  pointer-events: none;
+}
+
+#loadingScreen.active {
+  display: flex;
+  pointer-events: auto;
+}
+
+.forge-lockup .brand-name {
+  text-shadow: 0 0 60px rgba(199, 162, 82, 0.25);
+}
+
+.loading-track {
+  width: min(280px, 70vw);
+  height: 2px;
+  background: rgba(199,162,82,.15);
+  margin-top: 40px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.loading-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.loading-caption {
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+#experienceCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  width: 100%;
+  height: 100%;
+  display: none;
+  opacity: 1;
+  pointer-events: none;
+}
+
+#experienceCanvas.active { display: block; }
+
+#forgeFlash {
+  position: fixed;
+  inset: 0;
+  z-index: 225;
+  background: radial-gradient(circle, rgba(199,162,82,.28), transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-brand-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 228;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(48px, 12vh, 100px);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.intro-brand-overlay.visible {
+  opacity: 1;
+}
+
+.intro-brand-lockup .brand-name {
+  font-size: clamp(40px, 10vw, 64px);
+  color: var(--gold-light);
+  text-shadow: 0 0 48px rgba(199, 162, 82, 0.55);
+}
+
+/* Hero WebGL */
+.hero-visual {
+  position: relative;
+}
+
+#heroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+#heroImg.hidden { opacity: 0; pointer-events: none; }
+
+/* 360 viewer in modal */
+.viewer360-wrap {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: min(52vh, 420px);
+  aspect-ratio: 1 / 1;
+  max-height: min(68vh, 560px);
+  background: var(--viewer-bg);
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: crosshair;
+  transition: box-shadow 0.35s cubic-bezier(.22,.61,.36,1);
+  --zoom-x: 50%;
+  --zoom-y: 50%;
+}
+
+.viewer360-wrap.is-zooming {
+  box-shadow: inset 0 0 0 1px rgba(199,162,82,.28);
+}
+
+.viewer360-wrap.is-zooming::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    circle 160px at var(--zoom-x, 50%) var(--zoom-y, 50%),
+    rgba(199,162,82,.12),
+    transparent 72%
+  );
+  transition: opacity 0.35s cubic-bezier(.22,.61,.36,1);
+}
+
+.viewer360-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1);
+  transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-property: transform;
+  will-change: transform;
+}
+
+.viewer360-wrap.is-zooming .viewer360-stage {
+  transform: scale(2.35);
+}
+
+.viewer360-wrap.viewer-png-mode {
+  background: var(--viewer-png-bg);
+}
+
+.viewer360-wrap.viewer-png-mode.is-zooming .viewer360-stage {
+  transform: scale(2.55);
+}
+
+#viewer360Canvas {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.viewer360-wrap.viewer-3d-mode #viewer360Canvas {
+  cursor: crosshair;
+}
+
+#viewer360Canvas:active { cursor: grabbing; }
+
+#pmMainImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 4px;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.28));
+  transition: filter 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.viewer360-wrap.viewer-png-mode #pmMainImg {
+  padding: 6px;
+  filter: drop-shadow(0 14px 32px rgba(0,0,0,.22));
+}
+
+.viewer360-wrap.is-zooming #pmMainImg {
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.32));
+}
+
+.viewer360-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  pointer-events: none;
+  z-index: 4;
+  white-space: nowrap;
+  padding: 4px 10px;
+  background: var(--surface-chip);
+  border-radius: 20px;
+}
+
+#pmMainImg.hidden { display: none; }
+
+body.catalogue-ready header {
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+}
+
+body.catalogue-ready .filter-bar {
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
+
+@media (max-width: 900px) {
+  .brand-name { letter-spacing: 0.04em; }
+  .brand-tagline { letter-spacing: 0.28em; }
+  .viewer360-wrap { min-height: min(44vh, 300px); max-height: min(52vh, 400px); }
+  .viewer360-wrap.is-zooming .viewer360-stage { transform: scale(2.05); }
+  .viewer360-wrap.viewer-png-mode.is-zooming .viewer360-stage { transform: scale(2.2); }
+  .viewer360-hint { font-size: 9px; letter-spacing: 0.08em; max-width: 90%; white-space: normal; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #experienceCanvas.active { display: none !important; }
+  #heroCanvas { display: none !important; }
+  #heroImg.hidden { opacity: 1 !important; display: block !important; }
+  .viewer360-wrap.is-zooming .viewer360-stage,
+  .viewer360-wrap.viewer-png-mode.is-zooming .viewer360-stage {
+    transform: none;
+  }
+  .viewer360-stage { transition: none; }
+}

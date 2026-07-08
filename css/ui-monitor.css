@@ -1,0 +1,77 @@
+/* Minimal styles for on-page UI monitor HUD */
+#pmjUiMonitor {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 9999;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 240px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(199, 162, 82, 0.35);
+  background: rgba(8, 8, 12, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: rgba(247, 244, 239, 0.92);
+  pointer-events: auto;
+}
+
+#pmjUiMonitor.hidden {
+  display: none;
+}
+
+#pmjUiMonitor .ui-mon-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(199, 162, 82, 0.2);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold, #c7a252);
+}
+
+#pmjUiMonTier {
+  font-style: normal;
+  font-weight: 600;
+}
+
+#pmjUiMonitor .ui-mon-head button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+#pmjUiMonitor .ui-mon-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px 10px;
+  overflow-y: auto;
+  max-height: 190px;
+}
+
+#pmjUiMonitor .ui-mon-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+#pmjUiMonitor .ui-mon-t {
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-theme="light"] #pmjUiMonitor {
+  background: rgba(255, 252, 247, 0.95);
+  color: rgba(42, 36, 28, 0.92);
+  border-color: rgba(154, 117, 48, 0.25);
+}

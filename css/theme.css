@@ -1,0 +1,235 @@
+/* Customer light theme — warm ivory luxury palette matching PMJ dark design */
+[data-theme="light"] {
+  --onyx: #f7f3ec;
+  --umber: #fffcf8;
+  --umber-2: #f5f0e8;
+  --gold: #b8923f;
+  --gold-light: #d4b87a;
+  --garnet: #7c1f2e;
+  --ivory: #2c241c;
+  --line: rgba(154, 117, 48, 0.24);
+
+  --ink-muted: rgba(44, 36, 28, 0.68);
+  --ink-soft: rgba(44, 36, 28, 0.52);
+  --ink-faint: rgba(44, 36, 28, 0.38);
+  --ink-body: rgba(44, 36, 28, 0.82);
+  --ink-secondary: rgba(44, 36, 28, 0.58);
+  --ink-dim: rgba(44, 36, 28, 0.46);
+  --ink-caption: rgba(253, 251, 247, 0.92);
+
+  --surface-deep: #ece6da;
+  --surface-media: #e5dfd4;
+  --surface-chip: rgba(253, 251, 247, 0.88);
+  --surface-badge: rgba(253, 251, 247, 0.82);
+  --surface-glass: rgba(253, 251, 247, 0.94);
+  --surface-glass-soft: rgba(253, 251, 247, 0.9);
+  --surface-modal-btn: rgba(253, 251, 247, 0.95);
+  --surface-input: rgba(255, 253, 249, 0.92);
+
+  --scrim-heavy: rgba(44, 36, 28, 0.42);
+  --scrim-medium: rgba(44, 36, 28, 0.32);
+
+  --hero-wash: rgba(44, 36, 28, 0.42);
+  --hero-gradient-end: rgba(244, 239, 228, 0);
+  --accent-spec: #8a6528;
+  --accent-hero-em: #8a6528;
+  --btn-primary-text: #fdfbf7;
+
+  --header-gradient: linear-gradient(to bottom, rgba(253, 251, 247, 0.96), rgba(253, 251, 247, 0));
+  --header-scrolled: rgba(253, 251, 247, 0.96);
+
+  --hero-bg:
+    radial-gradient(ellipse 900px 600px at 78% 40%, rgba(124, 31, 46, 0.07), transparent 60%),
+    radial-gradient(ellipse 1000px 800px at 15% 80%, rgba(184, 146, 63, 0.12), transparent 60%),
+    var(--onyx);
+
+  --login-glow: radial-gradient(ellipse 900px 600px at 50% 30%, rgba(184, 146, 63, 0.14), transparent 60%);
+
+  --viewer-bg:
+    radial-gradient(ellipse 92% 92% at 50% 44%, rgba(184, 146, 63, 0.1), transparent 72%),
+    linear-gradient(165deg, #faf6ef, #ece6da);
+
+  --viewer-png-bg:
+    radial-gradient(ellipse 88% 88% at 50% 46%, rgba(255, 255, 255, 0.92), transparent 72%),
+    linear-gradient(160deg, #faf8f4, #ece6da);
+
+  --chip-active-bg: rgba(184, 146, 63, 0.1);
+  --filter-chip-color: rgba(44, 36, 28, 0.58);
+  --admin-pill-bg: rgba(253, 251, 247, 0.96);
+}
+
+[data-theme="light"] body {
+  background: var(--onyx);
+  color: var(--ivory);
+}
+
+[data-theme="light"] #loginGate,
+[data-theme="light"] #introBox,
+[data-theme="light"] #loadingScreen {
+  background: var(--login-glow), var(--onyx);
+}
+
+[data-theme="light"] #loadingScreen {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(184, 146, 63, 0.1), transparent 55%),
+    var(--onyx);
+}
+
+[data-theme="light"] .loading-caption {
+  color: var(--ink-dim);
+}
+
+[data-theme="light"] .box-panel {
+  background: linear-gradient(135deg, #faf6ef, #f4efe4 60%);
+  box-shadow: 0 0 60px rgba(44, 36, 28, 0.08);
+}
+
+[data-theme="light"] .wishlist-count {
+  background: var(--gold);
+  color: var(--btn-primary-text);
+}
+
+[data-theme="light"] .heart-btn svg {
+  stroke: var(--ivory);
+}
+
+[data-theme="light"] .heart-btn {
+  background: var(--surface-chip);
+}
+
+[data-theme="light"] .gallery-badge {
+  color: var(--accent-spec);
+}
+
+[data-theme="light"] .pm-heart.active {
+  color: var(--garnet);
+}
+
+[data-theme="light"] .submit-btn {
+  color: #fdfbf7;
+}
+
+[data-theme="light"] .submit-btn:hover {
+  background: #93283a;
+}
+
+[data-theme="light"] #pmMainImg {
+  filter: drop-shadow(0 12px 28px rgba(44, 36, 28, 0.16));
+}
+
+[data-theme="light"] .viewer360-wrap.is-zooming #pmMainImg {
+  filter: drop-shadow(0 16px 36px rgba(44, 36, 28, 0.22));
+}
+
+[data-theme="light"] .viewer360-wrap.is-zooming {
+  box-shadow: inset 0 0 0 1px rgba(184, 146, 63, 0.35);
+}
+
+[data-theme="light"] .viewer360-wrap.is-zooming::after {
+  background: radial-gradient(
+    circle 140px at var(--zoom-x, 50%) var(--zoom-y, 50%),
+    rgba(184, 146, 63, 0.12),
+    transparent 72%
+  );
+}
+
+[data-theme="light"] .intro-brand-lockup .brand-name {
+  color: var(--gold);
+  text-shadow: 0 0 48px rgba(184, 146, 63, 0.35);
+}
+
+[data-theme="light"] .strip .stat {
+  color: var(--accent-spec);
+}
+
+/* Promo banner */
+[data-theme="light"] .promo-banner-inner {
+  background: var(--surface-deep);
+}
+
+[data-theme="light"] .promo-banner-media {
+  background:
+    radial-gradient(ellipse at center, rgba(184, 146, 63, 0.1), transparent 70%),
+    var(--surface-media);
+}
+
+[data-theme="light"] .promo-banner-content {
+  background: linear-gradient(180deg, transparent 35%, rgba(44, 36, 28, 0.55) 100%);
+}
+
+[data-theme="light"] .promo-banner-content p {
+  color: rgba(253, 251, 247, 0.88);
+}
+
+[data-theme="light"] .banner-preview {
+  background: var(--surface-media);
+}
+
+/* Admin UI */
+[data-theme="light"] .admin-tab {
+  color: var(--ink-secondary);
+}
+
+[data-theme="light"] .admin-tab.active {
+  color: var(--accent-spec);
+  background: var(--chip-active-bg);
+}
+
+[data-theme="light"] .upload-spec-card {
+  background: rgba(184, 146, 63, 0.08);
+  border-color: rgba(184, 146, 63, 0.28);
+}
+
+[data-theme="light"] .upload-spec-dims {
+  color: var(--accent-spec);
+}
+
+[data-theme="light"] .upload-spec-meta,
+[data-theme="light"] .upload-spec-note {
+  color: var(--ink-muted);
+}
+
+[data-theme="light"] .banner-upload-row input[type="file"] {
+  color: var(--ink-muted);
+}
+
+[data-theme="light"] .btn-clear-banner {
+  color: var(--ink-dim);
+}
+
+/* Theme toggle icons */
+[data-theme="light"] .theme-toggle .theme-icon-dark {
+  display: inline;
+}
+
+[data-theme="light"] .theme-toggle .theme-icon-light {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .theme-icon-dark,
+:root:not([data-theme="light"]) .theme-toggle .theme-icon-dark {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .theme-icon-light,
+:root:not([data-theme="light"]) .theme-toggle .theme-icon-light {
+  display: inline;
+}
+
+.theme-toggle {
+  min-width: 42px;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.theme-toggle .theme-icon-dark,
+.theme-toggle .theme-icon-light {
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  [data-theme="light"] .promo-banner-content {
+    background: linear-gradient(180deg, transparent 20%, rgba(44, 36, 28, 0.62) 100%);
+  }
+}

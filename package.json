@@ -1,0 +1,12 @@
+{
+  "name": "anchor-catlouge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PMJ private partner catalogue — static site + Netlify admin publish",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.2.0"
+  }
+}

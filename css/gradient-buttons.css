@@ -1,0 +1,148 @@
+/* Gemini / AWS-inspired gradient buttons — orbiting colour ring + spark glow */
+
+@property --pmj-grad-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes pmj-gradient-orbit {
+  to {
+    --pmj-grad-angle: 360deg;
+  }
+}
+
+@keyframes pmj-gradient-spark {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(66, 133, 244, 0.14),
+      0 4px 18px rgba(66, 133, 244, 0.24),
+      0 0 28px rgba(168, 85, 247, 0.2),
+      0 0 40px rgba(236, 72, 153, 0.1);
+  }
+  33% {
+    box-shadow:
+      0 0 0 1px rgba(168, 85, 247, 0.18),
+      0 6px 22px rgba(168, 85, 247, 0.28),
+      0 0 32px rgba(249, 115, 22, 0.22),
+      0 0 46px rgba(6, 182, 212, 0.14);
+  }
+  66% {
+    box-shadow:
+      0 0 0 1px rgba(236, 72, 153, 0.16),
+      0 5px 20px rgba(236, 72, 153, 0.26),
+      0 0 30px rgba(66, 133, 244, 0.22),
+      0 0 42px rgba(249, 115, 22, 0.16);
+  }
+}
+
+#loginGate .login-submit,
+[data-theme="light"] .btn-primary,
+:root:not([data-theme="light"]) .btn-primary {
+  --pmj-ring: conic-gradient(
+    from var(--pmj-grad-angle),
+    #4285f4 0deg,
+    #8b5cf6 55deg,
+    #ec4899 115deg,
+    #f97316 175deg,
+    #06b6d4 235deg,
+    #a855f7 295deg,
+    #4285f4 360deg
+  );
+  --pmj-fill: linear-gradient(135deg, #0f172a 0%, #1e1b4b 52%, #312e81 100%);
+  --pmj-fill-hover: linear-gradient(135deg, #1e293b 0%, #312e81 52%, #4338ca 100%);
+  --pmj-grad-angle: 0deg;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: none !important;
+  border-radius: 980px;
+  color: #ffffff !important;
+  background: transparent !important;
+  cursor: pointer;
+  z-index: 0;
+  animation: pmj-gradient-orbit 2.8s linear infinite, pmj-gradient-spark 3.2s ease-in-out infinite;
+  transition: transform 0.15s ease;
+}
+
+:root:not([data-theme="light"]) .btn-primary {
+  --pmj-fill: linear-gradient(135deg, #0c0a09 0%, #1c1917 48%, #292524 100%);
+  --pmj-fill-hover: linear-gradient(135deg, #1c1917 0%, #292524 48%, #44403c 100%);
+}
+
+#loginGate .login-submit::before,
+[data-theme="light"] .btn-primary::before,
+:root:not([data-theme="light"]) .btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: -130%;
+  background: var(--pmj-ring);
+  z-index: -2;
+}
+
+#loginGate .login-submit::after,
+[data-theme="light"] .btn-primary::after,
+:root:not([data-theme="light"]) .btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background: var(--pmj-fill);
+  z-index: -1;
+  transition: background 0.25s ease;
+  transform: none;
+}
+
+#loginGate .login-submit:hover,
+[data-theme="light"] .btn-primary:hover,
+:root:not([data-theme="light"]) .btn-primary:hover {
+  transform: translateY(-1px);
+  background: transparent !important;
+  color: #fff !important;
+}
+
+#loginGate .login-submit:hover::after,
+[data-theme="light"] .btn-primary:hover::after,
+:root:not([data-theme="light"]) .btn-primary:hover::after {
+  background: var(--pmj-fill-hover);
+  transform: none;
+}
+
+#loginGate .login-submit:active,
+[data-theme="light"] .btn-primary:active,
+:root:not([data-theme="light"]) .btn-primary:active {
+  transform: scale(0.985);
+}
+
+#loginGate .login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 14px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+[data-theme="light"] .btn-primary {
+  font-family: var(--am-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 12px 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #loginGate .login-submit,
+  [data-theme="light"] .btn-primary,
+  :root:not([data-theme="light"]) .btn-primary {
+    animation: none;
+    box-shadow: 0 4px 16px rgba(66, 133, 244, 0.22);
+  }
+}

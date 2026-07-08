@@ -1,0 +1,147 @@
+/* PMJ Jewels — official brand logos (transparent PNG, no background box)
+   Stacked:  assets/pmj-logo-stacked.png   — vertical lockup (hero, login, intro)
+   Horizontal: assets/pmj-logo-horizontal.png — header / footer bar */
+
+:root {
+  --pmj-logo-stacked: url('../assets/pmj-logo-stacked.png');
+  --pmj-logo-horizontal: url('../assets/pmj-logo-horizontal.png');
+  --pmj-brand-name: 'PMJ Jewels';
+  --pmj-brand-tagline: 'Celebrate For Ever';
+}
+
+.pmj-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 0;
+  background: transparent !important;
+}
+
+.pmj-brand-logo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+
+.pmj-brand-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  background: transparent !important;
+}
+
+.pmj-brand-logo--hero {
+  width: min(200px, 62vw);
+  height: auto;
+}
+
+.pmj-brand-logo--intro {
+  width: min(168px, 48vw);
+  height: auto;
+}
+
+.pmj-brand-logo--login {
+  width: min(200px, 58vw);
+  height: auto;
+  margin: 0 auto 8px;
+}
+
+.pmj-brand-logo--login.pmj-brand-logo--horizontal {
+  width: min(200px, 62vw);
+  height: auto;
+}
+
+.pmj-brand-logo--hero.pmj-brand-logo--horizontal {
+  width: min(220px, 68vw);
+  height: auto;
+}
+
+.pmj-brand-logo--intro.pmj-brand-logo--horizontal {
+  width: min(200px, 58vw);
+  height: auto;
+}
+
+.pmj-brand-logo--header.pmj-brand-logo--stacked {
+  height: clamp(32px, 8vw, 40px);
+  width: auto;
+}
+
+.pmj-brand-logo--header.pmj-brand-logo--horizontal {
+  height: clamp(26px, 6.5vw, 34px);
+  width: auto;
+}
+
+.pmj-brand--header {
+  flex-shrink: 0;
+  margin-right: 4px;
+  background: transparent !important;
+}
+
+.pmj-brand-logo--footer.pmj-brand-logo--stacked {
+  width: min(128px, 38vw);
+  height: auto;
+  margin: 0 auto 16px;
+  opacity: 0.95;
+}
+
+.pmj-brand-logo--footer.pmj-brand-logo--horizontal {
+  width: min(200px, 56vw);
+  height: auto;
+  margin: 0 auto 16px;
+  opacity: 0.95;
+  display: none;
+}
+
+.footer-brand {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  background: transparent !important;
+}
+
+/* Theme: dark = stacked white · light = horizontal navy */
+.pmj-brand-logo--theme-light {
+  display: none;
+}
+
+[data-theme="light"] .pmj-brand-logo--theme-dark {
+  display: none !important;
+}
+
+[data-theme="light"] .pmj-brand-logo--theme-light {
+  display: block !important;
+}
+
+@media (min-width: 768px) {
+  [data-theme="light"] .footer-brand .pmj-brand-logo--footer.pmj-brand-logo--stacked {
+    display: none;
+  }
+
+  [data-theme="light"] .footer-brand .pmj-brand-logo--footer.pmj-brand-logo--horizontal {
+    display: block;
+  }
+}
+
+@media (max-width: 520px) {
+  .pmj-brand-logo--header.pmj-brand-logo--stacked {
+    height: 30px;
+  }
+
+  .pmj-brand-logo--header.pmj-brand-logo--horizontal {
+    height: 24px;
+  }
+}
+
+#siteHeader .wordmark:not(.pmj-brand) span,
+.wordmark.pmj-brand span {
+  display: none;
+}

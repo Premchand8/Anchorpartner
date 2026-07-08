@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PMJ Jewels — Partner Catalogue</title>
+<meta name="description" content="Private partner viewing catalogue — PMJ Jewels · Celebrate For Ever">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0b0d"> 
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/pmj-logo-stacked.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/pmj-logo-stacked.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/brand.css">
+<link rel="stylesheet" href="css/luxury.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/experience.css">
+<link rel="stylesheet" href="css/banner.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/premium.css">
+<link rel="stylesheet" href="css/atmosphere.css">
+<link rel="stylesheet" href="css/hero-product.css">
+<link rel="stylesheet" href="css/theme-light.css">
+<link rel="stylesheet" href="css/plp.css">
+<link rel="stylesheet" href="css/plp-mobile.css">
+<link rel="stylesheet" href="css/pdp-mobile.css">
+<link rel="stylesheet" href="css/theme-light-apple.css">
+<link rel="stylesheet" href="css/ui-monitor.css">
+<link rel="stylesheet" href="css/responsive-system.css">
+<link rel="stylesheet" href="css/luxury-mobile.css">
+<link rel="stylesheet" href="css/plp-toolbar-unified.css">
+<link rel="stylesheet" href="css/login-gate.css">
+<link rel="stylesheet" href="css/cinematic-brand.css">
+<link rel="stylesheet" href="css/gradient-buttons.css">
+</head>
+<body>
+
+<!-- ============ LOADING / LOGO FORGE ============ -->
+<div id="loadingScreen">
+  <div class="brand-lockup forge-lockup pmj-brand-lockup" id="forgeLogo">
+    <img class="pmj-brand-logo pmj-brand-logo--hero pmj-brand-logo--horizontal pmj-brand-logo--loading" src="assets/pmj-logo-horizontal.png" alt="PMJ Jewels — Celebrate For Ever" width="220" height="66">
+    <p class="brand-est">Heritage Gold Craft · Est. 1964</p>
+  </div>
+  <div class="loading-track"><div class="loading-bar" id="loadingBar"></div></div>
+  <p class="loading-caption">Forging your private viewing experience</p>
+</div>
+<div id="forgeFlash"></div>
+<div id="introBrandOverlay" class="intro-brand-overlay" aria-hidden="true">
+  <div class="brand-lockup intro-brand-lockup pmj-brand-lockup">
+    <img class="pmj-brand-logo pmj-brand-logo--intro pmj-brand-logo--stacked" src="assets/pmj-logo-stacked.png" alt="" width="180" height="180" aria-hidden="true">
+  </div>
+</div>
+<canvas id="experienceCanvas" aria-hidden="true"></canvas>
+
+<!-- ============ LOGIN GATE ============ -->
+<div id="loginGate">
+  <div class="login-card">
+    <div class="brand-lockup login-lockup pmj-brand-lockup">
+      <img class="pmj-brand-logo pmj-brand-logo--login pmj-brand-logo--horizontal" src="assets/pmj-logo-horizontal.png" alt="PMJ Jewels — Celebrate For Ever" width="200" height="60">
+    </div>
+    <p class="login-sub">A private viewing catalogue prepared exclusively for our trade partner.<br>Please enter your access code to continue.</p>
+    <form id="loginForm" autocomplete="off" novalidate>
+      <input id="accessCode" type="password" name="accessCode" placeholder="Access Code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" required>
+      <button type="submit" class="login-submit" id="loginBtn">Enter Catalogue →</button>
+    </form>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-foot">© 2026 PMJ Jewels · Celebrate For Ever · Confidential Partner Preview</div>
+  </div>
+</div>
+
+<!-- ============ 3D INTRO BOX ============ -->
+<div id="introBox">
+  <div class="box-glow"></div>
+  <div class="box-panel box-left"><div class="box-emblem">P</div></div>
+  <div class="box-panel box-right"><div class="box-emblem">J</div></div>
+</div>
+
+<div id="siteContent">
+
+<header id="siteHeader">
+  <div class="header-main-row">
+    <a class="wordmark pmj-brand pmj-brand--header" href="#" id="headerBrandLink" aria-label="PMJ Jewels — Celebrate For Ever">
+      <img class="pmj-brand-logo pmj-brand-logo--header pmj-brand-logo--stacked pmj-brand-logo--theme-dark" src="assets/pmj-logo-stacked.png" alt="PMJ Jewels" width="120" height="40">
+      <img class="pmj-brand-logo pmj-brand-logo--header pmj-brand-logo--horizontal pmj-brand-logo--theme-light" src="assets/pmj-logo-horizontal.png" alt="PMJ Jewels" width="180" height="54">
+    </a>
+    <nav>
+      <a class="nav-link" href="#catalogue">Collection</a>
+      <a class="nav-link" href="#footer">Enquire</a>
+      <button class="icon-btn theme-toggle hidden" id="themeToggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Light mode">
+        <span class="theme-icon-dark" aria-hidden="true">☀</span>
+        <span class="theme-icon-light" aria-hidden="true">☾</span>
+      </button>
+      <button class="icon-btn" id="openAdmin">⚙ Admin</button>
+      <button class="wishlist-tab" id="openDrawer">
+        <span>Wishlist</span>
+        <span class="wishlist-count" id="wishlistCount">0</span>
+      </button>
+    </nav>
+  </div>
+  <div id="headerFilterDock" class="header-filter-dock" aria-hidden="true"></div>
+</header>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow" id="heroEyebrow">The Private Viewing</span>
+      <h1 id="heroHeadline"><span id="heroHeadlineMain">Pieces worth</span><br><em id="heroHeadlineEm">a second look.</em></h1>
+      <p id="heroDescription">A curated selection from the PMJ atelier, shown here for your consideration. Save what catches your eye — we'll follow up personally on every piece you shortlist.</p>
+      <a href="#catalogue" class="btn-primary" id="heroCta">View the Collection →</a>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <img id="heroImg" src="" alt="Featured piece">
+      <div class="hero-caption" id="heroCaption"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Admin Promo Banner ============ -->
+<section class="promo-banner hidden" id="promoBanner" aria-label="Featured promotion">
+  <div class="promo-banner-inner">
+    <div class="promo-banner-media" id="promoBannerMedia">
+      <canvas id="promoBannerCanvas" class="hidden" aria-hidden="true"></canvas>
+      <img id="promoBannerDesktop" class="promo-banner-img promo-desktop" alt="">
+      <img id="promoBannerMobile" class="promo-banner-img promo-mobile" alt="">
+    </div>
+    <div class="promo-banner-content">
+      <span class="eyebrow" id="promoEyebrow">Featured Piece</span>
+      <h2 id="promoHeadline"></h2>
+      <p id="promoSubtext"></p>
+      <button type="button" class="btn-primary" id="promoCta">View Piece</button>
+    </div>
+  </div>
+</section>
+
+<div id="filterBarAnchor" class="filter-bar-anchor">
+<div class="filter-bar" id="filterBar">
+  <div class="filter-group filter-group--availability">
+    <span class="filter-group-label">Availability</span>
+    <button class="filter-chip active" data-availability="all">All</button>
+    <button class="filter-chip filter-chip--ready" data-availability="ready">Ready to Deliver</button>
+    <button class="filter-chip filter-chip--mto" data-availability="mto">Made to Order</button>
+  </div>
+  <div class="filter-divider" aria-hidden="true"></div>
+  <div id="filterCategorySlot" class="filter-category-slot">
+    <div class="filter-group filter-group--category" id="filterCategoryGroup">
+      <span class="filter-group-label">Category</span>
+      <button type="button" class="filter-chip category-browse-btn" id="categoryBrowseBtn" aria-expanded="false" aria-haspopup="dialog">
+        <span id="categoryActiveLabel">All Pieces</span>
+        <span class="category-browse-caret" aria-hidden="true">▾</span>
+      </button>
+      <div class="category-scroll-outer">
+        <div class="category-scroll" id="categoryScroll" role="tablist" aria-label="Product categories"></div>
+      </div>
+    </div>
+  </div>
+  <div class="filter-bar-actions">
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Search pieces…" aria-label="Search catalogue" autocomplete="off">
+    </div>
+    <button type="button" class="plp-mobile-theme-btn icon-btn theme-toggle hidden" id="mobileThemeToggle" aria-label="Switch appearance" aria-pressed="false">
+      <span class="theme-icon-dark" aria-hidden="true">☀</span>
+      <span class="theme-icon-light" aria-hidden="true">☾</span>
+    </button>
+    <button type="button" class="filter-chip filter-chip--clear hidden" id="clearAllFiltersBtn" aria-label="Clear all filters">Clear all</button>
+    <div class="filter-wishlist-slot" id="filterWishlistSlot" aria-hidden="true"></div>
+  </div>
+</div>
+</div>
+
+<div class="category-panel-backdrop hidden" id="categoryPanelBackdrop" aria-hidden="true"></div>
+<div class="category-panel hidden" id="categoryPanel" role="dialog" aria-label="Filter products" aria-modal="true">
+  <div class="category-panel-head">
+    <span class="lux-filter-title">Filters</span>
+    <button type="button" class="category-panel-close" id="categoryPanelClose" aria-label="Close filters">✕</button>
+  </div>
+  <div class="lux-filter-scroll">
+    <div class="lux-filter-acc is-open" data-acc="category">
+      <button type="button" class="lux-filter-acc-head">Category <span class="lux-acc-toggle" aria-hidden="true">−</span></button>
+      <div class="lux-filter-acc-body">
+        <input type="search" class="lux-filter-search" id="categorySearch" placeholder="Search categories" aria-label="Search categories" autocomplete="off">
+        <div class="lux-filter-list" id="categoryPanelGrid"></div>
+      </div>
+    </div>
+    <div class="lux-filter-acc is-open" data-acc="availability">
+      <button type="button" class="lux-filter-acc-head">Availability <span class="lux-acc-toggle" aria-hidden="true">−</span></button>
+      <div class="lux-filter-acc-body">
+        <div class="lux-filter-list" id="sheetAvailabilityChips">
+          <label class="lux-filter-row lux-filter-check"><input type="radio" name="availFilter" value="all" checked><span class="lux-filter-label">All pieces</span><span class="lux-filter-count" data-avail-count="all"></span></label>
+          <label class="lux-filter-row lux-filter-check"><input type="radio" name="availFilter" value="ready"><span class="lux-filter-label">Ready to deliver</span><span class="lux-filter-count" data-avail-count="ready"></span></label>
+          <label class="lux-filter-row lux-filter-check"><input type="radio" name="availFilter" value="mto"><span class="lux-filter-label">Made to order</span><span class="lux-filter-count" data-avail-count="mto"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="category-panel-foot">
+    <button type="button" class="plp-sheet-clear" id="sheetClearFilters">Reset filters</button>
+    <button type="button" class="plp-sheet-apply" id="sheetShowResults">Display <span id="sheetResultCount">0</span> result(s)</button>
+  </div>
+</div>
+
+<div class="category-panel-backdrop hidden" id="sortPanelBackdrop" aria-hidden="true"></div>
+<div class="sort-panel hidden" id="sortPanel" role="dialog" aria-label="Sort products" aria-modal="true">
+  <div class="category-panel-head">
+    <h3 class="category-panel-title">Sort By</h3>
+    <button type="button" class="category-panel-close" id="sortPanelClose" aria-label="Close sort">✕</button>
+  </div>
+  <div class="sort-panel-options" id="sortPanelOptions">
+    <button type="button" class="sort-option active" data-sort="featured">Featured</button>
+    <button type="button" class="sort-option" data-sort="name-asc">Name (A–Z)</button>
+    <button type="button" class="sort-option" data-sort="name-desc">Name (Z–A)</button>
+    <button type="button" class="sort-option" data-sort="ready-first">Ready to Deliver First</button>
+  </div>
+</div>
+
+<main class="catalogue" id="catalogue">
+  <nav class="plp-mobile-crumb" id="plpMobileCrumb" aria-label="Breadcrumb">
+    <a href="#" id="plpCrumbHome">Home</a>
+    <span class="plp-crumb-sep" aria-hidden="true">›</span>
+    <span id="plpCrumbCategory">All Pieces</span>
+  </nav>
+  <div class="plp-mobile-head" id="plpMobileResults" aria-live="polite">
+    <h2 class="plp-mobile-results-label" id="plpMobileResultsLabel">All Pieces</h2>
+    <span class="plp-mobile-results-count" id="plpMobileResultsCount"></span>
+  </div>
+  <div class="plp-luxury-bar plp-mobile-toolbar">
+    <button type="button" class="plp-lux-btn plp-lux-btn--filter" id="mobileFilterBtn" aria-expanded="false" aria-controls="categoryPanel">
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 7h14M8 12h8M10 17h4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="7" r="1.2" fill="currentColor"/><circle cx="14" cy="12" r="1.2" fill="currentColor"/><circle cx="11" cy="17" r="1.2" fill="currentColor"/></svg>
+      <span>Filter</span>
+    </button>
+    <button type="button" class="plp-lux-btn plp-lux-btn--sort" id="mobileSortBtn" aria-expanded="false" aria-controls="sortPanel">
+      <span>Sort by</span>
+      <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="plp-lux-btn plp-lux-btn--theme theme-toggle hidden" id="mobileThemeToolbar" aria-label="Switch theme" aria-pressed="false">
+      <span class="theme-icon-dark" aria-hidden="true">☀</span>
+      <span class="theme-icon-light" aria-hidden="true">☾</span>
+    </button>
+  </div>
+  <div class="section-head">
+    <span class="eyebrow">Curated For You</span>
+    <h2>The Wishlist Collection</h2>
+    <span class="section-ornament" aria-hidden="true">◆ ◆ ◆</span>
+  </div>
+  <div class="grid" id="productGrid"></div>
+  <div class="catalogue-footer" id="catalogueFooter">
+    <p class="catalogue-count" id="catalogueCount"></p>
+    <div class="plp-loading hidden" id="plpLoading" aria-live="polite">Loading pieces</div>
+    <button type="button" class="btn-load-more hidden" id="loadMoreBtn" aria-hidden="true">Load More Pieces</button>
+  </div>
+  <button type="button" class="plp-fab plp-view-toggle hidden" id="plpViewToggle" aria-label="Switch to list view" aria-pressed="false">
+    <svg class="plp-fab-icon plp-fab-icon--expand" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    <svg class="plp-fab-icon plp-fab-icon--grid" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+  </button>
+  <button type="button" class="plp-fab plp-back-top hidden" id="plpBackToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 6l-5 5M12 6l5 5M12 6v12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</main>
+
+<footer id="footer">
+  <div class="footer-shell">
+    <div class="footer-grid">
+      <section class="footer-block footer-block--promises" aria-labelledby="brandPromisesTitle">
+        <div class="footer-block-head">
+          <span class="footer-ornament" aria-hidden="true">◆</span>
+          <h2 class="footer-block-title" id="brandPromisesTitle">Brand Promises</h2>
+        </div>
+        <ul class="footer-promises">
+          <li>Complete Transparency</li>
+          <li>BIS 916 Hallmarked Pure Gold</li>
+          <li>Best Value for Lifetime Exchange</li>
+          <li>De Beers' Tested, Certified &amp; Ethically Sourced Diamonds</li>
+          <li>Assured Lifetime Maintenance</li>
+          <li>20- Point Quality Assurance</li>
+          <li>Fair Labour Practices</li>
+          <li>100% Value Assured on Gold Exchange</li>
+        </ul>
+      </section>
+
+      <section class="footer-block footer-block--connect" aria-labelledby="footerContactTitle">
+        <div class="footer-block-head">
+          <span class="footer-ornament" aria-hidden="true">◆</span>
+          <h2 class="footer-block-title" id="footerContactTitle">Call Us</h2>
+        </div>
+        <p class="footer-connect-lead">We are happy to help you find what you are looking for.</p>
+        <div class="footer-connect-row">
+          <a class="footer-cta footer-cta--phone" href="tel:+18578918942">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h2l1 4-2 1a11 11 0 0 0 5 5l1-2 4 1v2a2 2 0 0 1-2 2A15 15 0 0 1 3 7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>+1 857-891-8942</span>
+          </a>
+          <a class="footer-cta footer-cta--whatsapp" id="whatsappFooter" href="https://wa.me/18578918942" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8.5 9.5c.3 1.6 1.8 3.5 3.5 4.2 1 .4 2.2.2 3-.5l.6-.6c.2-.2.5-.2.7 0l1.2 1.2c.2.2.2.5 0 .7l-.6.6c-.5.5-.6 1.2-.3 1.8z" fill="currentColor" opacity=".9"/></svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+        <nav class="footer-social" aria-label="PMJ Jewels on social media">
+          <a class="footer-social-icon" href="https://instagram.com/pmjjewels.usa?igsh=MnZsa3hqZXp2a3Vs" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor"/></svg>
+          </a>
+          <a class="footer-social-icon" href="https://www.linkedin.com/search/results/companies/?keywords=pmj%20jewels&origin=GLOBAL_SEARCH_HEADER" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 10v7M8 7v.01M12 17v-7m0 0a2 2 0 0 1 4 0v7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+          <a class="footer-social-icon" href="https://x.com/pmj_jewels" target="_blank" rel="noopener noreferrer" aria-label="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+          <a class="footer-social-icon" href="https://www.youtube.com/@pmjjewels" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M11 10l4 2-4 2v-4z" fill="currentColor"/></svg>
+          </a>
+          <a class="footer-social-icon" href="https://in.pinterest.com/pmjjewellers/" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12 8c-1.2 0-2 .8-2 2 0 1.5 1.2 2.2 1.8 3.5.2.5.1 1.2-.4 1.6-.3.2-.7.4-1 .4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </a>
+        </nav>
+      </section>
+    </div>
+
+    <div class="footer-brand">
+      <img class="pmj-brand-logo pmj-brand-logo--footer pmj-brand-logo--stacked" src="assets/pmj-logo-stacked.png" alt="PMJ Jewels — Celebrate For Ever" width="128" height="128">
+      <img class="pmj-brand-logo pmj-brand-logo--footer pmj-brand-logo--horizontal" src="assets/pmj-logo-horizontal.png" alt="PMJ Jewels — Celebrate For Ever" width="200" height="60">
+    </div>
+    <p class="footer-copy">© 2026 PMJ Jewels · Celebrate For Ever · Private partner catalogue.</p>
+  </div>
+</footer>
+
+</div><!-- /siteContent -->
+
+<div class="admin-pill hidden" id="adminPill">Admin · <button type="button" id="openDisplaySettings">Display</button> · <button type="button" id="publishSiteConfig">Publish</button><span id="publishStatus"></span></div>
+
+<!-- ============ Product Modal ============ -->
+<div class="modal-overlay" id="pmOverlay"></div>
+<div class="product-modal" id="productModal">
+  <button class="pm-close" id="pmClose">✕</button>
+  <nav class="pm-breadcrumb" id="pmBreadcrumb" aria-label="Breadcrumb"></nav>
+  <div class="pm-grid" id="pmGrid">
+    <div class="pm-gallery">
+      <div class="pm-main viewer360-wrap" id="viewer360Wrap">
+        <button type="button" class="pm-gallery-nav pm-gallery-nav--prev" id="pmGalleryPrev" aria-label="Previous image">‹</button>
+        <button type="button" class="pm-gallery-nav pm-gallery-nav--next" id="pmGalleryNext" aria-label="Next image">›</button>
+        <div class="viewer360-stage" id="viewer360Stage">
+          <canvas id="viewer360Canvas"></canvas>
+          <img id="pmMainImg" src="" alt="">
+        </div>
+        <button type="button" class="pm-gallery-heart" id="pmGalleryHeart" aria-label="Add to wishlist">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.7-10-9.3C.4 8.1 2 4.5 5.6 4c2-.3 3.8.7 4.9 2.4C11.6 4.7 13.4 3.7 15.4 4c3.6.5 5.2 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/></svg>
+        </button>
+        <button type="button" class="pm-gallery-expand" id="pmGalleryExpand" aria-label="Expand gallery">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <span class="viewer360-hint">Hover to magnify · Drag to rotate</span>
+      </div>
+      <div class="pm-carousel-dots" id="pmCarouselDots" aria-hidden="true"></div>
+      <div class="pm-gallery-meta pm-gallery-meta--inline">
+        <span class="pm-gallery-counter" id="pmGalleryCounter"></span>
+      </div>
+      <div class="pm-thumbs" id="pmThumbs"></div>
+    </div>
+    <div class="pm-mobile-quick" id="pmMobileQuick">
+      <button type="button" class="pm-quick-btn" id="pmEnquireBtn">Enquire</button>
+      <button type="button" class="pm-quick-btn pm-quick-btn--share" id="pmShareBtn" aria-label="Share piece">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v10M12 3l-4 4M12 3l4 4M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="pm-info">
+      <div class="pm-cat" id="pmCat"></div>
+      <div class="pm-availability avail-mto" id="pmAvailability"></div>
+      <h3 class="pm-name" id="pmName"></h3>
+      <p class="pm-material" id="pmMaterial"></p>
+      <p class="pm-sku" id="pmSku"></p>
+      <p class="pm-price" id="pmPrice"></p>
+      <div class="pm-divider" aria-hidden="true"><span>◆</span></div>
+      <button type="button" class="pm-discover-row" id="pmDiscoverRow">
+        <span class="pm-discover-label">Discover piece specifications</span>
+        <span class="pm-discover-chevron" aria-hidden="true">›</span>
+      </button>
+      <div class="pm-spec-pill" id="pmSpecPill"></div>
+      <p class="pm-desc" id="pmDesc"></p>
+      <div class="pm-details-mobile" id="pmDetailsMobile">
+        <h4 class="pm-details-title">Jewellery Details</h4>
+        <div class="pm-details-tabs">
+          <button type="button" class="pm-details-tab active" data-tab="details">Product Details</button>
+          <button type="button" class="pm-details-tab" data-tab="price">Price Breakup</button>
+        </div>
+        <div class="pm-accordions" id="pmAccordions"></div>
+      </div>
+      <div class="pm-specs" id="pmSpecs"></div>
+      <div class="pm-actions pm-actions--sticky">
+        <button class="pm-heart" id="pmHeart">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7.5-4.7-10-9.3C.4 8.1 2 4.5 5.6 4c2-.3 3.8.7 4.9 2.4C11.6 4.7 13.4 3.7 15.4 4c3.6.5 5.2 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/></svg>
+          <span id="pmHeartLabel">Add to Wishlist</span>
+        </button>
+      </div>
+      <button type="button" class="pm-enquire-link" id="pmEnquireLink">Enquire about this piece</button>
+      <button class="edit-pencil" id="pmEditToggle">✎ Edit product details</button>
+      <div class="edit-fields" id="pmEditFields">
+        <label>Product Name</label>
+        <input id="editName" type="text">
+        <label>Description</label>
+        <textarea id="editDesc"></textarea>
+        <label>Purity</label>
+        <input id="editPurity" type="text" placeholder="e.g. 22K Antique Gold">
+        <label>Gross Weight</label>
+        <input id="editGross" type="text" placeholder="e.g. 18.4 g">
+        <label>Net Gold Weight</label>
+        <input id="editNetGold" type="text" placeholder="e.g. 15.1 g">
+        <label>Diamond / Stone Weight</label>
+        <input id="editDiamond" type="text" placeholder="e.g. 0.85 ct uncut polki">
+        <label>Stone Details</label>
+        <input id="editStones" type="text" placeholder="e.g. Ruby, emerald, natural pearls">
+        <label>Price</label>
+        <input id="editPrice" type="text" placeholder="e.g. Price on request">
+        <label>Availability</label>
+        <select id="editAvailability">
+          <option value="ready">Ready to Deliver</option>
+          <option value="mto">Made to Order</option>
+        </select>
+        <div class="edit-section-label">3D Display (this piece)</div>
+        <label class="toggle-row">
+          <input id="editAutoRotate" type="checkbox" checked>
+          <span>Auto-rotate in viewer</span>
+        </label>
+        <label>Rotation speed</label>
+        <input id="editRotateSpeed" type="range" min="0" max="3" step="0.1" value="1">
+        <span class="range-val" id="editRotateSpeedVal">1×</span>
+        <button class="edit-save" id="pmEditSave">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen gallery lightbox (mobile zoom view) -->
+<div class="pm-gallery-lightbox hidden" id="pmGalleryLightbox" role="dialog" aria-modal="true" aria-label="Product gallery">
+  <button type="button" class="pm-lightbox-close" id="pmLightboxClose" aria-label="Close gallery">✕</button>
+  <div class="pm-lightbox-viewer" id="pmLightboxViewer">
+    <button type="button" class="pm-gallery-nav pm-gallery-nav--prev" id="pmLightboxPrev" aria-label="Previous image">‹</button>
+    <div class="pm-lightbox-stage" id="pmLightboxStage">
+      <img id="pmLightboxImg" src="" alt="">
+    </div>
+    <button type="button" class="pm-gallery-nav pm-gallery-nav--next" id="pmLightboxNext" aria-label="Next image">›</button>
+  </div>
+  <p class="pm-pinch-hint">Pinch to zoom in/out</p>
+  <button type="button" class="pm-lightbox-reset" id="pmLightboxReset" aria-label="Reset zoom">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.4-5.8M20 12a8 8 0 0 1-13.4 5.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M17 4h3v3M7 20H4v-3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="pm-gallery-meta">
+    <span class="pm-gallery-counter" id="pmLightboxCounter"></span>
+  </div>
+  <div class="pm-thumbs pm-lightbox-thumbs" id="pmLightboxThumbs"></div>
+</div>
+
+<!-- ============ Admin Passcode Modal ============ -->
+<div class="admin-backdrop" id="adminBackdrop"></div>
+<div class="admin-modal" id="adminModal">
+  <div class="eyebrow">Store Admin</div>
+  <h3 style="font-size:22px;margin-top:10px;">Enter Admin Code</h3>
+  <input id="adminCode" type="password" placeholder="Admin passcode">
+  <button class="btn-primary" id="adminSubmit" style="width:100%;justify-content:center;">Unlock Editing</button>
+  <div class="admin-error login-error" id="adminError"></div>
+  <div class="admin-note">Admin edits publish live on Netlify for all visitors — product specs, prices, made-to-order, hero images, and banner. Shortcut: add <code>?admin=</code> and your admin code to the site URL.</div>
+</div>
+
+<!-- ============ Admin Display Settings ============ -->
+<div class="admin-backdrop" id="displaySettingsBackdrop"></div>
+<div class="admin-modal display-settings-modal wide" id="displaySettingsModal" aria-hidden="true">
+  <div class="eyebrow">Display Settings</div>
+
+  <div class="admin-settings-tabs">
+    <button type="button" class="admin-tab active" data-tab="motion">Motion</button>
+    <button type="button" class="admin-tab" data-tab="hero">Hero &amp; Intro</button>
+    <button type="button" class="admin-tab" data-tab="banner">Promo Banner</button>
+  </div>
+
+  <div class="admin-tab-panel" id="tabMotion">
+    <h3 class="admin-modal-title">3D Rotation &amp; Motion</h3>
+    <p class="admin-settings-note">Controls how products rotate in the hero, viewer, and catalogue.</p>
+
+    <label class="toggle-row">
+      <input id="setGlobalAutoRotate" type="checkbox" checked>
+      <span>Enable auto-rotate globally</span>
+    </label>
+    <label class="toggle-row">
+      <input id="setHeroAutoRotate" type="checkbox" checked>
+      <span>Hero featured piece auto-rotate</span>
+    </label>
+    <label class="toggle-row">
+      <input id="setViewerAutoRotate" type="checkbox" checked>
+      <span>Product detail viewer auto-rotate</span>
+    </label>
+
+    <label class="toggle-row">
+      <input id="setCustomerThemeToggle" type="checkbox" checked>
+      <span>Show light / dark theme switch for customers</span>
+    </label>
+
+    <label for="setGlobalSpeed">Global rotation speed</label>
+    <input id="setGlobalSpeed" type="range" min="0" max="3" step="0.1" value="1">
+    <span class="range-val" id="setGlobalSpeedVal">1×</span>
+
+    <label for="setHeroSpeed">Hero rotation speed</label>
+    <input id="setHeroSpeed" type="range" min="0" max="3" step="0.1" value="1">
+    <span class="range-val" id="setHeroSpeedVal">1×</span>
+  </div>
+
+  <div class="admin-tab-panel hidden" id="tabHero">
+    <h3 class="admin-modal-title">Hero &amp; Intro</h3>
+    <p class="admin-settings-note">Edit the hero text, button, and images. Changes appear in “The Private Viewing” section after save.</p>
+
+    <p class="admin-section-label">Hero text &amp; button</p>
+
+    <div class="banner-upload-row">
+      <label for="setHeroEyebrow">Eyebrow label</label>
+      <input type="text" id="setHeroEyebrow" placeholder="e.g. The Private Viewing">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setHeroHeadlineMain">Headline — first line</label>
+      <input type="text" id="setHeroHeadlineMain" placeholder="e.g. Pieces worth">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setHeroHeadlineEm">Headline — emphasis (italic)</label>
+      <input type="text" id="setHeroHeadlineEm" placeholder="e.g. a second look.">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setHeroDescription">Description paragraph</label>
+      <textarea id="setHeroDescription" placeholder="Text beside the hero image…"></textarea>
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setHeroCtaLabel">Button label</label>
+      <input type="text" id="setHeroCtaLabel" placeholder="e.g. View the Collection →">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setHeroCtaTarget">Button action</label>
+      <select id="setHeroCtaTarget">
+        <option value="#catalogue">Scroll to Collection</option>
+        <option value="#footer">Scroll to Enquire</option>
+        <option value="product">Open a product</option>
+      </select>
+    </div>
+
+    <div class="banner-upload-row hidden" id="heroCtaProductRow">
+      <label for="setHeroCtaProduct">Product to open</label>
+      <select id="setHeroCtaProduct">
+        <option value="">— Select a product —</option>
+      </select>
+    </div>
+
+    <p class="admin-section-label">Hero image</p>
+    <p class="admin-settings-note">Upload your hero product image. It appears in the vault intro and hero section as the product only — no background box. PNG with transparent background gives the cleanest result.</p>
+
+    <div class="banner-upload-row">
+      <label>Desktop hero image</label>
+      <div class="upload-spec-card" id="heroDesktopSpec"></div>
+      <input type="file" id="featuredDesktopUpload" accept="image/jpeg,image/png,image/webp">
+      <p class="preview-saved-hint hidden">Image saved — preview shown below</p>
+      <img id="featuredDesktopPreview" class="banner-preview hero-preview hidden" alt="Desktop hero preview">
+      <button type="button" class="btn-clear-banner hidden" id="clearFeaturedDesktop">Remove desktop image</button>
+    </div>
+
+    <div class="banner-upload-row">
+      <label>Mobile hero image</label>
+      <div class="upload-spec-card" id="heroMobileSpec"></div>
+      <input type="file" id="featuredMobileUpload" accept="image/jpeg,image/png,image/webp">
+      <p class="preview-saved-hint hidden">Image saved — preview shown below</p>
+      <img id="featuredMobilePreview" class="banner-preview hero-preview hidden" alt="Mobile hero preview">
+      <button type="button" class="btn-clear-banner hidden" id="clearFeaturedMobile">Remove mobile image</button>
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setImageCaption">Image caption</label>
+      <input type="text" id="setImageCaption" placeholder="Caption under the hero image">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setFeaturedProduct">Link caption to product (optional)</label>
+      <select id="setFeaturedProduct">
+        <option value="">— None —</option>
+      </select>
+    </div>
+
+    <label class="toggle-row">
+      <input id="setUseInIntro" type="checkbox" checked>
+      <span>Use this image in intro cinematic (after PMJ branding)</span>
+    </label>
+
+    <label class="toggle-row">
+      <input id="setFeaturedRotate3d" type="checkbox">
+      <span>3D rotate hero image (auto for PNG)</span>
+    </label>
+  </div>
+
+  <div class="admin-tab-panel hidden" id="tabBanner">
+    <h3 class="admin-modal-title">Promo Banner</h3>
+    <p class="admin-settings-note">Upload banner images at exact dimensions. Clicking the banner opens the linked product. PNG uploads can use 3D rotate mode.</p>
+
+    <label class="toggle-row">
+      <input id="setBannerEnabled" type="checkbox">
+      <span>Show promo banner on catalogue</span>
+    </label>
+
+    <div class="banner-upload-row">
+      <label for="setBannerMode">Banner type</label>
+      <select id="setBannerMode">
+        <option value="static">Static image banner</option>
+        <option value="rotate3d">Showcase motion (subtle drift)</option>
+      </select>
+    </div>
+
+    <div class="banner-upload-row">
+      <label>Desktop banner image</label>
+      <div class="upload-spec-card" id="bannerDesktopSpec"></div>
+      <input type="file" id="bannerDesktopUpload" accept="image/jpeg,image/png,image/webp">
+      <img id="bannerDesktopPreview" class="banner-preview hidden" alt="Desktop preview">
+      <button type="button" class="btn-clear-banner hidden" id="clearBannerDesktop">Remove desktop image</button>
+    </div>
+
+    <div class="banner-upload-row">
+      <label>Mobile banner image</label>
+      <div class="upload-spec-card" id="bannerMobileSpec"></div>
+      <input type="file" id="bannerMobileUpload" accept="image/jpeg,image/png,image/webp">
+      <img id="bannerMobilePreview" class="banner-preview mobile-preview hidden" alt="Mobile preview">
+      <button type="button" class="btn-clear-banner hidden" id="clearBannerMobile">Remove mobile image</button>
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setBannerHeadline">Headline</label>
+      <input type="text" id="setBannerHeadline" placeholder="e.g. Temple Collection Highlight">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setBannerSubtext">Description</label>
+      <textarea id="setBannerSubtext" placeholder="Short promotional copy…"></textarea>
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setBannerCta">Button label</label>
+      <input type="text" id="setBannerCta" placeholder="View Piece" value="View Piece">
+    </div>
+
+    <div class="banner-upload-row">
+      <label for="setBannerProduct">Link to product</label>
+      <select id="setBannerProduct">
+        <option value="">— Select a product —</option>
+      </select>
+    </div>
+
+    <div class="banner-upload-row" id="bannerRotateRow">
+      <label for="setBannerRotateSpeed">3D rotation speed</label>
+      <input id="setBannerRotateSpeed" type="range" min="0" max="3" step="0.1" value="1">
+      <span class="range-val" id="setBannerRotateSpeedVal">1×</span>
+    </div>
+  </div>
+
+  <button type="button" class="btn-primary admin-save-settings" id="saveDisplaySettings">Save Display Settings</button>
+  <button type="button" class="admin-cancel-settings" id="closeDisplaySettings">Cancel</button>
+</div>
+
+<!-- ============ Wishlist Drawer ============ -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Your Wishlist</h3>
+    <button class="close-btn" id="closeDrawer">✕</button>
+  </div>
+  <div id="drawerMain">
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-form" id="drawerForm">
+      <span class="eyebrow">Submit Enquiry</span>
+      <div class="field"><label for="fName">Full Name</label><input id="fName" type="text" placeholder="Your name" required></div>
+      <div class="field"><label for="fEmail">Email Address</label><input id="fEmail" type="email" placeholder="you@example.com" required></div>
+      <div class="field"><label for="fPhone">Phone Number</label><input id="fPhone" type="tel" placeholder="+91 90000 00000"></div>
+      <div class="field"><label for="fMsg">Message (optional)</label><textarea id="fMsg" placeholder="Any preferences — sizing, gifting, etc."></textarea></div>
+      <button class="submit-btn" id="submitBtn"><span id="submitLabel">Submit Wishlist Enquiry</span></button>
+      <p class="form-note">By submitting, you'll receive a confirmation email and our team will follow up within 24 hours regarding the pieces above.</p>
+    </div>
+  </div>
+  <div class="success-view" id="successView">
+    <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 12l5 5L20 6"/></svg></div>
+    <h3>Enquiry Received</h3>
+    <p>Thank you — a confirmation has been sent to your inbox, and our jewellery consultant will reach out shortly to discuss your shortlisted pieces.</p>
+    <div class="ref-code" id="refCode"></div>
+    <a href="#" class="new-enquiry" id="newEnquiry">Start a New Enquiry</a>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/images.js" defer></script>
+<script src="js/products.js" defer></script>
+<script src="js/site-sync.js" defer></script>
+<script src="js/availability.js" defer></script>
+<script src="js/model-loader.js" defer></script>
+<script src="js/particles.js" defer></script>
+<script src="js/three-experience.js" defer></script>
+<script src="js/viewer360.js" defer></script>
+<script src="js/viewer-zoom.js" defer></script>
+<script src="js/display-settings.js" defer></script>
+<script src="js/theme.js" defer></script>
+<script src="js/featured-hero.js" defer></script>
+<script src="js/categories.js" defer></script>
+<script src="js/header-scroll.js" defer></script>
+<script src="js/viewport-layout.js" defer></script>
+<script src="js/intro.js" defer></script>
+<script src="js/catalogue.js" defer></script>
+<script src="js/banner.js" defer></script>
+<script src="js/modal.js" defer></script>
+<script src="js/mobile-pdp.js" defer></script>
+<script src="js/plp-card-carousel.js" defer></script>
+<script src="js/luxury-mobile.js" defer></script>
+<script src="js/wishlist.js" defer></script>
+<script src="js/app.js" defer></script>
+<script src="js/ui-monitor.js" defer></script>
+
+</body>

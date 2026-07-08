@@ -37,6 +37,23 @@ html {
   padding-top: calc(var(--site-header-height, 68px) + clamp(48px, 9vh, 96px));
 }
 
+/* Light theme — match dark hero vertical rhythm (shorter header logo) */
+[data-theme="light"] .hero {
+  padding-top: calc(
+    var(--site-header-height, 68px)
+    + clamp(48px, 9vh, 96px)
+    + max(0px, var(--pmj-header-logo-stacked-h, 72px) - var(--pmj-header-logo-h, 36px))
+  );
+  min-height: 82vh;
+  display: flex;
+  align-items: center;
+}
+
+[data-theme="light"] .hero-grid {
+  align-items: center;
+  width: 100%;
+}
+
 .filter-bar.filter-bar--in-header {
   flex-wrap: wrap;
   padding-left: calc(var(--pmj-shell-pad) + var(--pmj-safe-left));
@@ -190,6 +207,14 @@ body.filter-bar-stuck #siteHeader {
     min-height: auto;
   }
 
+  [data-theme="light"] .hero {
+    padding-top: calc(
+      var(--site-header-height, 68px)
+      + 72px
+      + max(0px, var(--pmj-header-logo-stacked-h, 62px) - var(--pmj-header-logo-h, 32px))
+    );
+  }
+
   .hero-visual {
     height: min(52vw, 220px);
   }
@@ -303,6 +328,14 @@ body.filter-bar-stuck #siteHeader {
   .hero {
     padding-top: calc(var(--site-header-height, 68px) + clamp(56px, 8vh, 88px));
     min-height: 70vh;
+  }
+
+  [data-theme="light"] .hero {
+    padding-top: calc(
+      var(--site-header-height, 68px)
+      + clamp(56px, 8vh, 88px)
+      + max(0px, var(--pmj-header-logo-stacked-h, 72px) - var(--pmj-header-logo-h, 36px))
+    );
   }
 
   .hero-grid {

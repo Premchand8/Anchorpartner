@@ -77,6 +77,22 @@
   color: var(--ink-secondary);
 }
 
+/* Light + dark — same hero product stage height & vertical centering on desktop */
+@media (min-width: 901px) {
+  .hero-visual.hero-product-only,
+  .hero-visual.hero-png-mode {
+    height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-visual.hero-product-only #heroImg,
+  .hero-visual.hero-png-mode #heroImg {
+    object-position: center center;
+  }
+}
+
 /* Premium frame only when NOT showing uploaded product */
 .hero-visual:not(.hero-product-only):not(.hero-png-mode) {
   /* frames defined in premium.css */

@@ -7,6 +7,9 @@
   --pmj-logo-horizontal: url('../assets/pmj-logo-horizontal.png');
   --pmj-brand-name: 'PMJ Jewels';
   --pmj-brand-tagline: 'Celebrate For Ever';
+  /* Header: light = horizontal bar · dark = stacked square — taller for legible lettering */
+  --pmj-header-logo-h: clamp(28px, 7vw, 36px);
+  --pmj-header-logo-stacked-h: clamp(72px, 18vw, 88px);
 }
 
 .pmj-brand {
@@ -71,12 +74,12 @@
 }
 
 .pmj-brand-logo--header.pmj-brand-logo--stacked {
-  height: clamp(32px, 8vw, 40px);
+  height: var(--pmj-header-logo-stacked-h);
   width: auto;
 }
 
 .pmj-brand-logo--header.pmj-brand-logo--horizontal {
-  height: clamp(26px, 6.5vw, 34px);
+  height: var(--pmj-header-logo-h);
   width: auto;
 }
 
@@ -132,12 +135,9 @@
 }
 
 @media (max-width: 520px) {
-  .pmj-brand-logo--header.pmj-brand-logo--stacked {
-    height: 30px;
-  }
-
-  .pmj-brand-logo--header.pmj-brand-logo--horizontal {
-    height: 24px;
+  :root {
+    --pmj-header-logo-h: clamp(26px, 6.5vw, 32px);
+    --pmj-header-logo-stacked-h: clamp(62px, 16vw, 72px);
   }
 }
 

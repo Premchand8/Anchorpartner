@@ -326,7 +326,6 @@
 /* ——— Hero (Listen Now–style editorial) ——— */
 [data-theme="light"] .hero {
   background: var(--am-bg);
-  padding-top: 24px;
 }
 
 [data-theme="light"] .hero-visual:not(.hero-product-only):not(.hero-png-mode) {

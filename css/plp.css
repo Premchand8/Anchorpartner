@@ -71,7 +71,7 @@ body.filter-bar-stuck .filter-bar.filter-bar--in-header {
 
 body.plp-at-home .header-main-row {
   opacity: 1;
-  max-height: 80px;
+  max-height: 96px;
   min-height: 44px;
   transform: translateY(0);
   pointer-events: auto;

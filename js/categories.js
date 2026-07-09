@@ -11,6 +11,9 @@ const CATEGORY_LABELS = {
   stud: 'Studs',
   temple: 'Temple Jewellery',
   bridal: 'Bridal Sets',
+  mangalsutra: 'Mangalsutras',
+  vaddanam: 'Vaddanams',
+  nosepin: 'Nose Pins',
 };
 
 const CATEGORY_ICONS = {
@@ -26,6 +29,9 @@ const CATEGORY_ICONS = {
   stud: '•',
   temple: '☸',
   bridal: '♛',
+  mangalsutra: '∞',
+  vaddanam: '▭',
+  nosepin: '•',
 };
 
 function isMobilePlp() {
@@ -45,6 +51,9 @@ const CATEGORY_SHORT_LABELS = {
   stud: 'Studs',
   temple: 'Temple',
   bridal: 'Bridal',
+  mangalsutra: 'Mangalsutra',
+  vaddanam: 'Vaddanam',
+  nosepin: 'Nose Pin',
 };
 
 function getCategoryShortLabel(catId) {
@@ -94,7 +103,13 @@ function getCategoryLabel(catId) {
 
 /** Only categories that exist on current products (admin upload ready) */
 function getCategoryListForUi() {
-  const products = getProductsForCategories();
+  const collectionId = window.currentCollectionFilter || null;
+  let products = getProductsForCategories();
+  if (collectionId && typeof getProductsInCollection === 'function') {
+    products = getProductsInCollection(collectionId);
+  } else if (collectionId) {
+    products = products.filter((p) => (p.collections || []).includes(collectionId));
+  }
   const map = new Map();
 
   products.forEach((p) => {
@@ -296,11 +311,6 @@ function initCategoryUi(onSelect) {
     if (searchInput) searchInput.value = '';
     panel?.querySelectorAll('.category-panel-item').forEach((el) => el.classList.remove('hidden'));
   }
-
-  panel?.addEventListener('click', (e) => {
-    const item = e.target.closest('.category-panel-item[data-filter]');
-    if (item) handleCategoryPick(item, false);
-  });
 
   panel?.addEventListener('change', (e) => {
     const input = e.target.closest('input[name="catFilter"]');

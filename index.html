@@ -27,11 +27,13 @@
 <link rel="stylesheet" href="css/plp.css">
 <link rel="stylesheet" href="css/plp-mobile.css">
 <link rel="stylesheet" href="css/pdp-mobile.css">
-<link rel="stylesheet" href="css/theme-light-apple.css">
+<!-- <link rel="stylesheet" href="css/theme-light-apple.css"> -->
 <link rel="stylesheet" href="css/ui-monitor.css">
 <link rel="stylesheet" href="css/responsive-system.css">
 <link rel="stylesheet" href="css/luxury-mobile.css">
 <link rel="stylesheet" href="css/plp-toolbar-unified.css">
+<link rel="stylesheet" href="css/collections.css">
+<link rel="stylesheet" href="css/collections-animations.css">
 <link rel="stylesheet" href="css/login-gate.css">
 <link rel="stylesheet" href="css/cinematic-brand.css">
 <link rel="stylesheet" href="css/gradient-buttons.css">
@@ -48,11 +50,6 @@
   <p class="loading-caption">Forging your private viewing experience</p>
 </div>
 <div id="forgeFlash"></div>
-<div id="introBrandOverlay" class="intro-brand-overlay" aria-hidden="true">
-  <div class="brand-lockup intro-brand-lockup pmj-brand-lockup">
-    <img class="pmj-brand-logo pmj-brand-logo--intro pmj-brand-logo--stacked" src="assets/pmj-logo-stacked.png" alt="" width="180" height="180" aria-hidden="true">
-  </div>
-</div>
 <canvas id="experienceCanvas" aria-hidden="true"></canvas>
 
 <!-- ============ LOGIN GATE ============ -->
@@ -68,6 +65,15 @@
     </form>
     <div class="login-error" id="loginError"></div>
     <div class="login-foot">© 2026 PMJ Jewels · Celebrate For Ever · Confidential Partner Preview</div>
+  </div>
+</div>
+
+<!-- ============ LOGO REVEAL STAGE ============ -->
+<div id="logoRevealScreen" class="hidden">
+  <div class="logo-reveal-glow"></div>
+  <div class="logo-reveal-content">
+    <img class="logo-reveal-img" src="assets/pmj-logo-stacked.png" alt="PMJ Jewels — Celebrate For Ever">
+    <p class="logo-reveal-tagline">Celebrate For Ever</p>
   </div>
 </div>
 
@@ -87,7 +93,7 @@
       <img class="pmj-brand-logo pmj-brand-logo--header pmj-brand-logo--horizontal pmj-brand-logo--theme-light" src="assets/pmj-logo-horizontal.png" alt="PMJ Jewels" width="180" height="54">
     </a>
     <nav>
-      <a class="nav-link" href="#catalogue">Collection</a>
+      <a class="nav-link" href="#collectionsHub">Collections</a>
       <a class="nav-link" href="#footer">Enquire</a>
       <button class="icon-btn theme-toggle hidden" id="themeToggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Light mode">
         <span class="theme-icon-dark" aria-hidden="true">☀</span>
@@ -109,7 +115,7 @@
       <span class="eyebrow" id="heroEyebrow">The Private Viewing</span>
       <h1 id="heroHeadline"><span id="heroHeadlineMain">Pieces worth</span><br><em id="heroHeadlineEm">a second look.</em></h1>
       <p id="heroDescription">A curated selection from the PMJ atelier, shown here for your consideration. Save what catches your eye — we'll follow up personally on every piece you shortlist.</p>
-      <a href="#catalogue" class="btn-primary" id="heroCta">View the Collection →</a>
+      <a href="#collectionsHub" class="btn-primary" id="heroCta">Discover the Collections →</a>
     </div>
     <div class="hero-visual" id="heroVisual">
       <canvas id="heroCanvas" aria-hidden="true"></canvas>
@@ -136,7 +142,26 @@
   </div>
 </section>
 
-<div id="filterBarAnchor" class="filter-bar-anchor">
+<section class="collections-hub" id="collectionsHub" aria-label="Jewellery collections">
+  <div class="section-head">
+    <span class="eyebrow">The House</span>
+    <h2>Private Collections</h2>
+    <p class="collections-intro">Curated lines of PMJ craftsmanship — select a collection to explore every piece.</p>
+  </div>
+  <div class="collections-grid" id="collectionsGrid"></div>
+</section>
+
+
+
+<nav class="collection-browse-crumb plp-mobile-crumb collection-gallery-hidden" id="plpMobileCrumb" aria-label="Breadcrumb">
+  <button type="button" class="plp-crumb-link" id="plpCrumbHome">All Collections</button>
+  <span class="plp-crumb-sep hidden" id="plpCrumbColSep" aria-hidden="true">◆</span>
+  <button type="button" class="plp-crumb-link hidden" id="plpCrumbCollectionLink"></button>
+  <span class="plp-crumb-sep hidden" id="plpCrumbCatSep" aria-hidden="true">◆</span>
+  <span class="plp-crumb-current" id="plpCrumbCategory">All Pieces</span>
+</nav>
+
+<div id="filterBarAnchor" class="filter-bar-anchor collection-gallery-hidden">
 <div class="filter-bar" id="filterBar">
   <div class="filter-group filter-group--availability">
     <span class="filter-group-label">Availability</span>
@@ -158,9 +183,6 @@
     </div>
   </div>
   <div class="filter-bar-actions">
-    <div class="search-wrap">
-      <input id="searchInput" type="search" placeholder="Search pieces…" aria-label="Search catalogue" autocomplete="off">
-    </div>
     <button type="button" class="plp-mobile-theme-btn icon-btn theme-toggle hidden" id="mobileThemeToggle" aria-label="Switch appearance" aria-pressed="false">
       <span class="theme-icon-dark" aria-hidden="true">☀</span>
       <span class="theme-icon-light" aria-hidden="true">☾</span>
@@ -178,6 +200,14 @@
     <button type="button" class="category-panel-close" id="categoryPanelClose" aria-label="Close filters">✕</button>
   </div>
   <div class="lux-filter-scroll">
+    <div class="lux-filter-acc is-open" data-acc="search">
+      <button type="button" class="lux-filter-acc-head">Search <span class="lux-acc-toggle" aria-hidden="true">−</span></button>
+      <div class="lux-filter-acc-body">
+        <div class="search-wrap">
+          <input id="searchInput" type="search" placeholder="Search pieces…" aria-label="Search catalogue" autocomplete="off">
+        </div>
+      </div>
+    </div>
     <div class="lux-filter-acc is-open" data-acc="category">
       <button type="button" class="lux-filter-acc-head">Category <span class="lux-acc-toggle" aria-hidden="true">−</span></button>
       <div class="lux-filter-acc-body">
@@ -216,12 +246,18 @@
   </div>
 </div>
 
-<main class="catalogue" id="catalogue">
-  <nav class="plp-mobile-crumb" id="plpMobileCrumb" aria-label="Breadcrumb">
-    <a href="#" id="plpCrumbHome">Home</a>
-    <span class="plp-crumb-sep" aria-hidden="true">›</span>
-    <span id="plpCrumbCategory">All Pieces</span>
-  </nav>
+<main class="catalogue collection-gallery-hidden" id="catalogue">
+  <div class="collection-gallery-hero hidden" id="collectionGalleryHero" aria-hidden="true">
+    <div class="collection-gallery-hero-media">
+      <img id="collectionGalleryHeroImg" src="" alt="">
+    </div>
+    <div class="collection-gallery-hero-veil"></div>
+    <div class="collection-gallery-hero-copy">
+      <span class="eyebrow" id="collectionGalleryHeroEyebrow">Collection</span>
+      <h2 id="collectionGalleryHeroTitle">Collection</h2>
+      <p class="collection-gallery-hero-meta" id="collectionGalleryHeroMeta">Curated pieces</p>
+    </div>
+  </div>
   <div class="plp-mobile-head" id="plpMobileResults" aria-live="polite">
     <h2 class="plp-mobile-results-label" id="plpMobileResultsLabel">All Pieces</h2>
     <span class="plp-mobile-results-count" id="plpMobileResultsCount"></span>
@@ -241,11 +277,13 @@
     </button>
   </div>
   <div class="section-head">
-    <span class="eyebrow">Curated For You</span>
-    <h2>The Wishlist Collection</h2>
+    <span class="eyebrow" id="catalogueSectionEyebrow">Curated For You</span>
+    <h2 id="catalogueSectionTitle">The Wishlist Collection</h2>
     <span class="section-ornament" aria-hidden="true">◆ ◆ ◆</span>
   </div>
-  <div class="grid" id="productGrid"></div>
+  <div class="collection-gallery-stage" id="collectionGalleryStage">
+    <div class="grid" id="productGrid"></div>
+  </div>
   <div class="catalogue-footer" id="catalogueFooter">
     <p class="catalogue-count" id="catalogueCount"></p>
     <div class="plp-loading hidden" id="plpLoading" aria-live="polite">Loading pieces</div>
@@ -693,7 +731,10 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/images.js" defer></script>
+<script src="js/sweet16-images.js" defer></script>
 <script src="js/products.js" defer></script>
+<script src="js/collections.js" defer></script>
+<script src="js/collections-animations.js" defer></script>
 <script src="js/site-sync.js" defer></script>
 <script src="js/availability.js" defer></script>
 <script src="js/model-loader.js" defer></script>

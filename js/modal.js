@@ -3,6 +3,14 @@ const pmOverlay = document.getElementById('pmOverlay');
 const productModal = document.getElementById('productModal');
 let pmImageIndex = 0;
 
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function getModalImageSrc(product, index) {
   return IMAGES[product.images[index]];
 }
@@ -54,11 +62,56 @@ function resetViewerWrap(wrap) {
 
 function applyProductViewer(p) {
   const wrap = document.getElementById('viewer360Wrap');
-  const mainImg = document.getElementById('pmMainImg');
+  const stage = document.getElementById('viewer360Stage');
   const hint = wrap?.querySelector('.viewer360-hint');
-  if (!wrap || !mainImg) return;
+  if (!wrap || !stage) return;
 
   resetViewerWrap(wrap);
+
+  // Check if we have both model and product images for Sweet 16 collection
+  const hasSplitGallery = p.images && p.images.length === 2 && p.images[0].includes('_model') && p.images[1].includes('_product');
+
+  if (hasSplitGallery) {
+    wrap.classList.add('has-split-gallery');
+    stage.innerHTML = `
+      <div class="pdp-gallery-split">
+        <div class="pdp-gallery-item pdp-gallery-item--model">
+          <img src="${IMAGES[p.images[0]]}" alt="${p.name} - Model View" class="pdp-img">
+          <span class="pdp-img-label">Model View</span>
+        </div>
+        <div class="pdp-gallery-item pdp-gallery-item--product">
+          <img src="${IMAGES[p.images[1]]}" alt="${p.name} - Product View" class="pdp-img">
+          <span class="pdp-img-label">Product View</span>
+        </div>
+      </div>
+    `;
+
+    if (window.Viewer360) Viewer360.hide();
+    
+    // Hide single-image navigation elements
+    document.getElementById('pmGalleryPrev')?.classList.add('hidden');
+    document.getElementById('pmGalleryNext')?.classList.add('hidden');
+    document.getElementById('pmCarouselDots')?.classList.add('hidden');
+    document.getElementById('pmThumbs')?.classList.add('hidden');
+    if (hint) hint.style.display = 'none';
+    return;
+  }
+
+  // Restore defaults for single-image or 3D cases
+  wrap.classList.remove('has-split-gallery');
+  stage.innerHTML = `
+    <canvas id="viewer360Canvas"></canvas>
+    <img id="pmMainImg" src="" alt="">
+  `;
+  const mainImg = document.getElementById('pmMainImg');
+
+  // Show navigation and thumbnails if there are multiple images
+  const showNav = p.images && p.images.length > 1;
+  document.getElementById('pmGalleryPrev')?.classList.toggle('hidden', !showNav);
+  document.getElementById('pmGalleryNext')?.classList.toggle('hidden', !showNav);
+  document.getElementById('pmCarouselDots')?.classList.toggle('hidden', !showNav);
+  document.getElementById('pmThumbs')?.classList.toggle('hidden', !showNav);
+
   if (!isMobileView()) {
     window.ViewerZoom?.rebind(wrap);
   }
@@ -72,9 +125,14 @@ function applyProductViewer(p) {
 
   if (useFlat) {
     if (window.Viewer360) Viewer360.hide();
-    mainImg.classList.remove('hidden');
+    if (mainImg) {
+      mainImg.src = src;
+      mainImg.alt = p.name;
+      mainImg.classList.remove('hidden');
+    }
     updateMobileViewerHint(wrap, isPng);
     if (!isMobileView() && hint) {
+      hint.style.display = 'block';
       hint.textContent = isPng
         ? 'Hover to magnify · Original product cut-out'
         : 'Hover to magnify · Full view';
@@ -86,14 +144,22 @@ function applyProductViewer(p) {
     wrap.classList.add('viewer-3d-mode');
     Viewer360.show(p, pmImageIndex);
     if (hint) {
+      hint.style.display = 'block';
       hint.textContent = 'Hover to magnify · Drag to rotate · Pinch to zoom';
     }
     return;
   }
 
   if (window.Viewer360) Viewer360.hide();
-  mainImg.classList.remove('hidden');
-  if (hint) hint.textContent = 'Hover to magnify';
+  if (mainImg) {
+    mainImg.src = src;
+    mainImg.alt = p.name;
+    mainImg.classList.remove('hidden');
+  }
+  if (hint) {
+    hint.style.display = 'block';
+    hint.textContent = 'Hover to magnify';
+  }
 }
 
 function openProductModal(id) {
@@ -174,10 +240,50 @@ function buildMaterialLine(p) {
 function renderPmBreadcrumb(p, catLabel) {
   const el = document.getElementById('pmBreadcrumb');
   if (!el) return;
+
+  const inGallery = document.body.dataset.pmjBrowse === 'gallery';
+  const collectionId = document.body.dataset.pmjCollection || window.currentCollectionFilter;
+  const col = collectionId && typeof getCollectionById === 'function' ? getCollectionById(collectionId) : null;
+
+  if (inGallery && col) {
+    const catName = catLabel || (typeof getCategoryLabel === 'function' ? getCategoryLabel(p.cat) : p.cat);
+    el.innerHTML =
+      `<button type="button" class="pm-crumb-link" data-crumb="hub">All Collections</button>` +
+      `<span class="pm-crumb-sep" aria-hidden="true">◆</span>` +
+      `<button type="button" class="pm-crumb-link" data-crumb="collection">${escapeHtml(col.title)}</button>` +
+      `<span class="pm-crumb-sep" aria-hidden="true">◆</span>` +
+      `<button type="button" class="pm-crumb-link" data-crumb="category">${escapeHtml(catName)}</button>` +
+      `<span class="pm-crumb-sep" aria-hidden="true">◆</span>` +
+      `<span class="pm-crumb-current">${escapeHtml(p.name)}</span>`;
+    bindPmBreadcrumbNav(el);
+    return;
+  }
+
   const short = typeof getCategoryShortLabel === 'function' ? getCategoryShortLabel(p.cat) : catLabel;
   const left = short ? short.toUpperCase() : 'COLLECTION';
   const right = catLabel ? catLabel.toUpperCase() : 'PIECES';
   el.textContent = left === right ? left : `${left} | ${right}`;
+}
+
+function bindPmBreadcrumbNav(container) {
+  if (!container || container.dataset.bound === '1') return;
+  container.dataset.bound = '1';
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-crumb]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const collectionId = document.body.dataset.pmjCollection || window.currentCollectionFilter;
+    const product = typeof getProductData === 'function' && activeProductId ? getProductData(activeProductId) : null;
+    const categoryId = window.getCurrentCategoryFilter?.() || product?.cat || 'all';
+    const crumb = btn.dataset.crumb;
+
+    closeProductModal();
+
+    if (crumb === 'hub') window.openCollectionsHub?.();
+    else if (crumb === 'collection' && collectionId) window.openCollectionGallery?.(collectionId, 'all');
+    else if (crumb === 'category' && collectionId) window.openCollectionGallery?.(collectionId, categoryId);
+  });
 }
 
 function updateGalleryCounter(images, elId = 'pmGalleryCounter') {
@@ -389,8 +495,10 @@ function renderModal() {
   document.getElementById('pmDesc').textContent = p.description;
 
   const mainImg = document.getElementById('pmMainImg');
-  mainImg.src = getModalImageSrc(p, pmImageIndex);
-  mainImg.alt = p.name;
+  if (mainImg) {
+    mainImg.src = getModalImageSrc(p, pmImageIndex);
+    mainImg.alt = p.name;
+  }
 
   document.getElementById('pmThumbs').innerHTML = p.images.map((key, i) => `
     <div class="pm-thumb ${i === pmImageIndex ? 'active' : ''}" data-i="${i}">

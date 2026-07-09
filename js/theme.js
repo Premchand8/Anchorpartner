@@ -71,21 +71,19 @@ const PMJTheme = (() => {
   function updateToggleVisibility() {
     const enabled = isToggleEnabled();
     const active = isCatalogueActive();
-    const mobile = isMobileView();
-    const atHome = document.body.classList.contains('plp-at-home');
 
     const headerBtn = document.getElementById('themeToggle');
     const filterBtn = document.getElementById('mobileThemeToggle');
     const toolbarBtn = document.getElementById('mobileThemeToolbar');
 
     if (headerBtn) {
-      headerBtn.classList.toggle('hidden', !(enabled && active && (!mobile || atHome)));
+      headerBtn.classList.toggle('hidden', !(enabled && active));
     }
     if (filterBtn) {
-      filterBtn.classList.toggle('hidden', !(enabled && active && mobile));
+      filterBtn.classList.toggle('hidden', !(enabled && active));
     }
     if (toolbarBtn) {
-      toolbarBtn.classList.toggle('hidden', !(enabled && active && mobile));
+      toolbarBtn.classList.toggle('hidden', !(enabled && active));
     }
   }
 

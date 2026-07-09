@@ -63,17 +63,25 @@ function playCssIntroFallback() {
 }
 
 function playIntro() {
-  const useWebGL =
-    !prefersReducedMotion &&
-    window.PMJExperience &&
-    typeof THREE !== 'undefined' &&
-    typeof gsap !== 'undefined';
-
-  if (useWebGL) {
-    PMJExperience.playSequence(revealCatalogue);
-  } else {
-    playCssIntroFallback();
+  const revealScreen = document.getElementById('logoRevealScreen');
+  if (!revealScreen) {
+    revealCatalogue();
+    return;
   }
+
+  // Show the logo reveal screen
+  revealScreen.classList.remove('hidden');
+  void revealScreen.offsetWidth; // Force layout reflow
+  revealScreen.classList.add('active');
+
+  // After 2.6 seconds, fade out the reveal screen and reveal the catalogue
+  setTimeout(() => {
+    revealScreen.classList.remove('active');
+    setTimeout(() => {
+      revealScreen.classList.add('hidden');
+    }, 850); // Wait for fade out transition to complete
+    revealCatalogue();
+  }, 2600);
 }
 
 function attemptLogin() {
@@ -135,7 +143,11 @@ function onAppReady() {
       applyFeaturedVisual();
     } else {
       const hero = PRODUCTS?.find((p) => p.id === 'SPND998476');
-      if (hero && window.PMJExperience) PMJExperience.initHeroViewer(hero);
+      const heroImg = document.getElementById('heroImg');
+      if (heroImg && hero && IMAGES?.[hero.images?.[0]]) {
+        heroImg.src = IMAGES[hero.images[0]];
+        heroImg.classList.remove('hidden');
+      }
     }
     if (window.PromoBanner) {
       PromoBanner.init();
@@ -172,16 +184,8 @@ function startBootstrap() {
       .finally(finish);
   };
 
-  try {
-    if (window.PMJExperience && typeof THREE !== 'undefined') {
-      PMJExperience.bootstrap(wrappedFinish);
-    } else {
-      wrappedFinish();
-    }
-  } catch (err) {
-    console.warn('PMJ bootstrap failed, opening login gate.', err);
-    wrappedFinish();
-  }
+  // Bypass 3D cinematic bootstrap to ensure immediate loading of the login gate
+  wrappedFinish();
 }
 
 initLoginGate();

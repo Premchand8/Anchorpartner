@@ -1,0 +1,308 @@
+/* Collections browse — cinematic entrances & gallery wow */
+
+.browse-transition-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 50%, rgba(199, 162, 82, 0.22), transparent 65%),
+    linear-gradient(105deg, transparent 42%, rgba(232, 217, 181, 0.12) 50%, transparent 58%);
+  background-size: 100% 100%, 220% 100%;
+  background-position: center, -120% center;
+  transition: opacity 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.browse-transition-veil.is-active {
+  opacity: 1;
+  background-position: center, 120% center;
+  transition:
+    opacity 0.22s cubic-bezier(0.22, 0.61, 0.36, 1),
+    background-position 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes collectionHeadReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes collectionTileReveal {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes collectionHeroReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes collectionHeroKenBurns {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes collectionHeroImgIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(20px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.02) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes categoryHeadReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes categoryTileReveal {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.92);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes galleryStageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes galleryFilterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gallerySectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes galleryCardLuxReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.94) rotateX(6deg);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes galleryCardCleanIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes galleryHeroCopyIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes collectionOrbDrift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(12px, -18px) scale(1.08);
+    opacity: 0.55;
+  }
+}
+
+@keyframes ornamentShimmer {
+  0%, 100% { opacity: 0.45; letter-spacing: 0.55em; }
+  50% { opacity: 0.95; letter-spacing: 0.62em; }
+}
+
+@keyframes frameShimmer {
+  0% { box-shadow: inset 0 0 0 1px rgba(199, 162, 82, 0.15); }
+  50% { box-shadow: inset 0 0 0 1px rgba(199, 162, 82, 0.45), 0 0 24px rgba(199, 162, 82, 0.08); }
+  100% { box-shadow: inset 0 0 0 1px rgba(199, 162, 82, 0.15); }
+}
+
+/* Floating ambience — removed for cleaner hub */
+
+#collectionsHub.browse-stage-enter .section-head {
+  animation: collectionHeadReveal 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+#collectionsHub.browse-stage-enter .collections-intro {
+  animation: collectionHeadReveal 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s both;
+}
+
+.collection-tile.is-revealing,
+.collection-banner.is-revealing {
+  animation: collectionTileReveal 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--stagger, 0s);
+}
+
+.collection-banner.is-revealing.collection-banner--wide-left,
+.collection-banner.is-revealing.collection-banner--wide-right {
+  animation-duration: 1.05s;
+}
+
+/* Collection landing */
+#collectionLanding.browse-stage-enter .collection-breadcrumb {
+  animation: categoryHeadReveal 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+#collectionLanding.browse-stage-enter .collection-landing-hero {
+  animation: collectionHeroReveal 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s both;
+}
+
+#collectionLanding.browse-stage-enter .collection-landing-hero-media img {
+  animation:
+    collectionHeroImgIn 1.15s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s both,
+    collectionHeroKenBurns 18s ease-in-out 1.2s forwards;
+}
+
+#collectionLanding.browse-stage-enter .collection-landing-hero-copy {
+  animation: collectionHeroReveal 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.28s both;
+}
+
+#collectionLanding.browse-stage-enter .collection-categories-head {
+  animation: categoryHeadReveal 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s both;
+}
+
+.collection-category-tile.is-revealing {
+  animation: categoryTileReveal 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--stagger, 0s);
+}
+
+/* Gallery stage — refined, uncluttered entrance */
+#catalogue.browse-stage-enter {
+  animation: galleryStageReveal 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+#collectionGalleryHero.gallery-hero-enter {
+  animation: galleryHeroCopyIn 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+#collectionGalleryStage.gallery-stage-unveil {
+  animation: galleryStageReveal 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
+}
+
+#filterBarAnchor.browse-filter-enter {
+  animation: galleryFilterReveal 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.05s both;
+}
+
+#plpMobileCrumb.browse-crumb-enter {
+  animation: gallerySectionReveal 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+body[data-pmj-browse="gallery"] .card-gallery-reveal.card-gallery-lux {
+  animation: galleryCardCleanIn 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--wave-delay, 0s);
+}
+
+.collection-category-tile.is-activating {
+  animation: categoryTileActivate 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.collection-tile.is-activating,
+.collection-banner.is-activating {
+  animation: categoryTileActivate 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes categoryTileActivate {
+  0% { transform: scale(1); filter: brightness(1); }
+  40% { transform: scale(0.97); filter: brightness(1.15); box-shadow: 0 0 40px rgba(199, 162, 82, 0.25); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+body.browse-transitioning .collection-banner,
+body.browse-transitioning .collection-category-tile {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .browse-transition-veil,
+  .collection-tile.is-revealing,
+  .collection-banner.is-revealing,
+  .collection-category-tile.is-revealing,
+  body[data-pmj-browse="gallery"] .card-gallery-reveal,
+  #collectionsHub.browse-stage-enter .section-head,
+  #collectionLanding.browse-stage-enter .collection-landing-hero,
+  #catalogue.browse-stage-enter,
+  #collectionGalleryHero.gallery-hero-enter,
+  #collectionGalleryStage.gallery-stage-unveil {
+    animation: none !important;
+  }
+
+  #collectionLanding.browse-stage-enter .collection-landing-hero-media img {
+    animation: none !important;
+  }
+}

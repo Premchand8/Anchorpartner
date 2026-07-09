@@ -1162,3 +1162,606 @@ footer .wordmark {
     transform: none !important;
   }
 }
+
+/* --- Desktop Card Carousel & Luxury Hover Cross-fade --- */
+@media (min-width: 901px) {
+  .card-carousel-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-media--carousel .card-carousel-track {
+    display: block !important;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    transform: none !important;
+  }
+
+  .card-media--carousel .card-carousel-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.45, 1), transform 0.8s cubic-bezier(0.25, 1, 0.45, 1) !important;
+  }
+
+  /* Model view - visible by default */
+  .card-media--carousel .card-carousel-img[data-i="0"],
+  .card-media--carousel .card-carousel-img:first-child {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  /* Product view - hidden by default */
+  .card-media--carousel .card-carousel-img[data-i="1"],
+  .card-media--carousel .card-carousel-img:nth-child(2) {
+    opacity: 0;
+    transform: scale(0.95);
+    z-index: 1;
+  }
+
+  /* Hover state: model fades out & zooms forward slightly; product cutout fades in & scales to 1 */
+  .card:hover .card-media--carousel .card-carousel-img[data-i="0"],
+  .card:hover .card-media--carousel .card-carousel-img:first-child {
+    opacity: 0;
+    transform: scale(1.05);
+    z-index: 1;
+  }
+
+  .card:hover .card-media--carousel .card-carousel-img[data-i="1"],
+  .card:hover .card-media--carousel .card-carousel-img:nth-child(2) {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 3;
+  }
+
+  /* If card image is PNG, add a clean background and padding */
+  .card-media.card-media--png .card-carousel-img,
+  .card-img--png {
+    background: none !important;
+    padding: 12px;
+    object-fit: contain !important;
+  }
+}
+
+/* --- PDP Split Gallery (Model + Product Images Side-by-Side on Desktop, Stacked on Mobile) --- */
+.pdp-gallery-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.pdp-gallery-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface-deep);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pdp-gallery-item img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+}
+
+.pdp-gallery-item:hover img {
+  transform: scale(1.03);
+}
+
+.pdp-img-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(11, 11, 13, 0.65);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  font-family: 'Jost', sans-serif;
+}
+
+/* Light theme overrides for labels */
+[data-theme="light"] .pdp-img-label {
+  background: rgba(255, 255, 255, 0.8);
+  color: #1a1a1a;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+@media (max-width: 900px) {
+  .pdp-gallery-split {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  /* Override the fixed height on mobile viewer wrapper when split gallery is active */
+  .pm-gallery .viewer360-wrap.has-split-gallery {
+    max-height: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+  
+  .pdp-gallery-item img {
+    max-height: 400px;
+  }
+}
+
+/* --- Premium Logo Reveal Stage --- */
+#logoRevealScreen {
+  position: fixed;
+  inset: 0;
+  background: #0b0b0d;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#logoRevealScreen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.logo-reveal-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(199, 162, 82, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease;
+}
+
+#logoRevealScreen.active .logo-reveal-glow {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+.logo-reveal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease;
+}
+
+#logoRevealScreen.active .logo-reveal-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.logo-reveal-img {
+  width: min(240px, 70vw);
+  height: auto;
+  margin-bottom: 24px;
+}
+
+.logo-reveal-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  letter-spacing: 0.25em;
+  color: var(--gold-light, #d4af37);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1) 0.4s, opacity 1s ease 0.4s;
+}
+
+#logoRevealScreen.active .logo-reveal-tagline {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* --- Premium Luxury Category Navigation Sub-menu --- */
+#filterCategoryGroup .filter-group-label {
+  display: none !important;
+}
+
+#categoryScroll {
+  display: flex !important;
+  gap: clamp(14px, 2.5vw, 28px) !important;
+  padding: 0 4px !important;
+  background: transparent !important;
+  mask-image: none !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  overflow: visible !important;
+}
+
+#categoryScroll .filter-chip {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 8px 0 !important;
+  font-family: 'Jost', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-muted, #8e8982) !important;
+  position: relative !important;
+  transition: color 0.3s ease !important;
+  min-height: auto !important;
+  box-shadow: none !important;
+}
+
+#categoryScroll .filter-chip:hover {
+  color: var(--gold-light, #d4af37) !important;
+}
+
+#categoryScroll .filter-chip.active {
+  color: var(--gold, #c7a252) !important;
+}
+
+/* Elegant gold underline reveal */
+#categoryScroll .filter-chip::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1.5px;
+  background: var(--gold, #c7a252);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#categoryScroll .filter-chip.active::after {
+  width: 100%;
+  left: 0;
+}
+
+#categoryScroll .filter-chip:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Hide count badge inside category scroll to keep it minimal and elegant */
+#categoryScroll .filter-chip-count {
+  display: none !important;
+}
+
+/* Scroll adjustments for category outer container */
+.category-scroll-outer {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.category-scroll-outer::before,
+.category-scroll-outer::after {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .category-scroll-outer {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  #categoryScroll {
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 4px 16px !important;
+    gap: 20px !important;
+  }
+}
+
+/* Hide categories tab bar on the main page (only show in the Filter Panel drawer) */
+.filter-category-slot {
+  display: none !important;
+}
+
+/* Remove redundant category title subheaders inside PLP */
+#catalogue .section-head,
+.plp-mobile-head {
+  display: none !important;
+}
+
+/* High contrast and readable collection gallery hero for Light Theme */
+[data-theme="light"] .collection-gallery-hero-veil {
+  background: linear-gradient(90deg, rgba(253, 251, 247, 0.95) 0%, rgba(253, 251, 247, 0.75) 50%, rgba(253, 251, 247, 0.2) 100%) !important;
+}
+
+[data-theme="light"] .collection-gallery-hero-copy .eyebrow {
+  color: #8a6528 !important; /* Deep bronze instead of low-contrast gold */
+}
+
+[data-theme="light"] .collection-gallery-hero-copy h2 {
+  color: #1a1a1a !important; /* Rich charcoal */
+}
+
+[data-theme="light"] .collection-gallery-hero-meta {
+  color: #6b6560 !important; /* Dark bronze-gray */
+}
+
+/* --- Collection detailed page banner & layout fixes --- */
+.collection-gallery-hero {
+  height: clamp(220px, 24vw, 340px) !important;
+  border-radius: 4px !important;
+  margin-bottom: 24px !important;
+}
+
+.collection-gallery-hero-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  height: 100% !important;
+  padding-left: clamp(24px, 4vw, 64px) !important;
+}
+
+/* Breadcrumbs colors and contrast */
+.plp-crumb-link,
+.collection-breadcrumb button {
+  color: var(--lux-ink) !important;
+  opacity: 0.75;
+}
+
+.plp-crumb-link:hover,
+.collection-breadcrumb button:hover {
+  color: var(--gold, #c7a252) !important;
+  opacity: 1;
+}
+
+/* Search input styling in Filter Panel drawer */
+#categoryPanel .search-wrap {
+  width: 100% !important;
+  margin-bottom: 14px !important;
+}
+
+#categoryPanel #searchInput {
+  width: 100% !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--lux-line) !important;
+  background: transparent !important;
+  color: var(--lux-ink) !important;
+  font-family: 'Jost', sans-serif !important;
+  font-size: 13px !important;
+  outline: none !important;
+  border-radius: 2px !important;
+}
+
+#categoryPanel #searchInput::placeholder {
+  color: var(--lux-muted) !important;
+  opacity: 0.7;
+}
+
+#categoryPanel #searchInput:focus {
+  border-color: var(--gold, #c7a252) !important;
+}
+
+
+/* ============================================================
+   LIGHT THEME UI ADJUSTMENTS & CONTRAST OVERRIDES
+   ============================================================ */
+
+/* Header Nav Links in Light Theme */
+[data-theme="light"] nav .nav-link,
+[data-theme="light"] .header-main-row .nav-link {
+  color: #1a1a1a !important;
+  opacity: 0.8 !important;
+}
+[data-theme="light"] nav .nav-link:hover,
+[data-theme="light"] .header-main-row .nav-link:hover {
+  color: var(--gold, #c7a252) !important;
+  opacity: 1 !important;
+}
+[data-theme="light"] .wordmark.pmj-brand {
+  color: #1a1a1a !important;
+}
+
+/* Homepage Hero Copy Text in Light Theme */
+[data-theme="light"] #heroEyebrow {
+  color: #8a6528 !important;
+}
+[data-theme="light"] #heroHeadline {
+  color: #1a1a1a !important;
+}
+[data-theme="light"] #heroHeadlineEm {
+  color: #8a6528 !important;
+}
+[data-theme="light"] #heroDescription {
+  color: #5c564f !important;
+}
+
+/* Homepage Collections Hub in Light Theme */
+[data-theme="light"] .collections-hub {
+  background: #ffffff !important;
+}
+[data-theme="light"] .collections-hub .section-head h2 {
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .collections-hub .section-head .eyebrow {
+  color: #8a6528 !important;
+}
+
+/* Collection Card Tiles (Maintain Light/Gold Text against Dark Card Gradients) */
+[data-theme="light"] .collection-banner h3 {
+  color: #ffffff !important;
+}
+[data-theme="light"] .collection-banner-sub {
+  color: var(--gold-light, #d4af37) !important;
+}
+[data-theme="light"] .collection-landing-hero-desc {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+[data-theme="light"] .collection-banner .btn-primary {
+  color: #fffdf8 !important;
+}
+
+
+/* ============================================================
+   PDP MODAL ALIGNMENT & RESPONSIVE LAYOUT
+   ============================================================ */
+
+/* Desktop Modal Alignment & Scroll Bounding */
+@media (min-width: 901px) {
+  .product-modal {
+    display: flex !important;
+    flex-direction: column !important;
+    max-height: 90vh !important;
+    width: min(1200px, 94vw) !important;
+    overflow: hidden !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .pm-grid {
+    flex: 1 1 auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.62fr) minmax(260px, 0.38fr) !important;
+    max-height: calc(90vh - 44px) !important;
+    overflow: hidden !important;
+  }
+  .pm-gallery {
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  .pm-gallery .viewer360-wrap {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 0 !important;
+  }
+  .pm-info {
+    height: 100% !important;
+    overflow-y: auto !important;
+    padding: 24px 28px !important;
+  }
+}
+
+/* Mobile Modal Alignment */
+@media (max-width: 900px) {
+  .product-modal {
+    max-height: 100dvh !important;
+    height: 100dvh !important;
+  }
+  .pm-grid {
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+  }
+  .pdp-gallery-split {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .pdp-gallery-item img {
+    max-height: 380px !important;
+  }
+}
+
+/* Light Theme PDP Contrast Fixes */
+[data-theme="light"] .pm-close,
+[data-theme="light"] body.pdp-open .pm-close {
+  background: rgba(255, 252, 247, 0.95) !important;
+  border-color: rgba(154, 117, 48, 0.25) !important;
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .pm-close:hover {
+  border-color: var(--gold, #c7a252) !important;
+  color: var(--gold, #c7a252) !important;
+}
+[data-theme="light"] .pm-heart,
+[data-theme="light"] .pm-gallery-heart,
+[data-theme="light"] .product-modal.open .pm-heart {
+  background: rgba(255, 252, 247, 0.95) !important;
+  border: 1px solid rgba(154, 117, 48, 0.25) !important;
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .pm-heart.active,
+[data-theme="light"] .pm-gallery-heart.active {
+  color: var(--garnet, #8b2942) !important;
+  border-color: var(--garnet, #8b2942) !important;
+}
+[data-theme="light"] .close-btn,
+[data-theme="light"] .drawer .close-btn {
+  border-color: rgba(154, 117, 48, 0.25) !important;
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .field input,
+[data-theme="light"] .field textarea,
+[data-theme="light"] .edit-fields input,
+[data-theme="light"] .edit-fields textarea,
+[data-theme="light"] .edit-fields select {
+  background: #ffffff !important;
+  border: 1px solid rgba(154, 117, 48, 0.25) !important;
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .wl-item-desc,
+[data-theme="light"] .wl-item-title,
+[data-theme="light"] .drawer h2,
+[data-theme="light"] .drawer h3,
+[data-theme="light"] .drawer p {
+  color: #1a1a1a !important;
+}
+
+/* Light Theme PDP Details Section Texts */
+[data-theme="light"] .pm-info h3,
+[data-theme="light"] .pm-info p,
+[data-theme="light"] .pm-info .pm-sku,
+[data-theme="light"] .pm-info .pm-price,
+[data-theme="light"] .pm-info .pm-material,
+[data-theme="light"] .pm-info .pm-desc,
+[data-theme="light"] .pm-discover-label,
+[data-theme="light"] .pm-details-title,
+[data-theme="light"] .pm-details-tab,
+[data-theme="light"] .pm-info .pm-divider span {
+  color: #1a1a1a !important;
+}
+[data-theme="light"] .pm-details-tab.active {
+  border-bottom-color: var(--gold, #c7a252) !important;
+  color: var(--gold, #c7a252) !important;
+}
+[data-theme="light"] .pm-spec-row,
+[data-theme="light"] .pm-spec-label,
+[data-theme="light"] .pm-spec-value {
+  color: #1a1a1a !important;
+}
+
+/* Wishlist Drawer Flex Scrolling Fixes */
+#drawerMain {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  height: calc(100% - 86px) !important; /* height minus header */
+}
+
+.drawer-body {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  min-height: 0 !important;
+}
+
+.drawer-form {
+  flex-shrink: 0 !important;
+}
+
+

@@ -599,16 +599,12 @@ const PMJExperience = (() => {
     camera.lookAt(0, 0, 0);
 
     const tl = gsap.timeline();
-    const brandOverlay = document.getElementById('introBrandOverlay');
 
-    tl.add(() => brandOverlay?.classList.add('visible'))
-      .to('#forgeFlash', { opacity: 0.75, duration: 0.12 })
-      .to('#introBrandOverlay', { opacity: 1, duration: 0.3 }, '<')
+    tl.to('#forgeFlash', { opacity: 0.75, duration: 0.12 })
       .to('#forgeFlash', { opacity: 0, duration: 0.5 })
       .to({}, { duration: 0.25 })
       .add(() => burstParticles())
-      .to('#introBrandOverlay', { opacity: 0, duration: 0.45, ease: 'power2.in' }, '-=0.05')
-      .to(vaultLeft.rotation, { y: -Math.PI * 0.52, duration: 1.65, ease: 'power3.inOut' }, '<')
+      .to(vaultLeft.rotation, { y: -Math.PI * 0.52, duration: 1.65, ease: 'power3.inOut' })
       .to(vaultRight.rotation, { y: Math.PI * 0.52, duration: 1.65, ease: 'power3.inOut' }, '<')
       .to(vaultCenterEmblem?.material, { opacity: 0, duration: 1.2, ease: 'power2.in' }, '-=1.5')
       .add(() => { if (vaultCenterEmblem) vaultCenterEmblem.visible = false; }, '-=0.35')
@@ -626,9 +622,6 @@ const PMJExperience = (() => {
   }
 
   function finishSequence(onComplete, introJewel) {
-    document.getElementById('introBrandOverlay')?.classList.remove('visible');
-    gsap.set('#introBrandOverlay', { opacity: 0 });
-
     gsap.to(canvas, {
       opacity: 0,
       duration: 1,

@@ -225,15 +225,18 @@ function applyFeaturedVisualNow() {
   const heroImg = document.getElementById('heroImg');
   const heroCanvas = document.getElementById('heroCanvas');
 
+  // Always hide the 3D canvas in the homepage hero and stop the 3D renderer
+  if (heroCanvas) heroCanvas.style.display = 'none';
+  if (window.PMJExperience && typeof window.PMJExperience.stopHeroViewer === 'function') {
+    window.PMJExperience.stopHeroViewer();
+  }
+
   if (!img) {
     applyHeroProductMode(false);
     const p = typeof getProductData === 'function'
       ? getProductData('SPND998476')
       : PRODUCTS?.find((x) => x.id === 'SPND998476');
-    if (p && window.PMJExperience) {
-      PMJExperience.initHeroViewer(p);
-    } else if (p && IMAGES?.[p.images?.[0]]) {
-      if (heroCanvas) heroCanvas.style.display = 'none';
+    if (p && IMAGES?.[p.images?.[0]]) {
       if (heroImg) {
         heroImg.src = IMAGES[p.images[0]];
         heroImg.classList.remove('hidden');
@@ -253,8 +256,6 @@ function applyFeaturedVisualNow() {
   /* Custom upload — flat product only, no box, no 3D canvas */
   applyHeroProductMode(true);
   heroVisual?.classList.toggle('hero-png-mode', isPngSource(img));
-  window.PMJExperience?.stopHeroViewer?.();
-  if (heroCanvas) heroCanvas.style.display = 'none';
 }
 
 function applyFeaturedVisual() {

@@ -154,6 +154,15 @@ const PMJHeaderScroll = (() => {
   function applyScrollState() {
     const y = window.scrollY || document.documentElement.scrollTop;
     const scrollAway = getScrollAwayThreshold();
+    const isGallery = document.body.dataset.pmjBrowse === 'gallery';
+
+    if (!isGallery) {
+      const atTop = y < SCROLL_HOME;
+      setHomeMode(atTop);
+      setFilterStuck(false, true);
+      syncHeaderHeight();
+      return;
+    }
 
     if (atHome && y > scrollAway) {
       setHomeMode(false);
@@ -166,23 +175,21 @@ const PMJHeaderScroll = (() => {
     syncHeaderHeight();
   }
 
-  function bindHeaderObserver() {
-    if (headerObserver || typeof ResizeObserver === 'undefined') return;
-    const { header, filterBar, filterDock } = getEls();
-    if (!header) return;
-    headerObserver = new ResizeObserver(() => {
-      syncHeaderHeight();
-    });
-    headerObserver.observe(header);
-    if (filterBar) headerObserver.observe(filterBar);
-    if (filterDock) headerObserver.observe(filterDock);
-  }
-
   function reconcileLayout() {
     const { filterBar, filterAnchor, filterDock } = getEls();
     if (!filterBar || !filterAnchor || !filterDock) return;
 
     const y = window.scrollY || document.documentElement.scrollTop;
+    const isGallery = document.body.dataset.pmjBrowse === 'gallery';
+
+    if (!isGallery) {
+      const atTop = y < SCROLL_HOME;
+      setHomeMode(atTop);
+      setFilterStuck(false, true, true);
+      syncHeaderHeight();
+      return;
+    }
+
     const wantStuck = y > getScrollAwayThreshold();
     const inDock = filterBar.parentElement === filterDock;
     const inAnchor = filterBar.parentElement === filterAnchor;
@@ -213,7 +220,6 @@ const PMJHeaderScroll = (() => {
     stuck = false;
     setHomeMode(atHome);
     setFilterStuck(!atHome, true);
-    bindHeaderObserver();
 
     window.addEventListener(
       'scroll',

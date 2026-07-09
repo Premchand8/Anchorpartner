@@ -39,7 +39,7 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def log_message(self, format, *args):
-        if '/__pmj-ui-log' in (args[0] if args else ''):
+        if args and isinstance(args[0], str) and '/__pmj-ui-log' in args[0]:
             return
         super().log_message(format, *args)
 
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     if os.path.exists(LOG_PATH):
         os.remove(LOG_PATH)
     port = int(os.environ.get('PORT', '8080'))
-    server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    server = ThreadingHTTPServer(('0.0.0.0', port), Handler)
     print(f'PMJ catalogue + UI log server: http://localhost:{port}')
     print(f'UI events -> {LOG_PATH}')
     server.serve_forever()

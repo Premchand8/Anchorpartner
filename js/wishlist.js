@@ -30,6 +30,15 @@ const draftsList = document.getElementById('draftsList');
 
 let activeCustomer = null;
 
+// Helper to refresh PLP grid reliably
+function refreshGridUi() {
+  if (typeof window.renderCatalogueGrid === 'function') {
+    window.renderCatalogueGrid();
+  } else if (typeof renderGrid === 'function') {
+    renderGrid(true);
+  }
+}
+
 // Initial loading of active customer and partner details
 function initDetails() {
   // Load saved partner details
@@ -171,7 +180,7 @@ if (btnStartNewSelection) {
     window.setBrowseVisibility?.();
 
     // 5. Re-render UI
-    if (typeof renderGrid === 'function') renderGrid();
+    refreshGridUi();
     if (typeof updateCount === 'function') updateCount();
     if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
 
@@ -234,7 +243,7 @@ function closeDrawer(){
     window.setBrowseStage?.('collections');
     window.setBrowseVisibility?.();
     
-    if (typeof renderGrid === 'function') renderGrid();
+    refreshGridUi();
     if (typeof updateCount === 'function') updateCount();
     if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
     
@@ -375,7 +384,7 @@ if (draftsList) {
           window.setBrowseVisibility?.();
           
           // 5. Re-render page elements
-          if (typeof renderGrid === 'function') renderGrid(true);
+          refreshGridUi();
           if (typeof updateCount === 'function') updateCount();
           if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
           window.updateGalleryBreadcrumb?.('all');
@@ -696,7 +705,7 @@ document.getElementById('newEnquiry').addEventListener('click', (e)=>{
   window.setBrowseVisibility?.();
 
   // Re-render
-  if (typeof renderGrid === 'function') renderGrid();
+  refreshGridUi();
   if (typeof updateCount === 'function') updateCount();
   if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
   
@@ -730,9 +739,12 @@ if (activeSelectionPill) {
 }
 
 // Curation Selection Mode Banner Action buttons click listeners
-const btnBrowseMore = document.getElementById('btnBrowseMoreFromCollections');
-if (btnBrowseMore) {
-  btnBrowseMore.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
+  const btnBrowseMore = e.target.closest('#btnBrowseMoreFromCollections');
+  const btnOpenReview = e.target.closest('#btnOpenReviewDrawer');
+  
+  if (btnBrowseMore) {
+    e.preventDefault();
     // 1. Reset selection-only filter to show all products
     window.showWishlistOnly = false;
     
@@ -741,17 +753,19 @@ if (btnBrowseMore) {
     window.setBrowseVisibility?.();
     
     // 3. Re-render Grid & update headers
-    if (typeof renderGrid === 'function') renderGrid(true);
+    if (typeof window.renderCatalogueGrid === 'function') {
+      window.renderCatalogueGrid();
+    } else if (typeof renderGrid === 'function') {
+      renderGrid(true);
+    }
     window.updateGalleryBreadcrumb?.('all');
     
     // 4. Scroll smoothly to collections page
     document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
-  });
-}
-
-const btnOpenReview = document.getElementById('btnOpenReviewDrawer');
-if (btnOpenReview) {
-  btnOpenReview.addEventListener('click', () => {
+  }
+  
+  if (btnOpenReview) {
+    e.preventDefault();
     openDrawer();
-  });
-}
+  }
+});

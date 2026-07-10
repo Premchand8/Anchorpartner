@@ -498,7 +498,7 @@ function initCollectionsBrowse() {
     if (!card || card.classList.contains('is-empty')) return;
     window.PMJCollectionsAnim?.pulseCategoryTile(card);
     const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 460;
-    window.setTimeout(() => openCollectionLanding(card.dataset.collectionId), delay);
+    window.setTimeout(() => openCollectionGallery(card.dataset.collectionId, 'all'), delay);
   });
 
   document.getElementById('collectionCategoriesGrid')?.addEventListener('click', (e) => {

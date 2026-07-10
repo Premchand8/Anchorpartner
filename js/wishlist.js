@@ -215,6 +215,34 @@ function openDrawer(opts = {}){
 function closeDrawer(){ 
   drawer.classList.remove('open', 'drawer-landed'); 
   overlay.classList.remove('open', 'overlay-wishlist-reveal'); 
+
+  // If success view was showing, reset state so it opens clean next time
+  if (successView && successView.classList.contains('show')) {
+    wishlist = [];
+    activeCustomer = null;
+    sessionStorage.removeItem('pmj_active_customer');
+    window.showWishlistOnly = false;
+    
+    ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    
+    const status = document.getElementById('cMobileStatus');
+    if (status) status.textContent = '';
+    
+    window.setBrowseStage?.('collections');
+    window.setBrowseVisibility?.();
+    
+    if (typeof renderGrid === 'function') renderGrid();
+    if (typeof updateCount === 'function') updateCount();
+    if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+    
+    renderDrawer();
+    
+    successView.classList.remove('show');
+    drawerMain.classList.remove('hidden');
+  }
 }
 
 document.getElementById('openDrawer')?.addEventListener('click', () => openDrawer());
@@ -636,6 +664,13 @@ async function submitSelection() {
   
   submitBtn.disabled = false;
   if (submitLabel) submitLabel.textContent = 'Submit Customer Selection';
+
+  // Automatically close the drawer and reset to collections homepage after 3 seconds
+  setTimeout(() => {
+    if (successView.classList.contains('show')) {
+      closeDrawer();
+    }
+  }, 3000);
 }
 
 // Reset Selection and start fresh

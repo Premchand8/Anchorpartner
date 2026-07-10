@@ -26,6 +26,7 @@ const btnSaveDetails = document.getElementById('btnSaveDetails');
 const btnEditCustInfo = document.getElementById('btnEditCustInfo');
 const sumRemarks = document.getElementById('sumRemarks');
 const submitBtn = document.getElementById('submitBtn');
+const draftsList = document.getElementById('draftsList');
 
 let activeCustomer = null;
 
@@ -80,39 +81,40 @@ cMobile.addEventListener('input', (e) => {
 btnSaveDetails.addEventListener('click', () => {
   const mobile = cMobile.value.trim();
   const name = cName.value.trim();
-  const email = cEmail.value.trim();
-  const dob = cDob.value.trim();
-  const city = cCity.value.trim();
 
-  const partnerId = pId.value.trim();
-  const partnerName = pName.value.trim();
-  const store = pStore.value.trim();
-  const execName = pExecutive.value.trim();
-
-  if (!mobile || !name || !email || !dob || !city) {
-    alert('Please fill in all required customer fields (*).');
+  // ONLY cMobile and cName are required! Everything else is optional!
+  if (!mobile) {
+    alert('Please enter a Mobile Number.');
     return;
   }
-  if (!partnerId || !partnerName || !store || !execName) {
-    alert('Please fill in all required partner details (*).');
+  if (!name) {
+    alert('Please enter a Customer Name.');
     return;
   }
 
   // Save partner details for next time
-  const partnerInfo = { id: partnerId, name: partnerName, store: store, executive: execName };
+  const partnerInfo = {
+    id: pId.value.trim(),
+    name: pName.value.trim(),
+    store: pStore.value.trim(),
+    executive: pExecutive.value.trim()
+  };
   localStorage.setItem('pmj_partner_info', JSON.stringify(partnerInfo));
 
   // Set active customer
   activeCustomer = {
     mobile,
     name,
-    email,
-    dob,
+    email: cEmail.value.trim(),
+    dob: cDob.value.trim(),
     anniversary: cAnniversary.value.trim(),
-    city,
+    city: cCity.value.trim(),
     remarks: cRemarks.value.trim()
   };
   sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
+
+  // Automatically save as draft
+  saveCurrentAsDraft();
 
   renderDrawer();
 });
@@ -170,9 +172,116 @@ document.getElementById('openDrawer')?.addEventListener('click', () => openDrawe
 document.getElementById('closeDrawer')?.addEventListener('click', closeDrawer);
 overlay.addEventListener('click', closeDrawer);
 
+// Drafts Management Logic
+function saveCurrentAsDraft() {
+  if (!activeCustomer || !activeCustomer.mobile) return;
+  try {
+    const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+    const draftIdx = drafts.findIndex(d => d.customer.mobile === activeCustomer.mobile);
+    const draftData = {
+      customer: activeCustomer,
+      products: [...wishlist],
+      lastUpdated: new Date().toISOString()
+    };
+    if (draftIdx !== -1) {
+      drafts[draftIdx] = draftData;
+    } else {
+      drafts.push(draftData);
+    }
+    localStorage.setItem('pmj_draft_wishlists', JSON.stringify(drafts));
+  } catch (e) {}
+}
+
+function renderDraftsList() {
+  if (!draftsList) return;
+  try {
+    const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+    const draftsSection = document.getElementById('drawerDraftsSection');
+    if (drafts.length === 0) {
+      draftsSection.style.display = 'none';
+      return;
+    }
+    draftsSection.style.display = 'block';
+
+    draftsList.innerHTML = drafts.map((draft, idx) => {
+      const formattedDate = new Date(draft.lastUpdated).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      return `
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 14px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <div style="font-size: 11px; line-height: 1.4;">
+            <strong>${draft.customer.name}</strong> (${draft.customer.mobile})<br>
+            <span style="opacity: 0.7;">${draft.products.length} item(s) · ${formattedDate}</span>
+          </div>
+          <div style="display: flex; gap: 8px; flex-shrink: 0;">
+            <button type="button" class="btn-text-edit btn-load-draft" data-idx="${idx}" style="font-size: 10px; padding: 4px 6px; text-decoration: none; background: rgba(199,162,82,0.15); border-radius: 3px; border: 1px solid rgba(199,162,82,0.3);">Load</button>
+            <button type="button" class="btn-text-edit btn-delete-draft" data-idx="${idx}" style="font-size: 10px; color: #ff6b6b; text-decoration: none; padding: 4px 6px;">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// Bind draft buttons
+if (draftsList) {
+  draftsList.addEventListener('click', (e) => {
+    const loadBtn = e.target.closest('.btn-load-draft');
+    const deleteBtn = e.target.closest('.btn-delete-draft');
+    if (loadBtn) {
+      const idx = parseInt(loadBtn.dataset.idx, 10);
+      try {
+        const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+        const draft = drafts[idx];
+        if (draft) {
+          activeCustomer = draft.customer;
+          sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
+          wishlist = [...draft.products];
+          
+          // Prepopulate inputs
+          cMobile.value = activeCustomer.mobile || '';
+          cName.value = activeCustomer.name || '';
+          cEmail.value = activeCustomer.email || '';
+          cDob.value = activeCustomer.dob || '';
+          cAnniversary.value = activeCustomer.anniversary || '';
+          cCity.value = activeCustomer.city || '';
+          cRemarks.value = activeCustomer.remarks || '';
+          
+          // Re-render
+          if (typeof renderGrid === 'function') renderGrid();
+          if (typeof updateCount === 'function') updateCount();
+          if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+          
+          renderDrawer();
+        }
+      } catch (err) {}
+    } else if (deleteBtn) {
+      const idx = parseInt(deleteBtn.dataset.idx, 10);
+      try {
+        const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+        drafts.splice(idx, 1);
+        localStorage.setItem('pmj_draft_wishlists', JSON.stringify(drafts));
+        renderDraftsList();
+      } catch (err) {}
+    }
+  });
+}
+
 function renderDrawer(){
   const lastAdded = window.__pmjLastWishlistAdd;
   const drawerOpen = drawer?.classList.contains('open');
+
+  // Trigger automatic saving of drafts if activeCustomer and wishlist exist
+  if (activeCustomer && wishlist.length > 0) {
+    saveCurrentAsDraft();
+  }
+
+  renderDraftsList();
 
   if(wishlist.length === 0){
     drawerViewForm.style.display = 'none';
@@ -254,6 +363,9 @@ drawerBody.addEventListener('click', (e)=>{
   const rm = e.target.closest('.wl-remove');
   if(!rm) return;
   toggleWishlist(rm.dataset.id, rm);
+  // Auto-save draft on item removal
+  saveCurrentAsDraft();
+  renderDraftsList();
 });
 
 // Submit Button Listener
@@ -305,10 +417,10 @@ async function submitSelection() {
     customerInfo: {
       customerName: activeCustomer.name,
       mobile: activeCustomer.mobile,
-      email: activeCustomer.email,
-      dob: activeCustomer.dob,
-      anniversary: activeCustomer.anniversary,
-      city: activeCustomer.city
+      email: activeCustomer.email || '',
+      dob: activeCustomer.dob || '',
+      anniversary: activeCustomer.anniversary || '',
+      city: activeCustomer.city || ''
     },
     wishlistInfo: {
       wishlistNumber: wlNumber,
@@ -334,10 +446,10 @@ async function submitSelection() {
     const custRecord = {
       mobile: activeCustomer.mobile,
       name: activeCustomer.name,
-      email: activeCustomer.email,
-      dob: activeCustomer.dob,
-      anniversary: activeCustomer.anniversary,
-      city: activeCustomer.city,
+      email: activeCustomer.email || '',
+      dob: activeCustomer.dob || '',
+      anniversary: activeCustomer.anniversary || '',
+      city: activeCustomer.city || '',
       remarks: remarksText
     };
 
@@ -349,16 +461,43 @@ async function submitSelection() {
     localStorage.setItem('pmj_customers', JSON.stringify(customers));
   } catch (e) {}
 
+  // 3. Remove from draft list since it's now submitted
+  try {
+    const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+    const draftIdx = drafts.findIndex(d => d.customer.mobile === activeCustomer.mobile);
+    if (draftIdx !== -1) {
+      drafts.splice(draftIdx, 1);
+      localStorage.setItem('pmj_draft_wishlists', JSON.stringify(drafts));
+    }
+  } catch (e) {}
+
   // Simulate server/processing lag
   await new Promise(r => setTimeout(r, 800));
 
-  // Display Success View
+  // Build submitted products HTML for the review section
+  const productsHtml = wishlist.map(id => {
+    const p = getProductData(id);
+    return `
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; text-align: left; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 4px;">
+        <img src="${IMAGES[p.images[0]]}" style="width: 40px; height: 40px; object-fit: contain; background: #fff;" alt="">
+        <div>
+          <div style="font-weight: 500; font-size: 11px;">${p.name}</div>
+          <div style="font-size: 10px; opacity: 0.7;">Code: ${p.id} · ${p.catLabel}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Display Success View (products which are interested review shown in a list)
   document.getElementById('refCode').innerHTML = `
-    <div style="font-size: 14px; margin-bottom: 8px;"><strong>Selection Details Saved</strong></div>
-    <div style="font-size: 13px; color: var(--gold); font-family: monospace;">${wlNumber}</div>
-    <div style="margin-top: 12px; font-size: 11px; opacity: 0.85;">
+    <div style="font-size: 14px; margin-bottom: 12px;"><strong>Selection Details Saved</strong></div>
+    <div style="font-size: 13px; color: var(--gold); font-family: monospace; margin-bottom: 12px;">${wlNumber}</div>
+    <div style="margin-top: 12px; font-size: 11px; opacity: 0.85; margin-bottom: 16px;">
       Customer: <strong>${activeCustomer.name}</strong><br>
       Total Pieces: <strong>${wishlist.length}</strong>
+    </div>
+    <div style="max-height: 180px; overflow-y: auto; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08); padding: 8px; border-radius: 4px;">
+      ${productsHtml}
     </div>
   `;
 

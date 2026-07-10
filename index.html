@@ -151,6 +151,32 @@
   <div class="collections-grid" id="collectionsGrid"></div>
 </section>
 
+<!-- ============ COLLECTION CATEGORIES LANDING ============ -->
+<section class="collection-landing collection-gallery-hidden" id="collectionLanding">
+  <div class="collection-landing-hero">
+    <div class="collection-landing-hero-media">
+      <img id="collectionLandingHeroImg" src="" alt="">
+    </div>
+    <div class="collection-landing-hero-veil"></div>
+    <div class="collection-landing-hero-copy">
+      <nav class="collection-breadcrumb" aria-label="Breadcrumb">
+        <button type="button" class="plp-crumb-link" id="collectionBackBtn">← All Collections</button>
+        <span class="plp-crumb-sep">◆</span>
+        <span class="plp-crumb-current" id="collectionCrumbName">Collection</span>
+      </nav>
+      <h2 id="collectionLandingHeroTitle">Collection</h2>
+      <p class="collection-landing-hero-desc" id="collectionLandingHeroDesc">Explore category lines</p>
+    </div>
+  </div>
+  <div class="collection-categories-section">
+    <div class="collection-categories-head">
+      <span class="eyebrow">Explore Categories</span>
+      <h3 id="collectionCategoriesTitle">Product Lines</h3>
+    </div>
+    <div class="collection-categories-grid" id="collectionCategoriesGrid"></div>
+  </div>
+</section>
+
 
 
 <nav class="collection-browse-crumb plp-mobile-crumb collection-gallery-hidden" id="plpMobileCrumb" aria-label="Breadcrumb">
@@ -719,13 +745,13 @@
         <input id="cName" type="text" placeholder="Full Name" required>
       </div>
       <div class="field">
-        <label for="cEmail">Email Address *</label>
-        <input id="cEmail" type="email" placeholder="customer@example.com" required>
+        <label for="cEmail">Email Address (Optional)</label>
+        <input id="cEmail" type="email" placeholder="customer@example.com">
       </div>
       <div class="field-row">
         <div class="field">
-          <label for="cDob">Date of Birth *</label>
-          <input id="cDob" type="date" required>
+          <label for="cDob">Date of Birth (Optional)</label>
+          <input id="cDob" type="date">
         </div>
         <div class="field">
           <label for="cAnniversary">Anniversary (Optional)</label>
@@ -733,33 +759,33 @@
         </div>
       </div>
       <div class="field">
-        <label for="cCity">City *</label>
-        <input id="cCity" type="text" placeholder="e.g. Hyderabad" required>
+        <label for="cCity">City (Optional)</label>
+        <input id="cCity" type="text" placeholder="e.g. Hyderabad">
       </div>
       <div class="field">
-        <label for="cRemarks">Remarks / Notes</label>
+        <label for="cRemarks">Remarks / Notes (Optional)</label>
         <textarea id="cRemarks" placeholder="Customer preference, notes etc."></textarea>
       </div>
 
-      <div class="drawer-section-title" style="margin-top: 24px;">Partner & Store Details</div>
+      <div class="drawer-section-title" style="margin-top: 24px;">Partner & Store Details (Optional)</div>
       <div class="field-row">
         <div class="field">
-          <label for="pId">Partner ID *</label>
-          <input id="pId" type="text" placeholder="e.g. PT-990" required>
+          <label for="pId">Partner ID (Optional)</label>
+          <input id="pId" type="text" placeholder="e.g. PT-990">
         </div>
         <div class="field">
-          <label for="pName">Partner Name *</label>
-          <input id="pName" type="text" placeholder="Company Name" required>
+          <label for="pName">Partner Name (Optional)</label>
+          <input id="pName" type="text" placeholder="Company Name">
         </div>
       </div>
       <div class="field-row">
         <div class="field">
-          <label for="pStore">Store Name *</label>
-          <input id="pStore" type="text" placeholder="e.g. Jubilee Hills" required>
+          <label for="pStore">Store Name (Optional)</label>
+          <input id="pStore" type="text" placeholder="e.g. Jubilee Hills">
         </div>
         <div class="field">
-          <label for="pExecutive">Sales Executive *</label>
-          <input id="pExecutive" type="text" placeholder="Name" required>
+          <label for="pExecutive">Sales Executive (Optional)</label>
+          <input id="pExecutive" type="text" placeholder="Name">
         </div>
       </div>
 
@@ -784,7 +810,7 @@
       
       <div class="drawer-footer-actions">
         <div class="field" style="padding: 16px 20px 0;">
-          <label for="sumRemarks">Selection Notes</label>
+          <label for="sumRemarks">Selection Notes (Optional)</label>
           <textarea id="sumRemarks" placeholder="Add any specific notes for this submission..."></textarea>
         </div>
         <div class="drawer-form" id="drawerForm" style="padding: 20px;">
@@ -794,6 +820,12 @@
           <p class="form-note">Upon submission, this customer selection is saved. You can access it anytime or view past logs.</p>
         </div>
       </div>
+    </div>
+
+    <!-- Active Drafts / Recent Selections Section -->
+    <div id="drawerDraftsSection" style="margin-top: 24px; padding: 0 20px 30px; border-top: 1px dashed rgba(199, 162, 82, 0.25);">
+      <div class="drawer-section-title" style="margin: 16px 0 8px; border-bottom: none; padding-bottom: 0;">Active Drafts / Recent Selections</div>
+      <div id="draftsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
     </div>
   </div>
   <div class="success-view" id="successView">

@@ -258,10 +258,21 @@
     background: rgba(0, 0, 0, 0.55);
   }
 
-  .catalogue .card-meta-row,
-  .catalogue .card-price,
-  .catalogue .card-desc,
+  .catalogue .card-meta-row {
+    display: flex !important;
+  }
+  .catalogue .card-price {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin-top: 4px !important;
+  }
   .catalogue .card-actions {
+    display: flex !important;
+    margin-top: 10px !important;
+    gap: 8px !important;
+  }
+  .catalogue .card-desc {
     display: none !important;
   }
 

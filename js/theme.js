@@ -10,7 +10,7 @@ const PMJTheme = (() => {
   }
 
   function isToggleEnabled() {
-    return loadSettings().customerThemeToggle !== false;
+    return true;
   }
 
   function isMobileView() {

@@ -631,7 +631,7 @@ async function submitSelection() {
     successP.textContent = `The selection has been successfully logged under partner ${savedPartner.name || ''} and associated with customer ${activeCustomer.name}.`;
   }
 
-  drawerMain.style.display = 'none';
+  drawerMain.classList.add('hidden');
   successView.classList.add('show');
   
   submitBtn.disabled = false;
@@ -646,6 +646,7 @@ document.getElementById('newEnquiry').addEventListener('click', (e)=>{
   wishlist = [];
   activeCustomer = null;
   sessionStorage.removeItem('pmj_active_customer');
+  window.showWishlistOnly = false;
   
   // Clear inputs (except partner details)
   ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
@@ -655,6 +656,10 @@ document.getElementById('newEnquiry').addEventListener('click', (e)=>{
   
   document.getElementById('cMobileStatus').textContent = '';
 
+  // Update browsing stage to collections homepage
+  window.setBrowseStage?.('collections');
+  window.setBrowseVisibility?.();
+
   // Re-render
   if (typeof renderGrid === 'function') renderGrid();
   if (typeof updateCount === 'function') updateCount();
@@ -662,8 +667,15 @@ document.getElementById('newEnquiry').addEventListener('click', (e)=>{
   
   renderDrawer();
   
+  // Reset view visibility classes
   successView.classList.remove('show');
-  drawerMain.style.display = 'block';
+  drawerMain.classList.remove('hidden');
+
+  // Close the drawer and scroll to homepage collections stage
+  closeDrawer();
+  setTimeout(() => {
+    document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
+  }, 300);
 });
 
 // Setup Initial state on load

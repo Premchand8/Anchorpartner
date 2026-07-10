@@ -351,7 +351,7 @@ function updateGalleryBreadcrumb(categoryId) {
   const sectionTitle = document.getElementById('catalogueSectionTitle');
   const crumbCol = document.getElementById('collectionCrumbName');
 
-  if (window.showWishlistOnly && activeCustomer) {
+  if (window.showWishlistOnly && window.activeCustomer) {
     if (colLink) {
       colLink.textContent = 'Customer Selection';
       colLink.classList.remove('hidden');
@@ -359,13 +359,13 @@ function updateGalleryBreadcrumb(categoryId) {
     if (colSep) colSep.classList.remove('hidden');
     if (catSep) catSep.classList.remove('hidden');
     if (catCrumb) {
-      catCrumb.textContent = activeCustomer.name;
+      catCrumb.textContent = window.activeCustomer.name;
     }
     if (sectionEyebrow) {
       sectionEyebrow.textContent = 'Curated Selection';
     }
     if (sectionTitle) {
-      sectionTitle.innerHTML = `${activeCustomer.name}'s Selection <button type="button" class="btn-text-edit" id="btnExitSelectionView" style="font-size: 11px; margin-left: 12px; background: rgba(199, 162, 82, 0.15); border: 1px solid rgba(199, 162, 82, 0.3); border-radius: 4px; padding: 4px 8px; vertical-align: middle; cursor: pointer; text-decoration: none;">View All Pieces</button>`;
+      sectionTitle.innerHTML = `${window.activeCustomer.name}'s Selection <button type="button" class="btn-text-edit" id="btnExitSelectionView" style="font-size: 11px; margin-left: 12px; background: rgba(199, 162, 82, 0.15); border: 1px solid rgba(199, 162, 82, 0.3); border-radius: 4px; padding: 4px 8px; vertical-align: middle; cursor: pointer; text-decoration: none;">View All Pieces</button>`;
       
       document.getElementById('btnExitSelectionView')?.addEventListener('click', () => {
         window.showWishlistOnly = false;

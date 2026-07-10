@@ -55,6 +55,7 @@ function initDetails() {
     const active = sessionStorage.getItem('pmj_active_customer');
     if (active) {
       activeCustomer = JSON.parse(active);
+      window.activeCustomer = activeCustomer;
     }
   } catch (e) {}
 
@@ -404,6 +405,9 @@ if (draftsList) {
 }
 
 function renderDrawer(){
+  // Sync state to window namespace for global visibility
+  window.activeCustomer = activeCustomer;
+
   const lastAdded = window.__pmjLastWishlistAdd;
   const drawerOpen = drawer?.classList.contains('open');
 
@@ -759,8 +763,11 @@ document.addEventListener('click', (e) => {
       renderGrid(true);
     }
     window.updateGalleryBreadcrumb?.('all');
+
+    // 4. Update banner state & drawer
+    renderDrawer();
     
-    // 4. Scroll smoothly to collections page
+    // 5. Scroll smoothly to collections page
     document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
   }
   

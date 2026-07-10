@@ -80,14 +80,15 @@ function getFilteredProducts(){
 
   if (window.showWishlistOnly) {
     items = items.filter((p) => wishlist.includes(p.id));
-    return items;
   }
 
   const collectionId = window.currentCollectionFilter || null;
-  if (collectionId && typeof productBelongsToCollection === 'function') {
-    items = items.filter((p) => productBelongsToCollection(p, collectionId));
-  } else if (collectionId) {
-    items = items.filter((p) => (p.collections || []).includes(collectionId));
+  if (!window.showWishlistOnly && collectionId) {
+    if (typeof productBelongsToCollection === 'function') {
+      items = items.filter((p) => productBelongsToCollection(p, collectionId));
+    } else {
+      items = items.filter((p) => (p.collections || []).includes(collectionId));
+    }
   }
 
   if (currentFilter !== 'all') {

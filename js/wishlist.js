@@ -499,6 +499,7 @@ function renderDrawer(){
     </div>
   ` + wishlist.map(id => {
     const p = getProductData(id);
+    if (!p) return '';
     const avail = getAvailabilityMeta(p.availability);
     const dramaticEntry = window.__pmjWishlistDramaticEntry && drawerOpen && id === lastAdded;
     const enterClass = dramaticEntry ? ' wl-item-enter wl-item-enter-dramatic' : (drawerOpen && id === lastAdded ? ' wl-item-enter' : '');
@@ -643,6 +644,7 @@ async function submitSelection() {
   // Build submitted products HTML for the review section
   const productsHtml = wishlist.map(id => {
     const p = getProductData(id);
+    if (!p) return '';
     return `
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; text-align: left; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 4px;">
         <img src="${IMAGES[p.images[0]]}" style="width: 40px; height: 40px; object-fit: contain; background: #fff;" alt="">

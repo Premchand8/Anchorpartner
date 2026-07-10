@@ -1165,4 +1165,41 @@
   body.pm-lightbox-open .pm-close {
     visibility: hidden;
   }
+
+  /* Mobile Wishlist Drawer UI Alignment & Layout Fixes */
+  .drawer {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #drawerMain {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .drawer-body {
+    flex: 0 0 auto !important;
+    display: block !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 16px 20px !important;
+  }
+
+  .drawer-form {
+    flex: 0 0 auto !important;
+    display: block !important;
+    border-top: 1px solid var(--line, rgba(0, 0, 0, 0.1)) !important;
+    padding: 24px 20px calc(30px + env(safe-area-inset-bottom, 0px)) !important;
+    background: inherit !important;
+  }
 }

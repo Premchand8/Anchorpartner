@@ -1764,4 +1764,94 @@ footer .wordmark {
   flex-shrink: 0 !important;
 }
 
+/* Customer Selection UI Styling */
+.drawer-section-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold, #c7a252);
+  margin: 20px 20px 8px;
+  font-weight: 600;
+  border-bottom: 1px dashed rgba(199, 162, 82, 0.2);
+  padding-bottom: 4px;
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px;
+}
+
+.field-row .field {
+  flex: 1;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.customer-summary-card {
+  background: rgba(199, 162, 82, 0.06);
+  border: 1px solid rgba(199, 162, 82, 0.2);
+  margin: 16px 20px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.summary-details {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.summary-line {
+  margin: 2px 0;
+  color: var(--ink-secondary);
+}
+
+.btn-text-edit {
+  background: transparent;
+  border: none;
+  color: var(--gold, #c7a252);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.btn-text-edit:hover {
+  color: var(--ivory, #fff);
+  text-decoration: none;
+}
+
+.lookup-status {
+  display: block;
+  font-size: 9px;
+  color: #52b788;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+[data-theme="light"] .customer-summary-card {
+  background: rgba(107, 31, 42, 0.03);
+  border-color: rgba(107, 31, 42, 0.15);
+}
+
+[data-theme="light"] .btn-text-edit {
+  color: #6b1f2a;
+}
+
+[data-theme="light"] .btn-text-edit:hover {
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .drawer-section-title {
+  color: #6b1f2a;
+  border-bottom-color: rgba(107, 31, 42, 0.15);
+}
+
 

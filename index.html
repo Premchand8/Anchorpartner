@@ -101,7 +101,7 @@
       </button>
       <button class="icon-btn" id="openAdmin">⚙ Admin</button>
       <button class="wishlist-tab" id="openDrawer">
-        <span>Wishlist</span>
+        <span>Customer Selection</span>
         <span class="wishlist-count" id="wishlistCount">0</span>
       </button>
     </nav>
@@ -278,7 +278,7 @@
   </div>
   <div class="section-head">
     <span class="eyebrow" id="catalogueSectionEyebrow">Curated For You</span>
-    <h2 id="catalogueSectionTitle">The Wishlist Collection</h2>
+    <h2 id="catalogueSectionTitle">Customer Selection</h2>
     <span class="section-ornament" aria-hidden="true">◆ ◆ ◆</span>
   </div>
   <div class="collection-gallery-stage" id="collectionGalleryStage">
@@ -702,19 +702,98 @@
 <div class="overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
-    <h3>Your Wishlist</h3>
+    <h3>Customer Selection</h3>
     <button class="close-btn" id="closeDrawer">✕</button>
   </div>
   <div id="drawerMain">
-    <div class="drawer-body" id="drawerBody"></div>
-    <div class="drawer-form" id="drawerForm">
-      <span class="eyebrow">Submit Enquiry</span>
-      <div class="field"><label for="fName">Full Name</label><input id="fName" type="text" placeholder="Your name" required></div>
-      <div class="field"><label for="fEmail">Email Address</label><input id="fEmail" type="email" placeholder="you@example.com" required></div>
-      <div class="field"><label for="fPhone">Phone Number</label><input id="fPhone" type="tel" placeholder="+91 90000 00000"></div>
-      <div class="field"><label for="fMsg">Message (optional)</label><textarea id="fMsg" placeholder="Any preferences — sizing, gifting, etc."></textarea></div>
-      <button class="submit-btn" id="submitBtn"><span id="submitLabel">Submit Wishlist Enquiry</span></button>
-      <p class="form-note">By submitting, you'll receive a confirmation email and our team will follow up within 24 hours regarding the pieces above.</p>
+    <!-- View 1: Customer & Partner Information Form -->
+    <div class="drawer-view" id="drawerViewForm" style="display: none;">
+      <div class="drawer-section-title">Customer Information</div>
+      <div class="field">
+        <label for="cMobile">Mobile Number *</label>
+        <input id="cMobile" type="tel" placeholder="e.g. 9876543210" required>
+        <span class="lookup-status" id="cMobileStatus"></span>
+      </div>
+      <div class="field">
+        <label for="cName">Customer Name *</label>
+        <input id="cName" type="text" placeholder="Full Name" required>
+      </div>
+      <div class="field">
+        <label for="cEmail">Email Address *</label>
+        <input id="cEmail" type="email" placeholder="customer@example.com" required>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="cDob">Date of Birth *</label>
+          <input id="cDob" type="date" required>
+        </div>
+        <div class="field">
+          <label for="cAnniversary">Anniversary (Optional)</label>
+          <input id="cAnniversary" type="date">
+        </div>
+      </div>
+      <div class="field">
+        <label for="cCity">City *</label>
+        <input id="cCity" type="text" placeholder="e.g. Hyderabad" required>
+      </div>
+      <div class="field">
+        <label for="cRemarks">Remarks / Notes</label>
+        <textarea id="cRemarks" placeholder="Customer preference, notes etc."></textarea>
+      </div>
+
+      <div class="drawer-section-title" style="margin-top: 24px;">Partner & Store Details</div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pId">Partner ID *</label>
+          <input id="pId" type="text" placeholder="e.g. PT-990" required>
+        </div>
+        <div class="field">
+          <label for="pName">Partner Name *</label>
+          <input id="pName" type="text" placeholder="Company Name" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pStore">Store Name *</label>
+          <input id="pStore" type="text" placeholder="e.g. Jubilee Hills" required>
+        </div>
+        <div class="field">
+          <label for="pExecutive">Sales Executive *</label>
+          <input id="pExecutive" type="text" placeholder="Name" required>
+        </div>
+      </div>
+
+      <div style="padding: 16px 20px 30px;">
+        <button type="button" class="submit-btn" id="btnSaveDetails">
+          <span>Proceed to Selection</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- View 2: Selected Products List & Submission Summary -->
+    <div class="drawer-view" id="drawerViewItems" style="display: none;">
+      <div class="customer-summary-card">
+        <div class="summary-details">
+          <div class="summary-line"><strong>Customer:</strong> <span id="sumCustName">-</span> (<span id="sumCustMobile">-</span>)</div>
+          <div class="summary-line"><strong>Store:</strong> <span id="sumStore">-</span> · <strong>Executive:</strong> <span id="sumExec">-</span></div>
+        </div>
+        <button type="button" class="btn-text-edit" id="btnEditCustInfo">Edit Details</button>
+      </div>
+      
+      <div class="drawer-body" id="drawerBody"></div>
+      
+      <div class="drawer-footer-actions">
+        <div class="field" style="padding: 16px 20px 0;">
+          <label for="sumRemarks">Selection Notes</label>
+          <textarea id="sumRemarks" placeholder="Add any specific notes for this submission..."></textarea>
+        </div>
+        <div class="drawer-form" id="drawerForm" style="padding: 20px;">
+          <button class="submit-btn" id="submitBtn">
+            <span id="submitLabel">Submit Customer Selection</span>
+          </button>
+          <p class="form-note">Upon submission, this customer selection is saved. You can access it anytime or view past logs.</p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="success-view" id="successView">

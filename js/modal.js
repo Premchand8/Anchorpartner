@@ -566,7 +566,7 @@ function refreshModalHeart() {
   const active = wishlist.includes(activeProductId);
   const btn = document.getElementById('pmHeart');
   btn.classList.toggle('active', active);
-  document.getElementById('pmHeartLabel').textContent = active ? 'Added to Wishlist' : 'Add to Wishlist';
+  document.getElementById('pmHeartLabel').textContent = active ? 'Added to Selection' : 'Add to Selection';
   document.getElementById('pmGalleryHeart')?.classList.toggle('active', active);
 }
 

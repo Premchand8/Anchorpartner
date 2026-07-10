@@ -375,7 +375,7 @@ function buildCardHtml(base) {
       <div class="${mediaClasses}" data-id="${p.id}" data-slide="0" data-slides="${mediaInner.count || 1}">
         ${renderAvailabilityBadge(p.availability)}
         ${multi ? `<span class="gallery-badge">◈ ${p.images.length} views</span>` : ''}
-        <button class="heart-btn ${wishlist.includes(p.id)?'active':''}" data-id="${p.id}" aria-label="Add to wishlist">
+        <button class="heart-btn ${wishlist.includes(p.id)?'active':''}" data-id="${p.id}" aria-label="Add to Selection">
           <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.4 8.1 2 4.5 5.6 4c2-.3 3.8.7 4.9 2.4C11.6 4.7 13.4 3.7 15.4 4c3.6.5 5.2 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/></svg>
         </button>
         ${mediaInner.html}
@@ -391,7 +391,7 @@ function buildCardHtml(base) {
         <div class="card-price">${formatCardPrice(p.price)}</div>
         <div class="card-desc">${p.description}</div>
         <div class="card-actions">
-          <span class="add-link" data-id="${p.id}">${wishlist.includes(p.id) ? '✓ Wishlist' : '+ Wishlist'}</span>
+          <span class="add-link" data-id="${p.id}">${wishlist.includes(p.id) ? '✓ Selection' : '+ Selection'}</span>
           <span class="view-link" data-id="${p.id}">View details</span>
         </div>
       </div>
@@ -832,9 +832,7 @@ function refreshWishlistUi() {
     card.querySelector('.heart-btn')?.classList.toggle('active', wishlist.includes(id));
     const addLink = card.querySelector('.add-link');
     if (addLink) {
-      addLink.textContent = wishlist.includes(id)
-        ? (window.matchMedia('(max-width: 767px)').matches ? '✓ Wishlist' : '✓ Added to wishlist')
-        : (window.matchMedia('(max-width: 767px)').matches ? '+ Wishlist' : '+ Add to wishlist');
+      addLink.textContent = wishlist.includes(id) ? '✓ Selection' : '+ Selection';
     }
   });
 }

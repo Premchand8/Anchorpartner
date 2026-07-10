@@ -136,6 +136,36 @@ btnEditCustInfo.addEventListener('click', () => {
   document.getElementById('drawerTitle').textContent = 'Enter Selection Details';
 });
 
+// Start New Selection Session click
+const btnStartNewSelection = document.getElementById('btnStartNewSelection');
+if (btnStartNewSelection) {
+  btnStartNewSelection.addEventListener('click', () => {
+    // 1. If we have active customer and items in wishlist, auto-save as draft first so we don't lose progress!
+    if (activeCustomer && activeCustomer.mobile && wishlist.length > 0) {
+      saveCurrentAsDraft();
+    }
+
+    // 2. Reset active states
+    wishlist = [];
+    activeCustomer = null;
+    sessionStorage.removeItem('pmj_active_customer');
+
+    // 3. Clear inputs
+    ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('cMobileStatus').textContent = '';
+
+    // 4. Re-render UI
+    if (typeof renderGrid === 'function') renderGrid();
+    if (typeof updateCount === 'function') updateCount();
+    if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+
+    renderDrawer();
+  });
+}
+
 function openDrawer(opts = {}){
   const dramatic = opts?.dramatic === true;
   drawer.classList.remove('drawer-landed');

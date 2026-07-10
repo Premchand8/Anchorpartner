@@ -78,6 +78,11 @@ function getFilteredProducts(){
   const products = typeof getCatalogueProducts === 'function' ? getCatalogueProducts() : PRODUCTS;
   let items = products.slice();
 
+  if (window.showWishlistOnly) {
+    items = items.filter((p) => wishlist.includes(p.id));
+    return items;
+  }
+
   const collectionId = window.currentCollectionFilter || null;
   if (collectionId && typeof productBelongsToCollection === 'function') {
     items = items.filter((p) => productBelongsToCollection(p, collectionId));

@@ -270,7 +270,7 @@ function renderDraftsList() {
             <div style="font-size: 11px; line-height: 1.4; flex: 1;">
               <strong>${draft.customer.name}</strong> (${draft.customer.mobile})<br>
               <span style="opacity: 0.7; font-size: 10px;">${draft.products.length} item(s) · ${formattedDate}</span>
-              <span style="color: var(--gold); font-size: 9px; display: block; margin-top: 2px;">▸ Click to review pieces</span>
+              <span style="color: var(--gold); font-size: 9px; display: block; margin-top: 2px;">▸ Tap to load & browse on page</span>
             </div>
             <div style="display: flex; gap: 8px; flex-shrink: 0;" class="draft-actions">
               <button type="button" class="btn-text-edit btn-load-draft" data-idx="${idx}" style="font-size: 10px; padding: 4px 6px; text-decoration: none; background: rgba(199,162,82,0.15); border-radius: 3px; border: 1px solid rgba(199,162,82,0.3);">Load</button>
@@ -289,44 +289,14 @@ function renderDraftsList() {
   }
 }
 
-// Bind draft buttons & accordion toggle
+// Bind draft buttons & card click
 if (draftsList) {
   draftsList.addEventListener('click', (e) => {
     const loadBtn = e.target.closest('.btn-load-draft');
     const deleteBtn = e.target.closest('.btn-delete-draft');
-    const draftActions = e.target.closest('.draft-actions');
     const card = e.target.closest('.draft-card');
     
-    if (loadBtn) {
-      e.stopPropagation();
-      const idx = parseInt(loadBtn.dataset.idx, 10);
-      try {
-        const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
-        const draft = drafts[idx];
-        if (draft) {
-          activeCustomer = draft.customer;
-          sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
-          wishlist = [...draft.products];
-          sessionStorage.setItem('pmj_active_wishlist', JSON.stringify(wishlist));
-          
-          // Prepopulate inputs
-          cMobile.value = activeCustomer.mobile || '';
-          cName.value = activeCustomer.name || '';
-          cEmail.value = activeCustomer.email || '';
-          cDob.value = activeCustomer.dob || '';
-          cAnniversary.value = activeCustomer.anniversary || '';
-          cCity.value = activeCustomer.city || '';
-          cRemarks.value = activeCustomer.remarks || '';
-          
-          // Re-render
-          if (typeof renderGrid === 'function') renderGrid();
-          if (typeof updateCount === 'function') updateCount();
-          if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
-          
-          renderDrawer();
-        }
-      } catch (err) {}
-    } else if (deleteBtn) {
+    if (deleteBtn) {
       e.stopPropagation();
       const idx = parseInt(deleteBtn.dataset.idx, 10);
       try {
@@ -335,17 +305,52 @@ if (draftsList) {
         localStorage.setItem('pmj_draft_wishlists', JSON.stringify(drafts));
         renderDraftsList();
       } catch (err) {}
-    } else if (card && !draftActions) {
-      // Toggle expanded products list
-      const idx = card.dataset.idx;
-      const prodList = document.getElementById(`draftProducts-${idx}`);
-      if (prodList) {
-        prodList.classList.toggle('show');
-        const arrow = card.querySelector('span[style*="var(--gold)"]');
-        if (arrow) {
-          arrow.textContent = prodList.classList.contains('show') ? '▾ Click to collapse' : '▸ Click to review pieces';
+    } else if (loadBtn || card) {
+      if (loadBtn) e.stopPropagation();
+      const target = loadBtn || card;
+      const idx = parseInt(target.dataset.idx, 10);
+      try {
+        const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
+        const draft = drafts[idx];
+        if (draft) {
+          // 1. Populate states
+          activeCustomer = draft.customer;
+          sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
+          wishlist = [...draft.products];
+          sessionStorage.setItem('pmj_active_wishlist', JSON.stringify(wishlist));
+          
+          // 2. Prepopulate form inputs
+          cMobile.value = activeCustomer.mobile || '';
+          cName.value = activeCustomer.name || '';
+          cEmail.value = activeCustomer.email || '';
+          cDob.value = activeCustomer.dob || '';
+          cAnniversary.value = activeCustomer.anniversary || '';
+          cCity.value = activeCustomer.city || '';
+          cRemarks.value = activeCustomer.remarks || '';
+          
+          // 3. Set page filter to show selection only
+          window.showWishlistOnly = true;
+          
+          // 4. Update browsing stage and visibilities
+          window.setBrowseStage?.('gallery');
+          window.setBrowseVisibility?.();
+          
+          // 5. Re-render page elements
+          if (typeof renderGrid === 'function') renderGrid(true);
+          if (typeof updateCount === 'function') updateCount();
+          if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+          window.updateGalleryBreadcrumb?.('all');
+          
+          // 6. Draw drawer elements
+          renderDrawer();
+          
+          // 7. Close drawer and scroll to catalogue section
+          closeDrawer();
+          setTimeout(() => {
+            document.getElementById('catalogue')?.scrollIntoView({ behavior: 'smooth' });
+          }, 300);
         }
-      }
+      } catch (err) {}
     }
   });
 }

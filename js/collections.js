@@ -343,7 +343,6 @@ function renderCollectionGalleryHero(collectionId, categoryId) {
 }
 
 function updateGalleryBreadcrumb(categoryId) {
-  const col = getCollectionById(activeCollectionId);
   const colLink = document.getElementById('plpCrumbCollectionLink');
   const catCrumb = document.getElementById('plpCrumbCategory');
   const colSep = document.getElementById('plpCrumbColSep');
@@ -351,6 +350,33 @@ function updateGalleryBreadcrumb(categoryId) {
   const sectionEyebrow = document.getElementById('catalogueSectionEyebrow');
   const sectionTitle = document.getElementById('catalogueSectionTitle');
   const crumbCol = document.getElementById('collectionCrumbName');
+
+  if (window.showWishlistOnly && activeCustomer) {
+    if (colLink) {
+      colLink.textContent = 'Customer Selection';
+      colLink.classList.remove('hidden');
+    }
+    if (colSep) colSep.classList.remove('hidden');
+    if (catSep) catSep.classList.remove('hidden');
+    if (catCrumb) {
+      catCrumb.textContent = activeCustomer.name;
+    }
+    if (sectionEyebrow) {
+      sectionEyebrow.textContent = 'Curated Selection';
+    }
+    if (sectionTitle) {
+      sectionTitle.innerHTML = `${activeCustomer.name}'s Selection <button type="button" class="btn-text-edit" id="btnExitSelectionView" style="font-size: 11px; margin-left: 12px; background: rgba(199, 162, 82, 0.15); border: 1px solid rgba(199, 162, 82, 0.3); border-radius: 4px; padding: 4px 8px; vertical-align: middle; cursor: pointer; text-decoration: none;">View All Pieces</button>`;
+      
+      document.getElementById('btnExitSelectionView')?.addEventListener('click', () => {
+        window.showWishlistOnly = false;
+        if (typeof renderGrid === 'function') renderGrid(true);
+        updateGalleryBreadcrumb('all');
+      });
+    }
+    return;
+  }
+
+  const col = getCollectionById(activeCollectionId);
 
   if (colLink) {
     colLink.textContent = col?.title || 'Collection';
@@ -575,6 +601,9 @@ window.openCollectionsHub = openCollectionsHub;
 window.openCollectionLanding = openCollectionLanding;
 window.openCollectionGallery = openCollectionGallery;
 window.updateGalleryBreadcrumb = updateGalleryBreadcrumb;
+window.setBrowseVisibility = setBrowseVisibility;
+window.setBrowseStage = (stage) => { browseStage = stage; };
+window.getBrowseStage = () => browseStage;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCollectionsBrowse);

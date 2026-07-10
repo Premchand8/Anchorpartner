@@ -1930,4 +1930,12 @@ footer .wordmark {
   border-top-color: rgba(0, 0, 0, 0.08);
 }
 
+#drawerMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 

@@ -1938,4 +1938,65 @@ footer .wordmark {
   min-height: 0;
 }
 
+/* Curated Selection mode banner above grid */
+.selection-mode-banner {
+  background: rgba(199, 162, 82, 0.08);
+  border: 1px solid rgba(199, 162, 82, 0.25);
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Jost', sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.selection-mode-banner.hidden {
+  display: none !important;
+}
+
+.selection-mode-banner .banner-text {
+  font-size: 13px;
+  color: var(--ivory, #fff);
+  line-height: 1.4;
+}
+
+.selection-mode-banner .banner-text strong {
+  color: var(--gold);
+}
+
+.selection-mode-banner .banner-actions {
+  display: flex;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .selection-mode-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .selection-mode-banner .banner-actions {
+    justify-content: center;
+  }
+}
+
+[data-theme="light"] .selection-mode-banner {
+  background: rgba(107, 31, 42, 0.04);
+  border-color: rgba(107, 31, 42, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .selection-mode-banner .banner-text {
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .selection-mode-banner .banner-text strong {
+  color: #6b1f2a;
+}
+
 

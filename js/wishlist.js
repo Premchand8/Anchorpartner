@@ -157,6 +157,7 @@ if (btnStartNewSelection) {
     wishlist = [];
     activeCustomer = null;
     sessionStorage.removeItem('pmj_active_customer');
+    window.showWishlistOnly = false;
 
     // 3. Clear inputs
     ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
@@ -165,12 +166,22 @@ if (btnStartNewSelection) {
     });
     document.getElementById('cMobileStatus').textContent = '';
 
-    // 4. Re-render UI
+    // 4. Update browsing stage to collections and refresh layout
+    window.setBrowseStage?.('collections');
+    window.setBrowseVisibility?.();
+
+    // 5. Re-render UI
     if (typeof renderGrid === 'function') renderGrid();
     if (typeof updateCount === 'function') updateCount();
     if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
 
     renderDrawer();
+
+    // 6. Close drawer and scroll to homepage
+    closeDrawer();
+    setTimeout(() => {
+      document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
   });
 }
 
@@ -373,6 +384,20 @@ function renderDrawer(){
       pill.classList.remove('hidden');
     } else {
       pill.classList.add('hidden');
+    }
+  }
+
+  // Update selection mode banner on PLP page
+  const selBanner = document.getElementById('selectionModeBanner');
+  const selBannerName = document.getElementById('selBannerCustName');
+  const selBannerCount = document.getElementById('selBannerCustCount');
+  if (selBanner && selBannerName && selBannerCount) {
+    if (window.showWishlistOnly && activeCustomer) {
+      selBannerName.textContent = activeCustomer.name;
+      selBannerCount.textContent = wishlist.length;
+      selBanner.classList.remove('hidden');
+    } else {
+      selBanner.classList.add('hidden');
     }
   }
 
@@ -653,6 +678,33 @@ window.refreshWishlistDrawer = renderDrawer;
 const activeSelectionPill = document.getElementById('activeSelectionPill');
 if (activeSelectionPill) {
   activeSelectionPill.addEventListener('click', () => {
+    openDrawer();
+  });
+}
+
+// Curation Selection Mode Banner Action buttons click listeners
+const btnBrowseMore = document.getElementById('btnBrowseMoreFromCollections');
+if (btnBrowseMore) {
+  btnBrowseMore.addEventListener('click', () => {
+    // 1. Reset selection-only filter to show all products
+    window.showWishlistOnly = false;
+    
+    // 2. Set stage to collections (homepage)
+    window.setBrowseStage?.('collections');
+    window.setBrowseVisibility?.();
+    
+    // 3. Re-render Grid & update headers
+    if (typeof renderGrid === 'function') renderGrid(true);
+    window.updateGalleryBreadcrumb?.('all');
+    
+    // 4. Scroll smoothly to collections page
+    document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+const btnOpenReview = document.getElementById('btnOpenReviewDrawer');
+if (btnOpenReview) {
+  btnOpenReview.addEventListener('click', () => {
     openDrawer();
   });
 }

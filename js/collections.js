@@ -484,6 +484,7 @@ function openCollectionLanding(collectionId, { scroll = true, animate = true } =
 }
 
 function openCollectionGallery(collectionId, categoryId, { scroll = true, animate = true } = {}) {
+  window.showWishlistOnly = false;
   const col = getCollectionById(collectionId);
   if (!col) return;
 

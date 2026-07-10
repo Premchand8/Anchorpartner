@@ -354,5 +354,9 @@
     pointer-events: auto;
   }
 
+  .pm-enquire-btn-mobile {
+    display: none !important;
+  }
+
   
   

@@ -915,36 +915,106 @@
     cursor: pointer;
   }
 
-  .pm-actions--sticky {
+  body.pdp-open .product-modal .pm-actions {
     display: flex !important;
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 225;
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-    background: rgba(255, 255, 255, 0.96);
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    margin: 0 !important;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    background: #ffffff !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-sizing: border-box;
+    gap: 12px;
     backdrop-filter: blur(8px);
   }
 
-  .pm-actions--sticky .pm-heart {
-    width: 100%;
-    min-height: 48px;
-    justify-content: center;
-    border: 1px solid #1a1a1a;
-    border-radius: 0;
-    background: transparent;
-    color: #1a1a1a;
+  [data-theme="dark"] body.pdp-open .product-modal .pm-actions {
+    background: #0b0b0d !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  body.pdp-open .product-modal .pm-heart {
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 !important;
+    border: 1px solid #1a1a1a !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #1a1a1a !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  body.pdp-open .product-modal .pm-heart svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke: #1a1a1a !important;
+    fill: none !important;
+  }
+
+  body.pdp-open .product-modal .pm-heart.active {
+    background: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+  }
+
+  body.pdp-open .product-modal .pm-heart.active svg {
+    fill: #e63946 !important;
+    stroke: #e63946 !important;
+  }
+
+  [data-theme="dark"] body.pdp-open .product-modal .pm-heart {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: #f5f2ed !important;
+  }
+
+  [data-theme="dark"] body.pdp-open .product-modal .pm-heart svg {
+    stroke: #f5f2ed !important;
+  }
+
+  [data-theme="dark"] body.pdp-open .product-modal .pm-heart.active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  body.pdp-open .product-modal .pm-heart #pmHeartLabel {
+    display: none !important;
+  }
+
+  /* Sticky Enquire Button on mobile PDP */
+  body.pdp-open .product-modal .pm-enquire-btn-mobile {
+    flex: 1 !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    background: #1a1a1a !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 !important;
     font-family: 'Jost', sans-serif;
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
   }
 
-  .pm-actions--sticky .pm-heart.active {
-    background: #1a1a1a;
-    color: #fff;
+  [data-theme="dark"] body.pdp-open .product-modal .pm-enquire-btn-mobile {
+    background: #f5f2ed !important;
+    color: #1a1a1a !important;
+  }
+
+  /* Support light theme overrides from Tanishq */
+  [data-theme="light"] body.pdp-open .product-modal .pm-heart {
+    border-color: #1a1a1a !important;
+    background: transparent !important;
+    color: #1a1a1a !important;
   }
 
   .pm-mobile-quick {

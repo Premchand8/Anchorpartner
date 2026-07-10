@@ -71,7 +71,7 @@ function applyProductViewer(p) {
   // Check if we have both model and product images for Sweet 16 collection
   const hasSplitGallery = p.images && p.images.length === 2 && p.images[0].includes('_model') && p.images[1].includes('_product');
 
-  if (hasSplitGallery) {
+  if (hasSplitGallery && !isMobileView()) {
     wrap.classList.add('has-split-gallery');
     stage.innerHTML = `
       <div class="pdp-gallery-split">
@@ -136,6 +136,20 @@ function applyProductViewer(p) {
       hint.textContent = isPng
         ? 'Hover to magnify · Original product cut-out'
         : 'Hover to magnify · Full view';
+    }
+
+    // Dynamic overlay label on mobile for Model/Product views
+    if (isMobileView() && hasSplitGallery) {
+      let label = stage.querySelector('.pdp-img-label');
+      if (!label) {
+        label = document.createElement('span');
+        label.className = 'pdp-img-label';
+        stage.appendChild(label);
+      }
+      label.textContent = pmImageIndex === 0 ? 'Model View' : 'Product View';
+      label.style.display = 'block';
+    } else {
+      stage.querySelector('.pdp-img-label')?.remove();
     }
     return;
   }
@@ -633,6 +647,11 @@ document.querySelectorAll('.pm-details-tab').forEach((tab) => {
 });
 
 document.getElementById('pmEnquireBtn')?.addEventListener('click', () => {
+  closeProductModal();
+  document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+document.getElementById('pmEnquireBtnMobile')?.addEventListener('click', () => {
   closeProductModal();
   document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
 });

@@ -48,6 +48,14 @@ function initDetails() {
       activeCustomer = JSON.parse(active);
     }
   } catch (e) {}
+
+  // Load active wishlist items
+  try {
+    const savedWl = sessionStorage.getItem('pmj_active_wishlist');
+    if (savedWl) {
+      wishlist = JSON.parse(savedWl);
+    }
+  } catch (e) {}
 }
 
 // Mobile Number Lookup Event
@@ -240,15 +248,38 @@ function renderDraftsList() {
         hour: '2-digit',
         minute: '2-digit'
       });
-      return `
-        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 14px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
-          <div style="font-size: 11px; line-height: 1.4;">
-            <strong>${draft.customer.name}</strong> (${draft.customer.mobile})<br>
-            <span style="opacity: 0.7;">${draft.products.length} item(s) · ${formattedDate}</span>
+
+      // Products summary for expansion
+      const productsSummaryHtml = draft.products.map(pId => {
+        const p = getProductData(pId);
+        if (!p) return '';
+        return `
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding: 4px; background: rgba(0,0,0,0.15); border-radius: 3px;">
+            <img src="${IMAGES[p.images[0]]}" style="width: 24px; height: 24px; object-fit: contain; background: #fff;" alt="">
+            <div style="font-size: 10px; line-height: 1.2;">
+              <span style="font-weight: 500; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px;">${p.name}</span>
+              <span style="opacity: 0.6; font-size: 8px;">Code: ${p.id}</span>
+            </div>
           </div>
-          <div style="display: flex; gap: 8px; flex-shrink: 0;">
-            <button type="button" class="btn-text-edit btn-load-draft" data-idx="${idx}" style="font-size: 10px; padding: 4px 6px; text-decoration: none; background: rgba(199,162,82,0.15); border-radius: 3px; border: 1px solid rgba(199,162,82,0.3);">Load</button>
-            <button type="button" class="btn-text-edit btn-delete-draft" data-idx="${idx}" style="font-size: 10px; color: #ff6b6b; text-decoration: none; padding: 4px 6px;">✕</button>
+        `;
+      }).join('');
+
+      return `
+        <div class="draft-card" data-idx="${idx}" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 14px; border-radius: 4px; display: flex; flex-direction: column; cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <div style="font-size: 11px; line-height: 1.4; flex: 1;">
+              <strong>${draft.customer.name}</strong> (${draft.customer.mobile})<br>
+              <span style="opacity: 0.7; font-size: 10px;">${draft.products.length} item(s) · ${formattedDate}</span>
+              <span style="color: var(--gold); font-size: 9px; display: block; margin-top: 2px;">▸ Click to review pieces</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-shrink: 0;" class="draft-actions">
+              <button type="button" class="btn-text-edit btn-load-draft" data-idx="${idx}" style="font-size: 10px; padding: 4px 6px; text-decoration: none; background: rgba(199,162,82,0.15); border-radius: 3px; border: 1px solid rgba(199,162,82,0.3);">Load</button>
+              <button type="button" class="btn-text-edit btn-delete-draft" data-idx="${idx}" style="font-size: 10px; color: #ff6b6b; text-decoration: none; padding: 4px 6px;">✕</button>
+            </div>
+          </div>
+          <div class="draft-item-products" id="draftProducts-${idx}">
+            <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 8px; font-weight: 600;">Saved Items:</div>
+            ${productsSummaryHtml || '<div style="font-size: 10px; opacity: 0.6; font-style: italic;">No items saved in this draft.</div>'}
           </div>
         </div>
       `;
@@ -258,12 +289,16 @@ function renderDraftsList() {
   }
 }
 
-// Bind draft buttons
+// Bind draft buttons & accordion toggle
 if (draftsList) {
   draftsList.addEventListener('click', (e) => {
     const loadBtn = e.target.closest('.btn-load-draft');
     const deleteBtn = e.target.closest('.btn-delete-draft');
+    const draftActions = e.target.closest('.draft-actions');
+    const card = e.target.closest('.draft-card');
+    
     if (loadBtn) {
+      e.stopPropagation();
       const idx = parseInt(loadBtn.dataset.idx, 10);
       try {
         const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
@@ -272,6 +307,7 @@ if (draftsList) {
           activeCustomer = draft.customer;
           sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
           wishlist = [...draft.products];
+          sessionStorage.setItem('pmj_active_wishlist', JSON.stringify(wishlist));
           
           // Prepopulate inputs
           cMobile.value = activeCustomer.mobile || '';
@@ -291,6 +327,7 @@ if (draftsList) {
         }
       } catch (err) {}
     } else if (deleteBtn) {
+      e.stopPropagation();
       const idx = parseInt(deleteBtn.dataset.idx, 10);
       try {
         const drafts = JSON.parse(localStorage.getItem('pmj_draft_wishlists') || '[]');
@@ -298,6 +335,17 @@ if (draftsList) {
         localStorage.setItem('pmj_draft_wishlists', JSON.stringify(drafts));
         renderDraftsList();
       } catch (err) {}
+    } else if (card && !draftActions) {
+      // Toggle expanded products list
+      const idx = card.dataset.idx;
+      const prodList = document.getElementById(`draftProducts-${idx}`);
+      if (prodList) {
+        prodList.classList.toggle('show');
+        const arrow = card.querySelector('span[style*="var(--gold)"]');
+        if (arrow) {
+          arrow.textContent = prodList.classList.contains('show') ? '▾ Click to collapse' : '▸ Click to review pieces';
+        }
+      }
     }
   });
 }
@@ -305,6 +353,23 @@ if (draftsList) {
 function renderDrawer(){
   const lastAdded = window.__pmjLastWishlistAdd;
   const drawerOpen = drawer?.classList.contains('open');
+
+  // Sync to sessionStorage
+  try {
+    sessionStorage.setItem('pmj_active_wishlist', JSON.stringify(wishlist));
+  } catch (e) {}
+
+  // Update active selection floating status pill
+  const pill = document.getElementById('activeSelectionPill');
+  const pillText = document.getElementById('activeSelectionPillText');
+  if (pill && pillText) {
+    if (activeCustomer) {
+      pillText.textContent = `Selection: ${activeCustomer.name} (${wishlist.length} pcs)`;
+      pill.classList.remove('hidden');
+    } else {
+      pill.classList.add('hidden');
+    }
+  }
 
   // Trigger automatic saving of drafts if activeCustomer and wishlist exist
   if (activeCustomer && wishlist.length > 0) {
@@ -578,3 +643,11 @@ renderDrawer();
 window.openWishlistDrawer = openDrawer;
 window.closeWishlistDrawer = closeDrawer;
 window.refreshWishlistDrawer = renderDrawer;
+
+// Active selection status pill click
+const activeSelectionPill = document.getElementById('activeSelectionPill');
+if (activeSelectionPill) {
+  activeSelectionPill.addEventListener('click', () => {
+    openDrawer();
+  });
+}

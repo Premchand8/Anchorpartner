@@ -1,5 +1,8 @@
 /* Catalogue rendering, filters, lazy scroll & pagination */
 let wishlist = [];
+try {
+  wishlist = JSON.parse(sessionStorage.getItem('pmj_active_wishlist') || '[]');
+} catch (e) {}
 let currentFilter = 'all';
 let availabilityFilter = 'all';
 let searchQuery = '';

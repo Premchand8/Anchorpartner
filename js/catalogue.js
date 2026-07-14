@@ -280,17 +280,21 @@ function logFilterResult(kind, value) {
 }
 
 function setCategoryFilter(catId) {
-  currentFilter = catId;
-  window.currentCategoryFilter = catId;
-  resetPagination();
-  window.buildCategoryFilters?.(catId);
-  renderGrid(true);
-  updateClearFiltersUi();
-  if (document.body.dataset.pmjBrowse === 'gallery') {
-    window.updateGalleryBreadcrumb?.(catId);
+  try {
+    currentFilter = catId;
+    window.currentCategoryFilter = catId;
+    resetPagination();
+    window.buildCategoryFilters?.(catId);
+    renderGrid(true);
+    updateClearFiltersUi();
+    if (document.body.dataset.pmjBrowse === 'gallery') {
+      window.updateGalleryBreadcrumb?.(catId);
+    }
+    scrollToCatalogueResults();
+    logFilterResult('category', catId);
+  } catch (err) {
+    console.error('Error inside setCategoryFilter:', err);
   }
-  scrollToCatalogueResults();
-  logFilterResult('category', catId);
 }
 
 function updateCatalogueFooter(items, shown) {
@@ -393,7 +397,6 @@ function buildCardHtml(base) {
       <div class="card-body">
         <div class="card-meta-row">
           <div class="card-cat">${catLabel}</div>
-          <span class="availability-inline ${avail.badgeClass}">${avail.short}</span>
         </div>
         <h3 class="card-name">${p.name}</h3>
         ${materialLine ? `<p class="card-material">${materialLine}</p>` : ''}

@@ -521,22 +521,48 @@ function initCollectionsBrowse() {
   setBrowseVisibility();
 
   document.getElementById('collectionsGrid')?.addEventListener('click', (e) => {
-    const card = e.target.closest('.collection-banner[data-collection-id]');
-    if (!card || card.classList.contains('is-empty')) return;
-    window.PMJCollectionsAnim?.pulseCategoryTile(card);
-    const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 460;
-    const colId = card.getAttribute('data-collection-id');
-    window.setTimeout(() => openCollectionGallery(colId, 'all'), delay);
+    try {
+      const card = e.target.closest('.collection-banner[data-collection-id]');
+      if (!card) return;
+      if (card.classList.contains('is-empty')) {
+        console.warn('Click ignored: Collection is empty or coming soon.', card);
+        return;
+      }
+      window.PMJCollectionsAnim?.pulseCategoryTile(card);
+      const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 460;
+      const colId = card.getAttribute('data-collection-id');
+      console.log('Collection banner clicked, transitioning to gallery:', colId);
+      window.setTimeout(() => {
+        try {
+          openCollectionGallery(colId, 'all');
+        } catch (err) {
+          console.error('Error opening collection gallery:', err);
+        }
+      }, delay);
+    } catch (err) {
+      console.error('Error in collectionsGrid click handler:', err);
+    }
   });
 
   document.getElementById('collectionCategoriesGrid')?.addEventListener('click', (e) => {
-    const card = e.target.closest('.collection-category-tile:not(.is-empty)');
-    if (!card) return;
-    const colId = card.getAttribute('data-collection-id');
-    const catId = card.getAttribute('data-category-id');
-    window.PMJCollectionsAnim?.pulseCategoryTile(card);
-    const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 480;
-    window.setTimeout(() => openCollectionGallery(colId, catId), delay);
+    try {
+      const card = e.target.closest('.collection-category-tile:not(.is-empty)');
+      if (!card) return;
+      const colId = card.getAttribute('data-collection-id');
+      const catId = card.getAttribute('data-category-id');
+      window.PMJCollectionsAnim?.pulseCategoryTile(card);
+      const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 480;
+      console.log('Category tile clicked, transitioning to gallery:', colId, catId);
+      window.setTimeout(() => {
+        try {
+          openCollectionGallery(colId, catId);
+        } catch (err) {
+          console.error('Error opening collection gallery from category tile:', err);
+        }
+      }, delay);
+    } catch (err) {
+      console.error('Error in collectionCategoriesGrid click handler:', err);
+    }
   });
 
   document.getElementById('collectionBackBtn')?.addEventListener('click', (e) => {

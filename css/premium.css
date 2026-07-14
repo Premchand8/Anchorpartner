@@ -2001,4 +2001,8 @@ footer .wordmark {
   color: #6b1f2a;
 }
 
+#drawerMain.hidden {
+  display: none !important;
+}
+
 

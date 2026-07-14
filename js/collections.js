@@ -525,21 +525,27 @@ function initCollectionsBrowse() {
     if (!card || card.classList.contains('is-empty')) return;
     window.PMJCollectionsAnim?.pulseCategoryTile(card);
     const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 460;
-    window.setTimeout(() => openCollectionGallery(card.dataset.collectionId, 'all'), delay);
+    const colId = card.getAttribute('data-collection-id');
+    window.setTimeout(() => openCollectionGallery(colId, 'all'), delay);
   });
 
   document.getElementById('collectionCategoriesGrid')?.addEventListener('click', (e) => {
     const card = e.target.closest('.collection-category-tile:not(.is-empty)');
     if (!card) return;
-    const { collectionId, categoryId } = card.dataset;
+    const colId = card.getAttribute('data-collection-id');
+    const catId = card.getAttribute('data-category-id');
     window.PMJCollectionsAnim?.pulseCategoryTile(card);
     const delay = window.PMJCollectionsAnim?.prefersReducedMotion?.() ? 0 : 480;
-    window.setTimeout(() => openCollectionGallery(collectionId, categoryId), delay);
+    window.setTimeout(() => openCollectionGallery(colId, catId), delay);
   });
 
   document.getElementById('collectionBackBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    openCollectionsHub();
+    if (browseStage === 'gallery' && activeCollectionId) {
+      openCollectionLanding(activeCollectionId);
+    } else {
+      openCollectionsHub();
+    }
   });
 
   document.getElementById('plpCrumbHome')?.addEventListener('click', (e) => {
@@ -549,8 +555,11 @@ function initCollectionsBrowse() {
 
   document.getElementById('plpCrumbCollectionLink')?.addEventListener('click', (e) => {
     e.preventDefault();
-    if (activeCollectionId) openCollectionGallery(activeCollectionId, 'all');
-    else openCollectionsHub();
+    if (activeCollectionId) {
+      openCollectionLanding(activeCollectionId);
+    } else {
+      openCollectionsHub();
+    }
   });
 
   document.getElementById('headerBrandLink')?.addEventListener('click', (e) => {

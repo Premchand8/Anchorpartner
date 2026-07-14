@@ -725,6 +725,39 @@ footer .wordmark {
   background: rgba(199, 162, 82, 0.04);
 }
 
+.pm-discover-row {
+  display: none;
+}
+
+.pm-enquire-link {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: var(--radius-pill, 980px);
+  border: 1px solid var(--garnet, #8b2942);
+  background: var(--garnet, #8b2942);
+  color: #fff !important;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.pm-enquire-link:hover {
+  background: #721e32;
+  border-color: #721e32;
+  transform: translateY(-1px);
+}
+
+.pm-enquire-link:active {
+  transform: translateY(0);
+}
+
 .pm-thumb {
   border-radius: 1px;
   transition: opacity 0.3s, border-color 0.3s, transform 0.3s;

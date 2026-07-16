@@ -1,0 +1,14 @@
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        admin: 'admin/index.html',
+        login: 'admin/login.html'
+      }
+    }
+  }
+});

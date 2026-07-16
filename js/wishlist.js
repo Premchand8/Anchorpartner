@@ -605,6 +605,34 @@ async function submitSelection() {
     localStorage.setItem('pmj_submitted_wishlists', JSON.stringify(submissions));
   } catch (e) {}
 
+  // Sync to Supabase
+  try {
+    if (typeof window.supabase !== 'undefined') {
+      const supabaseUrl = 'https://exrzkkwyzagadfngzhyf.supabase.co';
+      const supabaseKey = 'sb_publishable__3QPKY0YG7X6cW1MF9OYZQ_S9MF9o5D';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      const computedValue = payload.selectedProducts.reduce((sum, p) => {
+        const itemPrice = parseFloat(String(p.price || '0').replace(/[^0-9.]/g, '')) || 0;
+        return sum + (itemPrice * (p.qty || 1));
+      }, 0);
+
+      await supabaseClient.from('wishlists').insert({
+        partner_name: payload.partnerInfo.partnerName || 'Unknown Partner',
+        executive_name: payload.partnerInfo.salesExecutiveName || 'N/A',
+        customer_name: payload.customerInfo.customerName,
+        customer_phone: payload.customerInfo.mobile,
+        items: payload.selectedProducts,
+        status: 'Submitted',
+        quantity: payload.selectedProducts.length,
+        estimated_value: computedValue,
+        notes: payload.wishlistInfo.remarks
+      });
+    }
+  } catch (err) {
+    console.error('Failed to sync selection to Supabase:', err);
+  }
+
   // 2. Save customer record to database in localStorage so they can be looked up by Mobile Number next time
   try {
     const customers = JSON.parse(localStorage.getItem('pmj_customers') || '[]');

@@ -145,7 +145,17 @@ function getCollectionTileClass(col) {
 }
 
 function getCollectionById(id) {
-  return PMJ_COLLECTIONS.find((c) => c.id === id) || null;
+  const base = PMJ_COLLECTIONS.find((c) => c.id === id) || null;
+  try {
+    const raw = localStorage.getItem('pmj_collections_overrides');
+    if (raw) {
+      const overrides = JSON.parse(raw);
+      if (overrides[id]) {
+        return { ...base, ...overrides[id] };
+      }
+    }
+  } catch (e) {}
+  return base;
 }
 
 function getProductCollections(product) {
@@ -192,7 +202,8 @@ function renderCollectionsHub() {
   const grid = document.getElementById('collectionsGrid');
   if (!grid) return;
 
-  grid.innerHTML = PMJ_COLLECTIONS.map((col) => {
+  grid.innerHTML = PMJ_COLLECTIONS.map((c) => {
+    const col = getCollectionById(c.id);
     const count = getCollectionProductCount(col.id);
     const cover = getCollectionCoverImage(col.id);
     const empty = count === 0;

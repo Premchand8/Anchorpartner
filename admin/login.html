@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMJ Jewels — Partner Catalogue Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --garnet: #8b2942;
+      --gold: #c7a252;
+      --umber: #171310;
+      --umber-2: #1f1a15;
+      --line: rgba(199, 162, 82, 0.12);
+      --ivory: #fffcf8;
+      --ink-soft: #a89f95;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--umber);
+      color: var(--ivory);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(139, 41, 66, 0.12) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(199, 162, 82, 0.08) 0%, transparent 70%);
+      bottom: -150px;
+      right: -150px;
+      pointer-events: none;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 40px;
+      background: var(--umber-2);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      box-shadow: 0 16px 64px rgba(0, 0, 0, 0.45);
+      z-index: 2;
+      text-align: center;
+    }
+
+    .logo-container {
+      margin-bottom: 30px;
+    }
+
+    .logo-container h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      letter-spacing: 0.05em;
+      color: var(--ivory);
+      margin-bottom: 6px;
+    }
+
+    .logo-container p {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--line);
+      color: var(--ivory);
+      padding: 12px 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      border-radius: 2px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--garnet);
+      color: var(--ivory);
+      border: 1px solid var(--garnet);
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 24px; /* Matches the rounded pill CTA style */
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #721e32;
+      transform: translateY(-1px);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-msg {
+      color: #ff5252;
+      font-size: 13px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .back-to-site {
+      display: inline-block;
+      margin-top: 25px;
+      font-size: 12px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+
+    .back-to-site:hover {
+      color: var(--ivory);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo-container">
+      <h2>PMJ JEWELS</h2>
+      <p>Store Admin Portal</p>
+    </div>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="admin@pmjjewels.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+      
+      <button type="submit" class="login-btn" id="submitBtn">Sign In</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+    
+    <a href="../" class="back-to-site">← Back to Partner Catalogue</a>
+  </div>
+
+  <script type="module">
+    import { supabase } from './utils/supabase.js';
+
+    // Immediate check: If user already logged in and holds admin metadata, redirect them
+    async function checkExistingAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+        if (profile?.role === 'admin' || profile?.role === 'super_admin') {
+          window.location.href = './index.html';
+        }
+      }
+    }
+    checkExistingAuth();
+
+    const form = document.getElementById('loginForm');
+    const errorEl = document.getElementById('errorMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.style.display = 'none';
+      submitBtn.textContent = 'Authenticating...';
+      submitBtn.disabled = true;
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+
+        // Fetch role from profile
+        const { data: profile, error: profileErr } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', data.user.id)
+          .single();
+
+        if (profileErr || !profile) {
+          throw new Error('Access denied: Profile role not configured.');
+        }
+
+        if (profile.role !== 'admin' && profile.role !== 'super_admin') {
+          await supabase.auth.signOut();
+          throw new Error('Access denied: Unauthorized role.');
+        }
+
+        // Add admin mode flag to localStorage for helper scripts
+        localStorage.setItem('pmj_admin_mode', '1');
+        window.location.href = './index.html';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Login failed. Please check credentials.';
+        errorEl.style.display = 'block';
+        submitBtn.textContent = 'Sign In';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

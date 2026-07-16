@@ -160,13 +160,90 @@
     publishTimer = setTimeout(() => publishConfig({ silent: true }), 1800);
   }
 
+  async function backgroundSyncSupabase() {
+    try {
+      if (typeof window.supabase === 'undefined') return;
+      const supabaseUrl = 'https://exrzkkwyzagadfngzhyf.supabase.co';
+      const supabaseKey = 'sb_publishable__3QPKY0YG7X6cW1MF9OYZQ_S9MF9o5D';
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      const oldProds = localStorage.getItem('pmj_catalogue_products');
+      const oldCols = localStorage.getItem('pmj_collections_overrides');
+
+      // 1. Fetch collections overrides
+      const { data: cols } = await supabase.from('collections').select('*').eq('active', true);
+      if (Array.isArray(cols)) {
+        const overrides = {};
+        cols.forEach(c => {
+          overrides[c.id] = {
+            title: c.title,
+            subtitle: c.subtitle,
+            kicker: c.kicker,
+            story_text: c.story_text,
+            craftsmanship_text: c.craftsmanship_text,
+            theme: c.theme
+          };
+        });
+        localStorage.setItem('pmj_collections_overrides', JSON.stringify(overrides));
+      }
+
+      // 2. Fetch products overrides
+      const { data: prods } = await supabase.from('products').select('*');
+      if (Array.isArray(prods)) {
+        const mapped = prods.map(p => ({
+          id: p.id,
+          name: p.name,
+          cat: p.cat,
+          catLabel: p.cat_label,
+          purity: p.purity,
+          gross: p.gross_weight,
+          netGold: p.net_gold,
+          diamond: p.diamond_weight,
+          stones: p.stones,
+          price: p.price,
+          description: p.description,
+          collections: p.collections || [],
+          images: p.images || []
+        }));
+        localStorage.setItem('pmj_catalogue_products', JSON.stringify(mapped));
+      }
+
+      // 3. Fetch pricing
+      const { data: pricing } = await supabase
+        .from('pricing_settings')
+        .select('*')
+        .order('effective_date', { ascending: false })
+        .limit(1);
+      
+      if (pricing && pricing.length > 0) {
+        localStorage.setItem('pmj_gold_rate', pricing[0].gold_rate);
+        localStorage.setItem('pmj_import_duty', pricing[0].import_duty);
+        localStorage.setItem('pmj_default_wastage', pricing[0].default_wastage);
+      }
+
+      const newProds = localStorage.getItem('pmj_catalogue_products');
+      const newCols = localStorage.getItem('pmj_collections_overrides');
+
+      if (oldProds !== newProds || oldCols !== newCols) {
+        console.log('Catalogue updated from Supabase, refreshing UI...');
+        if (typeof renderCollectionsHub === 'function') renderCollectionsHub();
+        if (typeof renderGrid === 'function') renderGrid(true);
+      }
+    } catch (err) {
+      console.warn('Supabase background sync failed:', err);
+    }
+  }
+
   window.PMJSiteSync = {
     collectSiteConfig,
     applySiteConfig,
     loadPublishedConfig,
     publishConfig,
     schedulePublish,
+    backgroundSyncSupabase
   };
 
-  window.PMJSiteSync.ready = loadPublishedConfig();
+  window.PMJSiteSync.ready = loadPublishedConfig().then(() => {
+    backgroundSyncSupabase();
+  });
 })();

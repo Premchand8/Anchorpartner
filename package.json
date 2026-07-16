@@ -4,9 +4,17 @@
   "private": true,
   "description": "PMJ private partner catalogue — static site + Netlify admin publish",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build && node copy-assets.js",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@netlify/blobs": "^8.2.0"
+    "@netlify/blobs": "^8.2.0",
+    "@supabase/supabase-js": "^2.43.5",
+    "xlsx": "^0.18.5",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "vite": "^5.3.1"
   }
 }

@@ -245,7 +245,16 @@ function buildMaterialLine(p) {
     parts.push('Diamond');
   }
   if (!parts.length && p.description) {
-    const snippet = String(p.description).split(/[.·]/)[0].trim();
+    let descText = p.description;
+    if (String(descText).trim().startsWith('{')) {
+      try {
+        const parsed = JSON.parse(descText);
+        if (parsed.is_price_details && parsed.details) {
+          descText = `Pricing detailed breakdown for ${p.id}.`;
+        }
+      } catch (e) {}
+    }
+    const snippet = String(descText).split(/[.·]/)[0].trim();
     if (snippet) parts.push(snippet.length > 52 ? `${snippet.slice(0, 49)}…` : snippet);
   }
   return parts.slice(0, 3).join(', ');
@@ -391,6 +400,98 @@ function renderSpecPill(p) {
   ).join('');
 }
 
+function renderDescriptionContent(description) {
+  if (!description) return '—';
+  
+  if (String(description).trim().startsWith('{')) {
+    try {
+      const parsed = JSON.parse(description);
+      if (parsed.is_price_details && parsed.details) {
+        const d = parsed.details;
+        
+        return `
+          <div class="premium-price-table-wrapper" style="margin-top: 12px; font-family: 'Jost', sans-serif;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px;">
+              Curated Pricing Breakdown
+            </div>
+            <table class="premium-price-table" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; line-height: 1.6; color: #fff;">
+              <tbody>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Product Status</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right; color: var(--gold);">${d.product_status || 'Ready to Sell'}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Item Type / Category</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.item_type || 'Jewelry'}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Gold Purity</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.purity} KT</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Gross Weight / Net Gold</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.weight} g / ${d.net_wt} g</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Diamond Weight</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.tot_dia_cts} ct (${d.type})</td>
+                </tr>
+                ${d.tot_st_cts > 0 ? `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Other Stones Weight</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.tot_st_cts} ct</td>
+                </tr>` : ''}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); background: rgba(199, 162, 82, 0.03);">
+                  <td style="padding: 6px 4px; opacity: 0.7;">Barcode Value (Base Price)</td>
+                  <td style="padding: 6px 4px; font-weight: 500; text-align: right;">$${parseFloat(d.barcode_value || 0).toFixed(2)}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Barcode Rate (Base Gold Rate)</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">₹${parseFloat(d.barcode_rate || 0).toLocaleString()}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Today's Gold Rate</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right; color: #52b788;">₹${parseFloat(d.today_gold_rate || 0).toLocaleString()}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Gold Rate Difference (Diff.)</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">₹${parseFloat(d.diff || 0).toLocaleString()}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Wastage & Purity Yield (Wsg)</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">${d.wsg}%</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Purity Adjusted Gold Rate</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">₹${parseFloat(d.purity_gold_rate || 0).toFixed(2)}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); background: rgba(199, 162, 82, 0.03);">
+                  <td style="padding: 6px 4px; opacity: 0.7;">Gold Amt Diff (USD)</td>
+                  <td style="padding: 6px 4px; font-weight: 600; text-align: right; color: var(--gold);">$${parseFloat(d.gold_amt_diff || 0).toFixed(2)}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">New Tag Value</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">$${parseFloat(d.new_tag_value || 0).toFixed(2)}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 6px 0; opacity: 0.7;">Duty @ 15.5%</td>
+                  <td style="padding: 6px 0; font-weight: 500; text-align: right;">$${parseFloat(d.duty_value || 0).toFixed(2)}</td>
+                </tr>
+                <tr style="border-top: 1px solid var(--gold); background: rgba(199, 162, 82, 0.08);">
+                  <td style="padding: 8px 4px; font-weight: 600; color: var(--gold);">Total Tag Value (Final Price)</td>
+                  <td style="padding: 8px 4px; font-weight: 700; text-align: right; color: var(--gold); font-size: 13px;">$${parseFloat(d.total_tag_value || 0).toFixed(2)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+    } catch (e) {}
+  }
+  
+  return `<p style="line-height:1.6; opacity:0.85;">${description}</p>`;
+}
+
 function renderMobileAccordions(p, avail) {
   const el = document.getElementById('pmAccordions');
   if (!el) return;
@@ -404,19 +505,17 @@ function renderMobileAccordions(p, avail) {
 
   const generalRows = [
     ['Availability', avail.label],
-    ['Stone Details', p.stones],
-    ['Diamond / Stone Wt.', p.diamond],
+    ['Category', p.catLabel],
   ].filter(([, v]) => v && !Object.values(SPEC_DEFAULTS).includes(v));
 
   const priceRows = [
-    ['Price', formatModalPrice(p.price)],
-    ['Availability', avail.label],
+    ['Estimated Price', formatModalPrice(p.price)],
   ];
 
   el.innerHTML = `
-    <div class="pm-accordion is-open" data-panel="details">
+    <div class="pm-accordion" data-panel="details">
       <button type="button" class="pm-accordion-head">
-        <span class="pm-accordion-icon">◈</span>
+        <span class="pm-accordion-icon">◇</span>
         <span>Metal Details</span>
         <span class="pm-accordion-caret">▾</span>
       </button>
@@ -444,7 +543,7 @@ function renderMobileAccordions(p, avail) {
         <span>Description</span>
         <span class="pm-accordion-caret">▾</span>
       </button>
-      <div class="pm-accordion-body"><p>${p.description || '—'}</p></div>
+      <div class="pm-accordion-body"><div>${renderDescriptionContent(p.description)}</div></div>
     </div>
     <div class="pm-accordion is-open pm-accordion--price hidden" data-panel="price">
       <button type="button" class="pm-accordion-head">
@@ -506,7 +605,10 @@ function renderModal() {
     availEl.innerHTML = `<span class="pm-availability-label">${avail.label}</span><span class="pm-availability-hint">${avail.hint}</span>`;
   }
 
-  document.getElementById('pmDesc').textContent = p.description;
+  const descEl = document.getElementById('pmDesc');
+  if (descEl) {
+    descEl.innerHTML = renderDescriptionContent(p.description);
+  }
 
   const mainImg = document.getElementById('pmMainImg');
   if (mainImg) {

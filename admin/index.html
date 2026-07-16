@@ -4,29 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PMJ Jewels — Partner Catalogue Admin Console</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
-      --garnet: #8b2942;
-      --garnet-grad: linear-gradient(135deg, #8b2942 0%, #5c1828 100%);
-      --gold: #c7a252;
-      --gold-grad: linear-gradient(135deg, #c7a252 0%, #a37e36 100%);
-      --gold-glow: 0 0 16px rgba(199, 162, 82, 0.15);
-      --umber: #0c0908;
-      --umber-2: #14100e;
-      --card-bg: rgba(20, 16, 14, 0.6);
-      --line: rgba(199, 162, 82, 0.08);
-      --line-active: rgba(199, 162, 82, 0.22);
-      --ivory: #fffcf8;
-      --ink-soft: #c8bead;
-      --ink-muted: #8c8276;
-      --success: #2e7d32;
-      --warning: #f57c00;
-      --error: #c62828;
+      /* Light theme variables */
+      --bg: #fcfbfa;
+      --panel-bg: #ffffff;
+      --sidebar-bg: #161513;
+      --sidebar-text: #e2ded5;
+      --text: #282421;
+      --text-muted: #7d746c;
+      --gold: #b08947;
+      --burgundy: #7a1c30;
+      --line: rgba(176, 137, 71, 0.12);
+      --line-active: rgba(176, 137, 71, 0.24);
+      --input-bg: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      --radius: 2px;
+    }
+
+    [data-theme="dark"] {
+      /* Dark theme variables */
+      --bg: #11100f;
+      --panel-bg: #1a1817;
+      --sidebar-bg: #0c0b0a;
+      --sidebar-text: #e2ded5;
+      --text: #faf8f5;
+      --text-muted: #9e9487;
+      --gold: #c9a463;
+      --burgundy: #9c2b45;
+      --line: rgba(201, 164, 99, 0.1);
+      --line-active: rgba(201, 164, 99, 0.22);
+      --input-bg: rgba(0, 0, 0, 0.2);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
 
     * {
@@ -36,300 +48,277 @@
     }
 
     body {
-      font-family: 'Jost', sans-serif;
-      background: var(--umber);
-      color: var(--ivory);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* Floating Ambient Glows */
-    body::before {
-      content: '';
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(139, 41, 66, 0.08) 0%, transparent 70%);
-      top: -200px;
-      left: -200px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(199, 162, 82, 0.06) 0%, transparent 70%);
-      bottom: -300px;
-      right: -300px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Custom Premium Scrollbar */
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: var(--umber);
+      background: var(--bg);
     }
     ::-webkit-scrollbar-thumb {
       background: var(--gold);
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #e5c173;
+      background: #e2c085;
     }
 
-    /* --- Sidebar Navigation --- */
+    /* --- Sidebar --- */
     .sidebar {
-      width: 260px;
-      background: rgba(20, 16, 14, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      width: 250px;
+      background: var(--sidebar-bg);
       border-right: 1px solid var(--line);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      z-index: 10;
+      color: var(--sidebar-text);
     }
 
     .brand-header {
-      padding: 32px 24px;
+      padding: 28px 24px;
       text-align: center;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .brand-header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      background: linear-gradient(180deg, #ffffff 0%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--gold);
     }
 
     .brand-header p {
       font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.22em;
-      color: var(--ink-soft);
-      margin-top: 6px;
-      opacity: 0.8;
+      color: var(--sidebar-text);
+      opacity: 0.6;
+      margin-top: 4px;
     }
 
     .nav-links {
       list-style: none;
-      padding: 30px 0;
+      padding: 24px 0;
       flex: 1;
       overflow-y: auto;
     }
 
     .nav-item {
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .nav-item a {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 14px 28px;
-      color: var(--ink-soft);
+      gap: 14px;
+      padding: 12px 24px;
+      color: var(--sidebar-text);
+      opacity: 0.7;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s;
       cursor: pointer;
-      border-left: 3px solid transparent;
+      border-left: 2px solid transparent;
     }
 
     .nav-item a:hover {
-      color: var(--ivory);
-      background: rgba(199, 162, 82, 0.04);
-      padding-left: 32px;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .nav-item.active a {
+      opacity: 1;
       color: var(--gold);
-      background: rgba(199, 162, 82, 0.06);
       border-left-color: var(--gold);
-      text-shadow: var(--gold-glow);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .user-footer {
-      padding: 24px;
-      border-top: 1px solid var(--line);
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
-      background: rgba(0, 0, 0, 0.1);
     }
 
     .user-email {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 150px;
-      color: var(--ink-soft);
-      font-weight: 400;
+      max-width: 140px;
+      opacity: 0.7;
     }
 
     .logout-btn {
       background: none;
       border: none;
-      color: var(--ink-soft);
+      color: var(--gold);
       cursor: pointer;
-      font-size: 14px;
-      transition: color 0.3s;
+      font-size: 13px;
+      transition: opacity 0.3s;
     }
 
     .logout-btn:hover {
-      color: var(--error);
+      opacity: 0.8;
     }
 
-    /* --- Main Content Area --- */
+    /* --- Main Workspace --- */
     .main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-width: 0;
-      z-index: 5;
     }
 
     .header-bar {
-      height: 80px;
+      height: 70px;
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 48px;
-      background: rgba(12, 9, 8, 0.5);
-      backdrop-filter: blur(10px);
+      padding: 0 40px;
+      background: var(--panel-bg);
+      transition: background 0.3s;
     }
 
     .panel-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-size: 26px;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      position: relative;
+      font-weight: 500;
+      letter-spacing: 0.01em;
     }
 
     .view-site-link {
       color: var(--gold);
       text-decoration: none;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 10px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      border: 1px solid var(--line-active);
-      padding: 10px 22px;
-      border-radius: 30px;
-      transition: all 0.35s;
-      background: rgba(199, 162, 82, 0.02);
+      letter-spacing: 0.1em;
+      border: 1px solid var(--gold);
+      padding: 8px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
     }
 
     .view-site-link:hover {
-      background: var(--gold-grad);
-      color: var(--umber) !important;
-      border-color: transparent;
-      box-shadow: var(--gold-glow);
-      transform: translateY(-1px);
+      background: var(--gold);
+      color: var(--panel-bg) !important;
     }
 
-    /* --- Tab Panels --- */
+    /* --- Theme Toggle Button --- */
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* --- Panels --- */
     .panel {
       display: none;
-      padding: 48px;
+      padding: 40px;
       overflow-y: auto;
       flex: 1;
     }
 
     .panel.active {
       display: block;
-      animation: fadeIn 0.4s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* --- Grid Cards & Dashboards --- */
+    /* --- Stat Cards --- */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 24px;
-      margin-bottom: 48px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
     }
 
     .stat-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: var(--panel-bg);
       border: 1px solid var(--line);
-      padding: 28px;
-      border-radius: 6px;
+      padding: 24px;
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
-      gap: 24px;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
     }
 
     .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--line-active);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(199, 162, 82, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
     .stat-icon {
-      width: 54px;
-      height: 54px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(199, 162, 82, 0.12) 0%, rgba(199, 162, 82, 0.02) 100%);
-      border: 1px solid rgba(199, 162, 82, 0.18);
+      background: rgba(176, 137, 71, 0.05);
+      border: 1px solid var(--line-active);
       color: var(--gold);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 18px;
     }
 
     .stat-info h3 {
-      font-size: 32px;
-      font-weight: 400;
-      font-family: 'Playfair Display', serif;
-      background: linear-gradient(180deg, #ffffff 0%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 500;
+      color: var(--text);
     }
 
     .stat-info p {
       font-size: 10px;
-      color: var(--ink-soft);
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-top: 6px;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
       font-weight: 500;
     }
 
     /* --- Tables --- */
     .table-container {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
+      background: var(--panel-bg);
       border: 1px solid var(--line);
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-top: 20px;
+      box-shadow: var(--shadow);
     }
 
     table {
@@ -340,7 +329,7 @@
     }
 
     th, td {
-      padding: 18px 24px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -348,119 +337,114 @@
       font-weight: 500;
       color: var(--gold);
       text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      background: rgba(0, 0, 0, 0.2);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      background: rgba(0, 0, 0, 0.01);
     }
 
     tr {
-      transition: background 0.25s;
+      transition: background 0.2s;
     }
 
     tr:hover td {
-      background: rgba(199, 162, 82, 0.02);
-      color: var(--ivory);
+      background: rgba(176, 137, 71, 0.01);
+      color: var(--text);
     }
 
     td {
-      color: var(--ink-soft);
+      color: var(--text-muted);
     }
 
-    /* --- Forms & Inputs --- */
+    /* --- Form Controls --- */
     .form-group {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .form-group label {
       display: block;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 10px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       color: var(--gold);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .form-control {
       width: 100%;
-      background: rgba(0, 0, 0, 0.35);
+      background: var(--input-bg);
       border: 1px solid var(--line);
-      color: var(--ivory);
-      padding: 14px 18px;
-      font-family: 'Jost', sans-serif;
+      color: var(--text);
+      padding: 12px 14px;
+      font-family: 'DM Sans', sans-serif;
       font-size: 13px;
-      border-radius: 4px;
-      transition: all 0.3s;
+      border-radius: var(--radius);
+      transition: border-color 0.3s;
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--gold);
-      box-shadow: 0 0 10px rgba(199, 162, 82, 0.1);
-      background: rgba(0, 0, 0, 0.5);
     }
 
-    /* --- Button Aesthetics --- */
+    /* --- Primary Action Buttons --- */
     .btn-submit {
-      background: var(--garnet-grad);
-      color: var(--ivory);
-      border: none;
-      padding: 14px 28px;
-      font-family: 'Jost', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
+      background: var(--burgundy);
+      color: #ffffff;
+      border: 1px solid var(--burgundy);
+      padding: 12px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       cursor: pointer;
-      border-radius: 30px; /* Matching the catalog buttons */
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(139, 41, 66, 0.2);
+      border-radius: 20px;
+      transition: all 0.3s;
     }
 
     .btn-submit:hover {
-      background: linear-gradient(135deg, #a43350 0%, #721e32 100%);
+      opacity: 0.9;
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(139, 41, 66, 0.35);
     }
 
     .btn-submit:active {
       transform: translateY(0);
     }
 
-    /* --- Upload Zones --- */
+    /* --- Upload Boxes --- */
     .upload-zone {
-      border: 2px dashed rgba(199, 162, 82, 0.25);
-      padding: 48px;
+      border: 1px dashed var(--gold);
+      padding: 40px;
       text-align: center;
-      background: rgba(199, 162, 82, 0.01);
+      background: rgba(176, 137, 71, 0.01);
       cursor: pointer;
-      margin-bottom: 28px;
-      border-radius: 6px;
-      transition: all 0.35s;
+      margin-bottom: 24px;
+      border-radius: var(--radius);
+      transition: background 0.3s;
     }
 
     .upload-zone:hover {
-      border-color: var(--gold);
-      background: rgba(199, 162, 82, 0.03);
-      box-shadow: inset 0 0 20px rgba(199, 162, 82, 0.02);
+      background: rgba(176, 137, 71, 0.02);
     }
 
     .upload-zone i {
-      font-size: 42px;
+      font-size: 36px;
       color: var(--gold);
-      margin-bottom: 18px;
-      text-shadow: var(--gold-glow);
+      margin-bottom: 14px;
     }
 
     .upload-zone h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
     }
 
     .upload-zone p {
       font-size: 12px;
-      color: var(--ink-muted);
+      color: var(--text-muted);
     }
   </style>
 </head>
@@ -484,6 +468,9 @@
       <li class="nav-item" data-target="panelPricing">
         <a><i class="fa-solid fa-coins"></i> Pricing Settings</a>
       </li>
+      <li class="nav-item" data-target="panelCalculator">
+        <a><i class="fa-solid fa-calculator"></i> Pricing Calculator</a>
+      </li>
       <li class="nav-item" data-target="panelEmail">
         <a><i class="fa-solid fa-envelope"></i> SMTP / Templates</a>
       </li>
@@ -504,7 +491,12 @@
   <main class="main-content">
     <header class="header-bar">
       <h2 class="panel-title" id="panelHeading">Dashboard</h2>
-      <a href="../" class="view-site-link">View Main Catalogue</a>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+        </button>
+        <a href="../" class="view-site-link">View Main Catalogue</a>
+      </div>
     </header>
 
     <!-- 1. Dashboard Panel -->
@@ -582,11 +574,58 @@
           <label for="colStory">Story/Description</label>
           <textarea class="form-control" id="colStory" rows="4"></textarea>
         </div>
-        <div class="form-group">
-          <label for="colCrafts">Craftsmanship Details</label>
           <textarea class="form-control" id="colCrafts" rows="4"></textarea>
         </div>
-        <button type="submit" class="btn-submit">Save Collection Settings</button>
+
+        <div class="form-group" style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--line);">
+          <label for="colCtaText">CTA Button Text</label>
+          <input type="text" class="form-control" id="colCtaText" placeholder="e.g. Discover Now">
+        </div>
+
+        <div class="form-group">
+          <label for="colCtaUrl">CTA Button URL</label>
+          <input type="text" class="form-control" id="colCtaUrl" placeholder="e.g. #catalogue or http://example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="colCtaTarget">CTA Link Target</label>
+          <select class="form-control" id="colCtaTarget">
+            <option value="_self">Open in Same Tab (_self)</option>
+            <option value="_blank">Open in New Tab (_blank)</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="margin-top: 32px; padding-top: 24px; border-top: 1px dashed var(--line);">
+          <label>Cover Image (Required Dimension: 600 × 600 px)</label>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 8px;">
+            <input type="file" id="colCoverInput" accept="image/*" style="display: none;">
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px;" onclick="document.getElementById('colCoverInput').click()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Cover</button>
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--line); color: var(--text-muted); padding: 8px 18px;" id="btnRemoveCover">Remove</button>
+            <span id="colCoverStatus" style="font-size: 11px; color: var(--text-muted);">No image uploaded</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Desktop Banner (Required Dimension: 1920 × 600 px)</label>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 8px;">
+            <input type="file" id="colDesktopInput" accept="image/*" style="display: none;">
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px;" onclick="document.getElementById('colDesktopInput').click()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Desktop Banner</button>
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--line); color: var(--text-muted); padding: 8px 18px;" id="btnRemoveDesktop">Remove</button>
+            <span id="colDesktopStatus" style="font-size: 11px; color: var(--text-muted);">No image uploaded</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Banner (Required Dimension: 750 × 600 px)</label>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 8px;">
+            <input type="file" id="colMobileInput" accept="image/*" style="display: none;">
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px;" onclick="document.getElementById('colMobileInput').click()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Mobile Banner</button>
+            <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--line); color: var(--text-muted); padding: 8px 18px;" id="btnRemoveMobile">Remove</button>
+            <span id="colMobileStatus" style="font-size: 11px; color: var(--text-muted);">No image uploaded</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" style="margin-top: 16px;">Save Collection Settings</button>
       </form>
     </section>
 
@@ -646,6 +685,78 @@
         </div>
         <button type="submit" class="btn-submit">Update Pricing Variables</button>
       </form>
+    </section>
+
+    <!-- 4.5 Pricing Calculator Panel -->
+    <section class="panel" id="panelCalculator">
+      <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--line); padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+        <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold); margin-bottom: 12px;">Active Pricing Parameters</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">
+          These variables serve as the reference parameters for testing new sheets. You can override these variables dynamically to automatically recalculate the Total Tag Value of all uploaded pieces in the table below.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="calcGoldRate" style="font-size:12px; margin-bottom:6px;">Today's Gold Rate (₹ per 10g)</label>
+            <input type="number" step="1" class="form-control" id="calcGoldRate" value="14396" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="calcExchangeRate" style="font-size:12px; margin-bottom:6px;">USD Exchange Rate (INR)</label>
+            <input type="number" step="0.01" class="form-control" id="calcExchangeRate" value="95.68" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label for="calcDuty" style="font-size:12px; margin-bottom:6px;">Import Duty (%)</label>
+            <input type="number" step="0.01" class="form-control" id="calcDuty" value="15.5" required>
+          </div>
+        </div>
+        <button type="button" class="btn-submit" id="btnApplyCalcSettings" style="margin-top: 16px; background: var(--gold); color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Recalculate Table Data</button>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.02); border: 1px dashed var(--gold); border-radius: 6px; padding: 32px; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 24px;" id="calcDropZone">
+        <i class="fa-solid fa-file-excel" style="font-size: 40px; color: var(--gold); margin-bottom: 16px; display: block;"></i>
+        <span style="font-weight: 500; font-size: 14px; color: var(--text); display: block; margin-bottom: 8px;">Drag & drop your Excel/CSV here to test calculations</span>
+        <span style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 16px;">Supports SNO, LabelNo, Weight, Net Weight, Diamond Carats, wastage (Wsg), Barcode Value, and Rates</span>
+        <button type="button" class="btn-submit" style="background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px; display:inline-block;" onclick="document.getElementById('calcFileInput').click()"><i class="fa-solid fa-cloud-arrow-up"></i> Select Spreadsheet</button>
+        <input type="file" id="calcFileInput" accept=".xlsx, .xls, .csv" style="display: none;">
+      </div>
+
+      <div id="calcResultsWrapper" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px;">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold);" id="calcTableSummary">Calculated Products Preview</h3>
+          <div style="display: flex; gap: 12px;">
+            <button type="button" class="btn-submit" id="btnExportCalcCsv" style="background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 16px;"><i class="fa-solid fa-download"></i> Export Calculated CSV</button>
+            <button type="button" class="btn-submit" id="btnPushCalcMaster" style="background: var(--gold); color: #fff; border: none; padding: 8px 18px; font-weight: 600;"><i class="fa-solid fa-cloud-arrow-up"></i> Save & Update Master Catalogue</button>
+          </div>
+        </div>
+
+        <div class="table-container" style="overflow-x: auto; border: 1px solid var(--line); border-radius: 6px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap;">
+            <thead>
+              <tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid var(--line);">
+                <th style="padding: 12px 14px; text-align: left;">SNO</th>
+                <th style="padding: 12px 14px; text-align: left;">LabelNo</th>
+                <th style="padding: 12px 14px; text-align: left;">Item Type</th>
+                <th style="padding: 12px 14px; text-align: center;">Purity</th>
+                <th style="padding: 12px 14px; text-align: right;">Gross Wt (g)</th>
+                <th style="padding: 12px 14px; text-align: right;">Net Wt (g)</th>
+                <th style="padding: 12px 14px; text-align: right;">Dia Wt (ct)</th>
+                <th style="padding: 12px 14px; text-align: right;">Barcode Val ($)</th>
+                <th style="padding: 12px 14px; text-align: right;">Barcode Rate (₹)</th>
+                <th style="padding: 12px 14px; text-align: right;">Today Rate (₹)</th>
+                <th style="padding: 12px 14px; text-align: right;">Diff (₹)</th>
+                <th style="padding: 12px 14px; text-align: right;">Wsg (%)</th>
+                <th style="padding: 12px 14px; text-align: right;">Purity Rate (₹)</th>
+                <th style="padding: 12px 14px; text-align: right;">Gold Diff ($)</th>
+                <th style="padding: 12px 14px; text-align: right;">New Tag Val ($)</th>
+                <th style="padding: 12px 14px; text-align: right;">Duty Val ($)</th>
+                <th style="padding: 12px 14px; text-align: right; font-weight: 600; color: var(--gold);">Total Tag Val ($)</th>
+              </tr>
+            </thead>
+            <tbody id="calcTableBody">
+              <!-- Dynamically rendered calculation rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
     <!-- 5. Email Panel -->
@@ -731,6 +842,28 @@
       </div>
     </section>
   </main>
+
+  <!-- Wishlist Details Modal Overlay -->
+  <div id="wishlistDetailsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100; align-items: center; justify-content: center; padding: 24px;">
+    <div style="background: var(--panel-bg); color: var(--text); border: 1px solid var(--line); border-radius: 4px; width: 100%; max-width: 840px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow); position: relative;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 20px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.01);">
+        <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--gold); letter-spacing: 0.02em;">Shortlisted Wishlist Details</h3>
+        <button type="button" style="background: none; border: none; font-size: 24px; color: var(--text); cursor: pointer; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" onclick="closeWishlistModal()">&times;</button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div id="wishlistModalBody" style="padding: 24px; overflow-y: auto; flex: 1; min-height: 0;">
+        <!-- Curated items will load dynamically here -->
+      </div>
+      
+      <!-- Modal Footer -->
+      <div style="padding: 16px 24px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; background: rgba(0,0,0,0.01);">
+        <button type="button" class="btn-submit" onclick="closeWishlistModal()">Close Details</button>
+      </div>
+    </div>
+  </div>
 
   <!-- JS Entry Points -->
   <script type="module" src="admin.js"></script>

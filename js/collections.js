@@ -308,6 +308,15 @@ function setBrowseVisibility() {
 
   document.body.dataset.pmjBrowse = browseStage;
   document.body.dataset.pmjCollection = activeCollectionId || '';
+
+  if (window.showWishlistOnly) {
+    const hero = document.getElementById('collectionGalleryHero');
+    if (hero) {
+      hero.classList.add('hidden');
+      hero.setAttribute('aria-hidden', 'true');
+    }
+    catalogue?.classList.remove('collection-gallery-active');
+  }
 }
 
 function renderCollectionGalleryHero(collectionId, categoryId) {
@@ -320,7 +329,7 @@ function renderCollectionGalleryHero(collectionId, categoryId) {
   if (!hero) return;
 
   const col = getCollectionById(collectionId);
-  if (!col || browseStage !== 'gallery') {
+  if (!col || browseStage !== 'gallery' || window.showWishlistOnly) {
     hero.classList.add('hidden');
     hero.setAttribute('aria-hidden', 'true');
     catalogue?.classList.remove('collection-gallery-active');

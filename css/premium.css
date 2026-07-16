@@ -2038,4 +2038,42 @@ footer .wordmark {
   display: none !important;
 }
 
+/* --- Slide-Over Customer Details Form UX --- */
+#drawerMain {
+  position: relative !important;
+  overflow: hidden !important;
+  height: calc(100% - 75px) !important;
+}
+
+#drawerViewItems {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+#drawerViewForm {
+  position: absolute !important;
+  top: 0 !important;
+  right: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: var(--umber, #171310) !important;
+  border-left: 1px solid var(--line) !important;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow-y: auto !important;
+  z-index: 20 !important;
+  padding: 0 0 50px 0 !important;
+  display: block !important; /* Managed by right positioning */
+}
+
+[data-theme="light"] #drawerViewForm {
+  background: #fbfaf7 !important;
+}
+
+#drawerViewForm.open {
+  right: 0 !important;
+}
+
 

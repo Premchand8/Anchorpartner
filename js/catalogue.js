@@ -1,7 +1,10 @@
 /* Catalogue rendering, filters, lazy scroll & pagination */
-let wishlist = [];
+if (!window.wishlist) window.wishlist = [];
+let wishlist = window.wishlist;
 try {
-  wishlist = JSON.parse(sessionStorage.getItem('pmj_active_wishlist') || '[]');
+  const saved = JSON.parse(sessionStorage.getItem('pmj_active_wishlist') || '[]');
+  wishlist.length = 0;
+  wishlist.push(...saved);
 } catch (e) {}
 let currentFilter = 'all';
 let availabilityFilter = 'all';
@@ -868,7 +871,7 @@ function toggleWishlist(id, sourceEl){
   }
   refreshWishlistUi();
   if (!adding) wishlistCountEl.textContent = wishlist.length;
-  renderDrawer();
+  window.refreshWishlistDrawer?.();
   if(activeProductId === id) refreshModalHeart();
 }
 
@@ -1062,7 +1065,7 @@ function revealWishlistDrawer(productId, profile){
   if (drawerEl?.classList.contains('open')) {
     window.__pmjLastWishlistAdd = productId;
     window.__pmjWishlistDramaticEntry = true;
-    renderDrawer();
+    window.refreshWishlistDrawer?.();
     window.__pmjWishlistDramaticEntry = false;
     window.__pmjLastWishlistAdd = null;
     window.requestAnimationFrame(() => {

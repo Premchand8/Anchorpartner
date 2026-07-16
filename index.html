@@ -733,7 +733,10 @@
     </div>
     <!-- View 1: Customer & Partner Information Form -->
     <div class="drawer-view" id="drawerViewForm" style="display: none;">
-      <div class="drawer-section-title">Customer Information</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 16px 20px 8px; border-bottom: 1px dashed rgba(199, 162, 82, 0.2); padding-bottom: 8px;">
+        <span style="font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 600;">Customer Information</span>
+        <button type="button" class="btn-text-edit" id="btnBackToItems" style="font-size: 10px; padding: 4px 10px; background: rgba(255,255,255,0.04); border-radius: 3px; border: 1px solid rgba(255,255,255,0.08); color: var(--gold); cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      </div>
       <div class="field">
         <label for="cMobile">Mobile Number *</label>
         <input id="cMobile" type="tel" placeholder="e.g. 9876543210" required>
@@ -760,6 +763,19 @@
       <div class="field">
         <label for="cCity">City (Optional)</label>
         <input id="cCity" type="text" placeholder="e.g. Hyderabad">
+      </div>
+      <div class="field">
+        <label for="cCollection">Interested Collection (Optional)</label>
+        <select id="cCollection" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; border-radius: 4px; font-family: 'Jost', sans-serif; font-size: 13px;">
+          <option value="">— Select Collection —</option>
+          <option value="sweet-16">Sweet 16</option>
+          <option value="royal-heritage">Royal Heritage</option>
+          <option value="bridal-elegance">Bridal Elegance</option>
+          <option value="temple-jewellery">Temple Jewellery</option>
+          <option value="diamond-collection">Diamond Collection</option>
+          <option value="everyday-luxury">Everyday Luxury</option>
+          <option value="antique-collection">Antique Collection</option>
+        </select>
       </div>
       <div class="field">
         <label for="cRemarks">Remarks / Notes (Optional)</label>

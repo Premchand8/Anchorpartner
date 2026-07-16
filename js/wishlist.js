@@ -1,5 +1,9 @@
 /* Customer Selection (Wishlist) drawer & enquiry submission */
-const drawer = document.getElementById('drawer');
+{
+  if (!window.wishlist) window.wishlist = [];
+  let wishlist = window.wishlist;
+
+  const drawer = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
 const drawerBody = document.getElementById('drawerBody');
 const successView = document.getElementById('successView');
@@ -44,10 +48,10 @@ function initDetails() {
   // Load saved partner details
   try {
     const savedPartner = JSON.parse(localStorage.getItem('pmj_partner_info') || '{}');
-    if (savedPartner.id) pId.value = savedPartner.id;
-    if (savedPartner.name) pName.value = savedPartner.name;
-    if (savedPartner.store) pStore.value = savedPartner.store;
-    if (savedPartner.executive) pExecutive.value = savedPartner.executive;
+    if (savedPartner.id && pId) pId.value = savedPartner.id;
+    if (savedPartner.name && pName) pName.value = savedPartner.name;
+    if (savedPartner.store && pStore) pStore.value = savedPartner.store;
+    if (savedPartner.executive && pExecutive) pExecutive.value = savedPartner.executive;
   } catch (e) {}
 
   // Load active customer session
@@ -63,13 +67,22 @@ function initDetails() {
   try {
     const savedWl = sessionStorage.getItem('pmj_active_wishlist');
     if (savedWl) {
-      wishlist = JSON.parse(savedWl);
+      const parsed = JSON.parse(savedWl) || [];
+      const loadedProducts = parsed.map(item => {
+        if (item && typeof item === 'object') {
+          return item.id || item.productId || '';
+        }
+        return String(item || '');
+      }).filter(Boolean);
+
+      wishlist.length = 0;
+      wishlist.push(...loadedProducts);
     }
   } catch (e) {}
 }
 
 // Mobile Number Lookup Event
-cMobile.addEventListener('input', (e) => {
+cMobile?.addEventListener('input', (e) => {
   const mobile = e.target.value.trim();
   const status = document.getElementById('cMobileStatus');
   if (mobile.length === 10) {
@@ -96,7 +109,8 @@ cMobile.addEventListener('input', (e) => {
 });
 
 // Save Customer/Partner Details and proceed to items
-btnSaveDetails.addEventListener('click', () => {
+// Save Customer/Partner Details and trigger submission
+btnSaveDetails?.addEventListener('click', () => {
   const mobile = cMobile.value.trim();
   const name = cName.value.trim();
 
@@ -127,6 +141,7 @@ btnSaveDetails.addEventListener('click', () => {
     dob: cDob.value.trim(),
     anniversary: cAnniversary.value.trim(),
     city: cCity.value.trim(),
+    collection: document.getElementById('cCollection')?.value || '',
     remarks: cRemarks.value.trim()
   };
   sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
@@ -134,40 +149,55 @@ btnSaveDetails.addEventListener('click', () => {
   // Automatically save as draft
   saveCurrentAsDraft();
 
+  // Hide the slide-over details panel
+  document.getElementById('drawerViewForm')?.classList.remove('open');
+
   renderDrawer();
+  
+  // Trigger immediate submission to Supabase
+  submitSelection();
+});
+
+// Back navigation button inside details pane
+document.getElementById('btnBackToItems')?.addEventListener('click', () => {
+  document.getElementById('drawerViewForm')?.classList.remove('open');
 });
 
 // Edit Details back click
-btnEditCustInfo.addEventListener('click', () => {
+btnEditCustInfo?.addEventListener('click', () => {
   if (activeCustomer) {
-    cMobile.value = activeCustomer.mobile || '';
-    cName.value = activeCustomer.name || '';
-    cEmail.value = activeCustomer.email || '';
-    cDob.value = activeCustomer.dob || '';
-    cAnniversary.value = activeCustomer.anniversary || '';
-    cCity.value = activeCustomer.city || '';
-    cRemarks.value = activeCustomer.remarks || '';
+    if (cMobile) cMobile.value = activeCustomer.mobile || '';
+    if (cName) cName.value = activeCustomer.name || '';
+    if (cEmail) cEmail.value = activeCustomer.email || '';
+    if (cDob) cDob.value = activeCustomer.dob || '';
+    if (cAnniversary) cAnniversary.value = activeCustomer.anniversary || '';
+    if (cCity) cCity.value = activeCustomer.city || '';
+    if (cRemarks) cRemarks.value = activeCustomer.remarks || '';
+    if (activeCustomer.collection) {
+      const colEl = document.getElementById('cCollection');
+      if (colEl) colEl.value = activeCustomer.collection;
+    }
   }
   
-  drawerViewItems.style.display = 'none';
-  drawerViewForm.style.display = 'block';
-  document.getElementById('drawerTitle').textContent = 'Enter Selection Details';
+  // Slide in the details panel
+  document.getElementById('drawerViewForm')?.classList.add('open');
 });
 
 // Start New Selection Session click
 const btnStartNewSelection = document.getElementById('btnStartNewSelection');
 if (btnStartNewSelection) {
-  btnStartNewSelection.addEventListener('click', () => {
+  btnStartNewSelection?.addEventListener('click', () => {
     // 1. If we have active customer and items in wishlist, auto-save as draft first so we don't lose progress!
     if (activeCustomer && activeCustomer.mobile && wishlist.length > 0) {
       saveCurrentAsDraft();
     }
 
     // 2. Reset active states
-    wishlist = [];
+    wishlist.length = 0;
     activeCustomer = null;
     sessionStorage.removeItem('pmj_active_customer');
     window.showWishlistOnly = false;
+    document.getElementById('drawerViewForm')?.classList.remove('open');
 
     // 3. Clear inputs
     ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
@@ -223,41 +253,50 @@ function openDrawer(opts = {}){
 }
 
 function closeDrawer(){ 
-  drawer.classList.remove('open', 'drawer-landed'); 
-  overlay.classList.remove('open', 'overlay-wishlist-reveal'); 
+  try {
+    drawer.classList.remove('open', 'drawer-landed'); 
+    overlay.classList.remove('open', 'overlay-wishlist-reveal'); 
+    document.getElementById('drawerViewForm')?.classList.remove('open'); 
+  } catch (e) {}
 
   // If success view was showing, reset state so it opens clean next time
   if (successView && successView.classList.contains('show')) {
-    wishlist = [];
-    activeCustomer = null;
-    sessionStorage.removeItem('pmj_active_customer');
-    window.showWishlistOnly = false;
-    
-    ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
-    
-    const status = document.getElementById('cMobileStatus');
-    if (status) status.textContent = '';
-    
-    window.setBrowseStage?.('collections');
-    window.setBrowseVisibility?.();
-    
-    refreshGridUi();
-    if (typeof updateCount === 'function') updateCount();
-    if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
-    
-    renderDrawer();
-    
-    successView.classList.remove('show');
-    drawerMain.classList.remove('hidden');
+    try {
+      wishlist.length = 0;
+      activeCustomer = null;
+      sessionStorage.removeItem('pmj_active_customer');
+      window.showWishlistOnly = false;
+      
+      ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      
+      const status = document.getElementById('cMobileStatus');
+      if (status) status.textContent = '';
+      
+      window.setBrowseStage?.('collections');
+      window.setBrowseVisibility?.();
+      
+      refreshGridUi();
+      if (typeof updateCount === 'function') updateCount();
+      if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+      
+      renderDrawer();
+    } catch (err) {
+      console.error("Error resetting success drawer state:", err);
+    }
+
+    try {
+      successView.classList.remove('show');
+      drawerMain.classList.remove('hidden');
+    } catch (e) {}
   }
 }
 
 document.getElementById('openDrawer')?.addEventListener('click', () => openDrawer());
 document.getElementById('closeDrawer')?.addEventListener('click', closeDrawer);
-overlay.addEventListener('click', closeDrawer);
+overlay?.addEventListener('click', closeDrawer);
 
 // Drafts Management Logic
 function saveCurrentAsDraft() {
@@ -365,17 +404,26 @@ if (draftsList) {
           // 1. Populate states
           activeCustomer = draft.customer;
           sessionStorage.setItem('pmj_active_customer', JSON.stringify(activeCustomer));
-          wishlist = [...draft.products];
+          
+          const loadedProducts = (draft.products || []).map(item => {
+            if (item && typeof item === 'object') {
+              return item.id || item.productId || '';
+            }
+            return String(item || '');
+          }).filter(Boolean);
+
+          wishlist.length = 0;
+          wishlist.push(...loadedProducts);
           sessionStorage.setItem('pmj_active_wishlist', JSON.stringify(wishlist));
           
           // 2. Prepopulate form inputs
-          cMobile.value = activeCustomer.mobile || '';
-          cName.value = activeCustomer.name || '';
-          cEmail.value = activeCustomer.email || '';
-          cDob.value = activeCustomer.dob || '';
-          cAnniversary.value = activeCustomer.anniversary || '';
-          cCity.value = activeCustomer.city || '';
-          cRemarks.value = activeCustomer.remarks || '';
+          if (cMobile) cMobile.value = activeCustomer.mobile || '';
+          if (cName) cName.value = activeCustomer.name || '';
+          if (cEmail) cEmail.value = activeCustomer.email || '';
+          if (cDob) cDob.value = activeCustomer.dob || '';
+          if (cAnniversary) cAnniversary.value = activeCustomer.anniversary || '';
+          if (cCity) cCity.value = activeCustomer.city || '';
+          if (cRemarks) cRemarks.value = activeCustomer.remarks || '';
           
           // 3. Set page filter to show selection only
           window.showWishlistOnly = true;
@@ -450,7 +498,7 @@ function renderDrawer(){
   renderDraftsList();
 
   if(wishlist.length === 0){
-    drawerViewForm.style.display = 'none';
+    if (drawerViewForm) drawerViewForm.classList.remove('open');
     drawerViewItems.style.display = 'block';
     document.getElementById('drawerTitle').textContent = 'Customer Selection';
     
@@ -467,30 +515,44 @@ function renderDrawer(){
     return;
   }
 
-  // If customer details are not entered yet, show form view
-  if (!activeCustomer) {
-    drawerViewItems.style.display = 'none';
-    drawerViewForm.style.display = 'block';
-    document.getElementById('drawerTitle').textContent = 'Enter Selection Details';
-    return;
+  // Auto-populate collection selection dropdown if browsing a collection
+  const cColSelect = document.getElementById('cCollection');
+  if (cColSelect && window.currentCollectionFilter) {
+    cColSelect.value = window.currentCollectionFilter;
   }
 
   // Show selection view
-  drawerViewForm.style.display = 'none';
   drawerViewItems.style.display = 'block';
   document.getElementById('drawerTitle').textContent = 'Review Selection';
   
-  // Show summary card and footer actions
-  drawerViewItems.querySelector('.customer-summary-card').style.display = 'flex';
-  drawerViewItems.querySelector('.drawer-footer-actions').style.display = 'block';
+  const summaryCard = drawerViewItems.querySelector('.customer-summary-card');
+  const footerActions = drawerViewItems.querySelector('.drawer-footer-actions');
+  const submitLabel = document.getElementById('submitLabel');
 
-  // Populate summary labels
-  document.getElementById('sumCustName').textContent = activeCustomer.name;
-  document.getElementById('sumCustMobile').textContent = activeCustomer.mobile;
-  
-  const savedPartner = JSON.parse(localStorage.getItem('pmj_partner_info') || '{}');
-  document.getElementById('sumStore').textContent = savedPartner.store || '-';
-  document.getElementById('sumExec').textContent = savedPartner.executive || '-';
+  if (activeCustomer) {
+    if (summaryCard) summaryCard.style.display = 'flex';
+    if (footerActions) footerActions.style.display = 'block';
+
+    // Populate summary labels
+    const elSumCustName = document.getElementById('sumCustName');
+    if (elSumCustName) elSumCustName.textContent = activeCustomer.name;
+
+    const elSumCustMobile = document.getElementById('sumCustMobile');
+    if (elSumCustMobile) elSumCustMobile.textContent = activeCustomer.mobile;
+    
+    const savedPartner = JSON.parse(localStorage.getItem('pmj_partner_info') || '{}');
+    const elSumStore = document.getElementById('sumStore');
+    if (elSumStore) elSumStore.textContent = savedPartner.store || '-';
+
+    const elSumExec = document.getElementById('sumExec');
+    if (elSumExec) elSumExec.textContent = savedPartner.executive || '-';
+    
+    if (submitLabel) submitLabel.textContent = 'Submit Customer Selection';
+  } else {
+    if (summaryCard) summaryCard.style.display = 'none';
+    if (footerActions) footerActions.style.display = 'block';
+    if (submitLabel) submitLabel.textContent = 'Proceed to Submit Selection';
+  }
 
   // Render list of selected items grouped/labeled with details
   drawerBody.innerHTML = `
@@ -526,7 +588,7 @@ function renderDrawer(){
   }).join('');
 }
 
-drawerBody.addEventListener('click', (e)=>{
+drawerBody?.addEventListener('click', (e)=>{
   const rm = e.target.closest('.wl-remove');
   if(!rm) return;
   toggleWishlist(rm.dataset.id, rm);
@@ -536,11 +598,17 @@ drawerBody.addEventListener('click', (e)=>{
 });
 
 // Submit Button Listener
-submitBtn.addEventListener('click', submitSelection);
+submitBtn?.addEventListener('click', submitSelection);
 
 async function submitSelection() {
   if (!activeCustomer) {
-    alert('Customer details are missing.');
+    // Slide open the customer details form panel instead of showing alert
+    const formView = document.getElementById('drawerViewForm');
+    if (formView) {
+      formView.classList.add('open');
+      // Scroll details form to top
+      formView.scrollTop = 0;
+    }
     return;
   }
   if (wishlist.length === 0) {
@@ -560,16 +628,16 @@ async function submitSelection() {
   const savedPartner = JSON.parse(localStorage.getItem('pmj_partner_info') || '{}');
   const remarksText = sumRemarks.value.trim() || activeCustomer.remarks;
 
-  // Create products list
+  // Create products list - Mapping keys to 'id' and 'qty' to align with admin modal expectations
   const selectedProducts = wishlist.map(id => {
-    const p = getProductData(id);
+    const p = getProductData(id) || {};
     const collectionLabel = p.collections && p.collections.length ? p.collections[0] : 'sweet-16';
     return {
-      productId: p.id,
-      productCode: p.id,
+      id: p.id || id,
+      qty: 1,
+      price: p.price || 'Price on Request',
       collection: collectionLabel,
-      category: p.cat,
-      quantity: 1
+      category: p.cat || 'Jewelry'
     };
   });
 
@@ -587,7 +655,8 @@ async function submitSelection() {
       email: activeCustomer.email || '',
       dob: activeCustomer.dob || '',
       anniversary: activeCustomer.anniversary || '',
-      city: activeCustomer.city || ''
+      city: activeCustomer.city || '',
+      collection: activeCustomer.collection || ''
     },
     wishlistInfo: {
       wishlistNumber: wlNumber,
@@ -717,42 +786,53 @@ async function submitSelection() {
 }
 
 // Reset Selection and start fresh
-document.getElementById('newEnquiry').addEventListener('click', (e)=>{
+document.getElementById('newEnquiry')?.addEventListener('click', (e)=>{
   e.preventDefault();
   
-  // Reset selection states
-  wishlist = [];
-  activeCustomer = null;
-  sessionStorage.removeItem('pmj_active_customer');
-  window.showWishlistOnly = false;
-  
-  // Clear inputs (except partner details)
-  ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  
-  document.getElementById('cMobileStatus').textContent = '';
+  try {
+    // Reset selection states
+    wishlist.length = 0;
+    activeCustomer = null;
+    sessionStorage.removeItem('pmj_active_customer');
+    window.showWishlistOnly = false;
+    document.getElementById('drawerViewForm')?.classList.remove('open');
+    
+    // Clear inputs (except partner details)
+    ['cMobile', 'cName', 'cEmail', 'cDob', 'cAnniversary', 'cCity', 'cRemarks', 'sumRemarks'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    
+    const status = document.getElementById('cMobileStatus');
+    if (status) status.textContent = '';
 
-  // Update browsing stage to collections homepage
-  window.setBrowseStage?.('collections');
-  window.setBrowseVisibility?.();
+    // Update browsing stage to collections homepage
+    window.setBrowseStage?.('collections');
+    window.setBrowseVisibility?.();
 
-  // Re-render
-  refreshGridUi();
-  if (typeof updateCount === 'function') updateCount();
-  if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
-  
-  renderDrawer();
-  
-  // Reset view visibility classes
-  successView.classList.remove('show');
-  drawerMain.classList.remove('hidden');
+    // Re-render
+    refreshGridUi();
+    if (typeof updateCount === 'function') updateCount();
+    if (typeof refreshWishlistUi === 'function') refreshWishlistUi();
+    
+    renderDrawer();
+  } catch (err) {
+    console.error("Error in Start New Journey click handler:", err);
+  }
 
-  // Close the drawer and scroll to homepage collections stage
-  closeDrawer();
+  try {
+    // Reset view visibility classes
+    successView.classList.remove('show');
+    drawerMain.classList.remove('hidden');
+
+    // Close the drawer and scroll to homepage collections stage
+    closeDrawer();
+  } catch (e) {}
+
   setTimeout(() => {
-    document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
+    try {
+      document.getElementById('collectionsHub')?.scrollIntoView({ behavior: 'smooth' });
+    } catch (e) {}
   }, 300);
 });
 
@@ -806,3 +886,4 @@ document.addEventListener('click', (e) => {
     openDrawer();
   }
 });
+}

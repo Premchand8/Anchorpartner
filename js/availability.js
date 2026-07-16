@@ -4,9 +4,9 @@ const AVAILABILITY_DEFAULT = 'mto';
 const AVAILABILITY_META = {
   ready: {
     id: 'ready',
-    label: 'Ready to Deliver',
-    short: 'Ready',
-    hint: 'In stock and available for dispatch. Enquire for same-day or scheduled delivery.',
+    label: 'Ready to Stock',
+    short: 'Ready to Stock',
+    hint: 'In stock and available. Enquire for details.',
     badgeClass: 'avail-ready',
   },
   mto: {
